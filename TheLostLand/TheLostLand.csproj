@@ -67,6 +67,8 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\ConfigCommand.cs" />
+        <Compile Include="Configs\Configuration.cs" />
         <Compile Include="Configs\Configurations.cs" />
         <Compile Include="Configs\IConfig.cs" />
         <Compile Include="Configs\Plugin Config\TestConfig.cs" />

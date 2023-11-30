@@ -4,18 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Rocket.Core.Logging;
+using TheLostLand.Configs.Plugin_Config;
 
 namespace TheLostLand.Configs;
 
 public class Configurations
 {
     private string SAVE_DIR { get; set; }
-    private Dictionary<string, IConfig> CONFIGS { get; set; }
+    private Dictionary<string, Configuration> CONFIGS { get; set; }
 
     public Configurations(string save_directory, Assembly base_assembly)
     {
         SAVE_DIR = save_directory;
-        CONFIGS = new Dictionary<string, IConfig>();
+        CONFIGS = new Dictionary<string, Configuration>();
 
         var all_configs = base_assembly.GetTypes()
             .Where(x => x.BaseType != null)
@@ -54,7 +56,8 @@ public class Configurations
 
             var json_data = JsonConvert.DeserializeObject(json, config.GetType());
 
-            CONFIGS.Add(config.GetType().Name, json_data as IConfig);
+            CONFIGS.Add(config.GetType().Name, new Configuration(json_data as IConfig, config.GetType().Name));
+            Logger.Log("Loaded Config: " + config.GetType().Name);
             return;
         }
 
@@ -68,7 +71,7 @@ public class Configurations
             stream.Write(json_save);
         }
 
-        CONFIGS.Add(config.GetType().Name, config);
+        CONFIGS.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
     }
 
     public void Unload(IConfig config)
@@ -86,4 +89,9 @@ public class Configurations
         Unload(config);
         Load(config);
     }
+
+    public IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
+        GetAllConfigs().Where(x => match(x));
+
+    public IEnumerable<Configuration> GetAllConfigs() => CONFIGS.Select(x => x.Value);
 }
