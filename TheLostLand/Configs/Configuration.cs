@@ -1,11 +1,11 @@
 ﻿namespace TheLostLand.Configs.Plugin_Config;
 
-public class Configuration
+internal sealed class Configuration
 {
-    public IConfig Config { get; }
-    public string Name { get; }
+    internal IConfig Config { get; }
+    internal string Name { get; }
 
-    public Configuration(IConfig config, string name)
+    internal Configuration(IConfig config, string name)
     {
         Config = config;
         Name = name;

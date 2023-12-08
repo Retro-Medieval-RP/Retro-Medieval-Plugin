@@ -1,6 +1,6 @@
 ﻿namespace TheLostLand.Configs.Plugin_Config;
 
-public class TestConfig : IConfig
+internal class TestConfig : IConfig
 {
     public string ExampleString { get; set; }
         

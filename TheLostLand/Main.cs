@@ -3,7 +3,7 @@ using TheLostLand.Configs;
 
 namespace TheLostLand;
 
-public class Main : RocketPlugin
+public sealed class Main : RocketPlugin
 {
     public static Main INSTANCE { get; set; }
     public Configurations CONFIGS { get; set; }

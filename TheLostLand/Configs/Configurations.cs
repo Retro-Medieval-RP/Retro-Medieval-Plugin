@@ -9,12 +9,12 @@ using TheLostLand.Configs.Plugin_Config;
 
 namespace TheLostLand.Configs;
 
-public class Configurations
+public sealed class Configurations
 {
     private string SAVE_DIR { get; set; }
     private Dictionary<string, Configuration> CONFIGS { get; set; }
 
-    public Configurations(string save_directory, Assembly base_assembly)
+    internal Configurations(string save_directory, Assembly base_assembly)
     {
         SAVE_DIR = save_directory;
         CONFIGS = new Dictionary<string, Configuration>();
@@ -35,7 +35,7 @@ public class Configurations
         }
     }
 
-    public void Load(IConfig config)
+    internal void Load(IConfig config)
     {
         var file_path = Path.Combine(SAVE_DIR, config.GetType().Name, config.GetType().Name + ".json");
         var dir_path = Path.Combine(SAVE_DIR, config.GetType().Name);
@@ -74,7 +74,7 @@ public class Configurations
         CONFIGS.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
     }
 
-    public void Unload(IConfig config)
+    internal void Unload(IConfig config)
     {
         if (!CONFIGS.ContainsKey(config.GetType().Name))
         {
@@ -84,14 +84,14 @@ public class Configurations
         CONFIGS.Remove(config.GetType().Name);
     }
 
-    public void Reload(IConfig config)
+    internal void Reload(IConfig config)
     {
         Unload(config);
         Load(config);
     }
 
-    public IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
+    internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
         GetAllConfigs().Where(x => match(x));
 
-    public IEnumerable<Configuration> GetAllConfigs() => CONFIGS.Select(x => x.Value);
+    internal IEnumerable<Configuration> GetAllConfigs() => CONFIGS.Select(x => x.Value);
 }
