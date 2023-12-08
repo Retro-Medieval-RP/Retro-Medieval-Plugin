@@ -5,7 +5,7 @@ namespace TheLostLand;
 
 public sealed class Main : RocketPlugin
 {
-    public static Main INSTANCE { get; set; }
+    public static Main INSTANCE { get; private set; }
     public Configurations CONFIGS { get; set; }
     
     protected override void Load()
