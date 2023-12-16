@@ -11,13 +11,13 @@ namespace TheLostLand.Configs;
 
 public sealed class Configurations
 {
-    private string SAVE_DIR { get; set; }
-    private Dictionary<string, Configuration> CONFIGS { get; set; }
+    private string SaveDir { get; set; }
+    private Dictionary<string, Configuration> Configs { get; set; }
 
     internal Configurations(string save_directory, Assembly base_assembly)
     {
-        SAVE_DIR = save_directory;
-        CONFIGS = new Dictionary<string, Configuration>();
+        SaveDir = save_directory;
+        Configs = new Dictionary<string, Configuration>();
 
         var all_configs = base_assembly.GetTypes()
             .Where(x => x.BaseType != null)
@@ -26,7 +26,7 @@ public sealed class Configurations
 
         foreach (var config in all_configs)
         {
-            if (CONFIGS.ContainsKey(config.Name))
+            if (Configs.ContainsKey(config.Name))
             {
                 return;
             }
@@ -37,12 +37,12 @@ public sealed class Configurations
 
     internal void Load(IConfig config)
     {
-        var file_path = Path.Combine(SAVE_DIR, config.GetType().Name, config.GetType().Name + ".json");
-        var dir_path = Path.Combine(SAVE_DIR, config.GetType().Name);
+        var file_path = Path.Combine(SaveDir, config.GetType().Name, config.GetType().Name + ".json");
+        var dir_path = Path.Combine(SaveDir, config.GetType().Name);
 
-        if (!Directory.Exists(SAVE_DIR))
+        if (!Directory.Exists(SaveDir))
         {
-            Directory.CreateDirectory(SAVE_DIR);
+            Directory.CreateDirectory(SaveDir);
         }
             
         if (Directory.Exists(dir_path))
@@ -56,7 +56,7 @@ public sealed class Configurations
 
             var json_data = JsonConvert.DeserializeObject(json, config.GetType());
 
-            CONFIGS.Add(config.GetType().Name, new Configuration(json_data as IConfig, config.GetType().Name));
+            Configs.Add(config.GetType().Name, new Configuration(json_data as IConfig, config.GetType().Name));
             Logger.Log("Loaded Config: " + config.GetType().Name);
             return;
         }
@@ -71,17 +71,17 @@ public sealed class Configurations
             stream.Write(json_save);
         }
 
-        CONFIGS.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
+        Configs.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
     }
 
     internal void Unload(IConfig config)
     {
-        if (!CONFIGS.ContainsKey(config.GetType().Name))
+        if (!Configs.ContainsKey(config.GetType().Name))
         {
             return;
         }
 
-        CONFIGS.Remove(config.GetType().Name);
+        Configs.Remove(config.GetType().Name);
     }
 
     internal void Reload(IConfig config)
@@ -93,5 +93,5 @@ public sealed class Configurations
     internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
         GetAllConfigs().Where(x => match(x));
 
-    internal IEnumerable<Configuration> GetAllConfigs() => CONFIGS.Select(x => x.Value);
+    internal IEnumerable<Configuration> GetAllConfigs() => Configs.Select(x => x.Value);
 }

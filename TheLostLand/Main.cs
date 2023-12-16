@@ -5,13 +5,13 @@ namespace TheLostLand;
 
 public sealed class Main : RocketPlugin
 {
-    public static Main INSTANCE { get; private set; }
-    public Configurations CONFIGS { get; set; }
+    public static Main Instance { get; private set; }
+    public Configurations Configs { get; set; }
     
     protected override void Load()
     {
-        INSTANCE = this;
-        CONFIGS = new Configurations(Directory, Assembly);
+        Instance = this;
+        Configs = new Configurations(Directory, Assembly);
     }
 
     protected override void Unload()

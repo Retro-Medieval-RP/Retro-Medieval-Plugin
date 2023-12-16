@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Configs.Plugin_Config;
+﻿namespace TheLostLand.Configs;
 
 internal sealed class Configuration
 {

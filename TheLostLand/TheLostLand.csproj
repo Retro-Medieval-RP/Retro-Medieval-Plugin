@@ -35,35 +35,41 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\Unturned Files\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="AstarPathfindingProject">
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\AstarPathfindingProject.dll</HintPath>
         </Reference>
         <Reference Include="com.rlabrecque.steamworks.net">
-          <HintPath>..\..\Unturned Files\com.rlabrecque.steamworks.net.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
           <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.API">
-          <HintPath>..\..\Rocket Files\Rocket.API.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Extras\Rocket.Unturned\Rocket.API.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.Core">
-          <HintPath>..\..\Rocket Files\Rocket.Core.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Extras\Rocket.Unturned\Rocket.Core.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.Unturned">
-          <HintPath>..\..\Rocket Files\Rocket.Unturned.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Extras\Rocket.Unturned\Rocket.Unturned.dll</HintPath>
         </Reference>
         <Reference Include="SDG.NetTransport">
-          <HintPath>..\..\Unturned Files\SDG.NetTransport.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\SDG.NetTransport.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
-          <HintPath>..\..\Unturned Files\UnityEngine.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\..\Unturned Files\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
