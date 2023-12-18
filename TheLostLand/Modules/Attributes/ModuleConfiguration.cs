@@ -17,13 +17,5 @@ public class ModuleConfiguration<TConfiguration> : Attribute where TConfiguratio
         Main.Instance.Configs.Load(new TConfiguration(), ConfigName);
     }
 
-    public bool ModuleMatch(string module_name)
-    {
-        if (ModuleBase == module_name)
-        {
-            return true;
-        }
-
-        return false;
-    }
+    public bool ModuleMatch(string module_name) => ModuleBase == module_name;
 }
