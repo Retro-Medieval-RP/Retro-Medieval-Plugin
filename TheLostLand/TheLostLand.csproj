@@ -78,7 +78,6 @@
     <Compile Include="Configs\IConfig.cs" />
     <Compile Include="Configs\ModuleConfiguration.cs" />
     <Compile Include="Configs\ModuleInformation.cs" />
-    <Compile Include="Exceptions\ConfigException.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.Config.cs" />
