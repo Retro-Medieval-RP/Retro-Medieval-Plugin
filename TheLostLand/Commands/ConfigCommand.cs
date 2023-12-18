@@ -53,7 +53,7 @@ public class ConfigCommand : IRocketCommand
 
         foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.Name == obj))
         {
-            Main.Instance.Configs.Unload(config.Config);
+            Main.Instance.Configs.Unload(config.Config, config.Name);
         }
     }
 
@@ -67,7 +67,7 @@ public class ConfigCommand : IRocketCommand
      
         foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.Name == obj))
         {
-            Main.Instance.Configs.Load(config.Config);
+            Main.Instance.Configs.Load(config.Config, config.Name);
         }   
     }
 
@@ -77,7 +77,7 @@ public class ConfigCommand : IRocketCommand
         {
             foreach (var config in Main.Instance.Configs.GetAllConfigs())
             {
-                Main.Instance.Configs.Reload(config.Config);
+                Main.Instance.Configs.Reload(config.Config, config.Name);
             }
 
             return;
@@ -85,7 +85,7 @@ public class ConfigCommand : IRocketCommand
 
         foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.GetType().Name == obj))
         {
-            Main.Instance.Configs.Reload(config.Config);
+            Main.Instance.Configs.Reload(config.Config, config.Name);
         }
     }
 

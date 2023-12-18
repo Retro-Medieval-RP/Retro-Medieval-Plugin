@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Configs;
+﻿namespace TheLostLand.Configuration;
 
 internal sealed class Configuration
 {

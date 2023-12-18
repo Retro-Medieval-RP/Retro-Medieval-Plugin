@@ -1,4 +1,4 @@
-﻿using TheLostLand.Configs;
+﻿using TheLostLand.Configuration;
 
 namespace TheLostLand;
 

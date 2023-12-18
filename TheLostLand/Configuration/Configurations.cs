@@ -1,27 +1,28 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 using Rocket.Core.Logging;
-using TheLostLand.Modules;
 
-namespace TheLostLand.Configs;
+namespace TheLostLand.Configuration;
 
 public sealed class Configurations
 {
     private string SaveDir { get; set; }
     private Dictionary<string, Configuration> Configs { get; set; }
+    public IConfig this[string config_name] => Configs.ContainsKey(config_name) ? Configs[config_name].Config : null;
+    
     internal Configurations(string save_directory)
     {
         SaveDir = save_directory;
         Configs = new Dictionary<string, Configuration>();
     }
 
-    internal void Load(IConfig config)
+    internal void Load(IConfig config, string config_name)
     {
-        if (Configs.ContainsKey(config.GetType().Name))
+        if (Configs.ContainsKey(config_name))
             return;
         
-        var file_path = Path.Combine(SaveDir, config.GetType().Name, config.GetType().Name + ".json");
-        var dir_path = Path.Combine(SaveDir, config.GetType().Name);
+        var file_path = Path.Combine(SaveDir, config_name, config_name + ".json");
+        var dir_path = Path.Combine(SaveDir, config_name);
 
         if (!Directory.Exists(SaveDir))
         {
@@ -39,8 +40,8 @@ public sealed class Configurations
 
             var json_data = JsonConvert.DeserializeObject(json, config.GetType());
 
-            Configs.Add(config.GetType().Name, new Configuration(json_data as ModuleConfiguration, config.GetType().Name));
-            Logger.Log("Loaded Config: " + config.GetType().Name);
+            Configs.Add(config_name, new Configuration(json_data as IConfig, config_name));
+            Logger.Log("Loaded Config: " + config_name);
             return;
         }
 
@@ -54,23 +55,23 @@ public sealed class Configurations
             stream.Write(json_save);
         }
 
-        Configs.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
+        Configs.Add(config_name, new Configuration(config, config_name));
     }
 
-    internal void Unload(IConfig config)
+    internal void Unload(IConfig config, string config_name)
     {
-        if (!Configs.ContainsKey(config.GetType().Name))
+        if (!Configs.ContainsKey(config_name))
         {
             return;
         }
 
-        Configs.Remove(config.GetType().Name);
+        Configs.Remove(config_name);
     }
 
-    internal void Reload(IConfig config)
+    internal void Reload(IConfig config, string config_name)
     {
-        Unload(config);
-        Load(config);
+        Unload(config, config_name);
+        Load(config, config_name);
     }
 
     internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
