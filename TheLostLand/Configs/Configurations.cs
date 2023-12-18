@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Rocket.Core.Logging;
-using TheLostLand.Configs.Plugin_Config;
 
 namespace TheLostLand.Configs;
 
@@ -14,14 +13,18 @@ public sealed class Configurations
     private string SaveDir { get; set; }
     private Dictionary<string, Configuration> Configs { get; set; }
 
+    public ModuleConfiguration this[string name] => Configs.ContainsKey(name) ? Configs[name].Config : null;
+
     internal Configurations(string save_directory, Assembly base_assembly)
     {
+        Console.WriteLine("Line 17");
         SaveDir = save_directory;
         Configs = new Dictionary<string, Configuration>();
+        Console.WriteLine("Line 21");
 
         var all_configs = base_assembly.GetTypes()
             .Where(x => x.BaseType != null)
-            .Where(x => x.BaseType == typeof(IConfig) || x.BaseType.GetInterfaces().Contains(typeof(IConfig)))
+            .Where(x => x.BaseType == typeof(ModuleConfiguration))
             .Select(x => (x.Name, Activator.CreateInstance(x)));
 
         foreach (var config in all_configs)
@@ -31,11 +34,11 @@ public sealed class Configurations
                 return;
             }
 
-            Load(config.Item2 as IConfig);
+            Load(config.Item2 as ModuleConfiguration);
         }
     }
 
-    internal void Load(IConfig config)
+    internal void Load(ModuleConfiguration config)
     {
         var file_path = Path.Combine(SaveDir, config.GetType().Name, config.GetType().Name + ".json");
         var dir_path = Path.Combine(SaveDir, config.GetType().Name);
@@ -56,7 +59,7 @@ public sealed class Configurations
 
             var json_data = JsonConvert.DeserializeObject(json, config.GetType());
 
-            Configs.Add(config.GetType().Name, new Configuration(json_data as IConfig, config.GetType().Name));
+            Configs.Add(config.GetType().Name, new Configuration(json_data as ModuleConfiguration, config.GetType().Name));
             Logger.Log("Loaded Config: " + config.GetType().Name);
             return;
         }
@@ -74,7 +77,7 @@ public sealed class Configurations
         Configs.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
     }
 
-    internal void Unload(IConfig config)
+    internal void Unload(ModuleConfiguration config)
     {
         if (!Configs.ContainsKey(config.GetType().Name))
         {
@@ -84,7 +87,7 @@ public sealed class Configurations
         Configs.Remove(config.GetType().Name);
     }
 
-    internal void Reload(IConfig config)
+    internal void Reload(ModuleConfiguration config)
     {
         Unload(config);
         Load(config);

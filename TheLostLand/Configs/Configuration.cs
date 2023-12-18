@@ -2,10 +2,10 @@
 
 internal sealed class Configuration
 {
-    internal IConfig Config { get; }
+    internal ModuleConfiguration Config { get; }
     internal string Name { get; }
 
-    internal Configuration(IConfig config, string name)
+    internal Configuration(ModuleConfiguration config, string name)
     {
         Config = config;
         Name = name;

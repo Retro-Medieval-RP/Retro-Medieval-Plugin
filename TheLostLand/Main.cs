@@ -1,4 +1,5 @@
 ﻿using Rocket.Core.Plugins;
+using SDG.Unturned;
 using TheLostLand.Configs;
 
 namespace TheLostLand;
@@ -11,10 +12,17 @@ public sealed class Main : RocketPlugin
     protected override void Load()
     {
         Instance = this;
-        Configs = new Configurations(Directory, Assembly);
+        Configs = new Configurations(Directory, GetType().Assembly);
+
+        Level.onLevelLoaded += OnLevelLoaded;
+    }
+
+    private static void OnLevelLoaded(int level)
+    {
     }
 
     protected override void Unload()
     {
+        Level.onLevelLoaded -= OnLevelLoaded;
     }
 }
