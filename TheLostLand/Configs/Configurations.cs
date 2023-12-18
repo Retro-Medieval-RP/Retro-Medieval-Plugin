@@ -12,20 +12,10 @@ public sealed class Configurations
 
     public ModuleConfiguration this[string name] => Configs.ContainsKey(name) ? Configs[name].Config : null;
 
-    internal Configurations(string save_directory, Assembly base_assembly)
+    internal Configurations(string save_directory)
     {
         SaveDir = save_directory;
         Configs = new Dictionary<string, Configuration>();
-
-        var all_configs = base_assembly.GetTypes()
-            .Where(x => x.BaseType != null)
-            .Where(x => x.BaseType == typeof(ModuleConfiguration))
-            .Select(x => (x.Name, Activator.CreateInstance(x)));
-
-        foreach (var config in all_configs)
-        {
-            Load(config.Item2 as ModuleConfiguration);
-        }
     }
 
     internal void Load(ModuleConfiguration config)

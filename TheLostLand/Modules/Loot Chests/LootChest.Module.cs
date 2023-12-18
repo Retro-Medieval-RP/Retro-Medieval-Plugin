@@ -2,7 +2,7 @@
 
 namespace TheLostLand.Modules.Loot_Chests;
 
-[ModuleInformation(ModuleName = "Loot Chest", ModuleConfig = typeof(LootChestModuleConfig))]
+[ModuleInformation<LootChestModuleConfig>("Loot Chest")]
 public class LootChestModule
 {
     

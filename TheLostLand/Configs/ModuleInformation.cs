@@ -1,25 +1,15 @@
 ﻿namespace TheLostLand.Configs;
 
-[System.AttributeUsage(System.AttributeTargets.Class)]
-public class ModuleInformation : Attribute
+public class ModuleInformation<TModuleConfiguration> : ModuleInformation where TModuleConfiguration : ModuleConfiguration, new()
 {
-    public string ModuleName { get; set; }
+    public TModuleConfiguration ModuleConfig { get; set; }
 
-    private ModuleConfiguration _ModuleConfig { get; set; }
-    public Type ModuleConfig
-    {
-        get => null;
-        set
-        {
-            if (value.BaseType == null)
-                throw new ConfigException($"{value.Name} does not have a base type!");
+    public ModuleInformation(string module_name) : base(module_name) => 
+        Main.Instance.Configs.Load(new TModuleConfiguration());
+}
 
-            if (value.BaseType != typeof(ModuleConfiguration))
-                throw new ConfigException($"{value.Name} does not inherit from ModuleConfiguration!");
-            
-            _ModuleConfig = Activator.CreateInstance(value) as ModuleConfiguration;
-        }
-    }
-
-    public ModuleConfiguration GetConfig() => _ModuleConfig;
+[System.AttributeUsage(System.AttributeTargets.Class)]
+public class ModuleInformation(string module_name) : Attribute
+{
+    public string ModuleName { get; set; } = module_name;
 }

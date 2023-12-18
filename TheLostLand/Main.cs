@@ -10,7 +10,7 @@ public sealed class Main : RocketPlugin
     protected override void Load()
     {
         Instance = this;
-        Configs = new Configurations(Directory, GetType().Assembly);
+        Configs = new Configurations(Directory);
 
         Level.onLevelLoaded += OnLevelLoaded;
     }
