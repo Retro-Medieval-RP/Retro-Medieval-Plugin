@@ -73,21 +73,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ConfigCommand.cs" />
+    <Compile Include="Configs\ConfigException.cs" />
     <Compile Include="Configs\Configuration.cs" />
     <Compile Include="Configs\Configurations.cs" />
     <Compile Include="Configs\IConfig.cs" />
     <Compile Include="Configs\ModuleConfiguration.cs" />
+    <Compile Include="Configs\ModuleInformation.cs" />
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Modules\Loot Chests\LootChest.Module.Config.cs" />
+    <Compile Include="Modules\Loot Chests\LootChest.Module.cs" />
     <Compile Include="Padlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configs\Plugin Config\" />
-    <Folder Include="Modules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

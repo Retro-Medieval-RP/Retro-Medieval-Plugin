@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TheLostLand;
+﻿namespace TheLostLand;
 
 public class Padlock<T>
 {

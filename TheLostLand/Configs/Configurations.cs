@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 using Rocket.Core.Logging;
@@ -17,10 +14,8 @@ public sealed class Configurations
 
     internal Configurations(string save_directory, Assembly base_assembly)
     {
-        Console.WriteLine("Line 17");
         SaveDir = save_directory;
         Configs = new Dictionary<string, Configuration>();
-        Console.WriteLine("Line 21");
 
         var all_configs = base_assembly.GetTypes()
             .Where(x => x.BaseType != null)
@@ -29,17 +24,15 @@ public sealed class Configurations
 
         foreach (var config in all_configs)
         {
-            if (Configs.ContainsKey(config.Name))
-            {
-                return;
-            }
-
             Load(config.Item2 as ModuleConfiguration);
         }
     }
 
     internal void Load(ModuleConfiguration config)
     {
+        if (Configs.ContainsKey(config.GetType().Name))
+            return;
+        
         var file_path = Path.Combine(SaveDir, config.GetType().Name, config.GetType().Name + ".json");
         var dir_path = Path.Combine(SaveDir, config.GetType().Name);
 
