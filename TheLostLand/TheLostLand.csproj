@@ -80,6 +80,8 @@
     <Compile Include="Configs\ModuleInformation.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Modules\Loot Chests\ChestTier.cs" />
+    <Compile Include="Modules\Loot Chests\LootChest.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.Config.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.cs" />
     <Compile Include="Padlock.cs" />

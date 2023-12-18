@@ -9,9 +9,6 @@ public sealed class Configurations
 {
     private string SaveDir { get; set; }
     private Dictionary<string, Configuration> Configs { get; set; }
-
-    public ModuleConfiguration this[string name] => Configs.ContainsKey(name) ? Configs[name].Config : null;
-
     internal Configurations(string save_directory)
     {
         SaveDir = save_directory;

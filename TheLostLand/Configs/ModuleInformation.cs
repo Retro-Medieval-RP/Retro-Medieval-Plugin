@@ -2,7 +2,7 @@
 
 public class ModuleInformation<TModuleConfiguration> : ModuleInformation where TModuleConfiguration : ModuleConfiguration, new()
 {
-    public TModuleConfiguration ModuleConfig { get; set; }
+    public TModuleConfiguration Configuration { get; set; }
 
     public ModuleInformation(string module_name) : base(module_name) => 
         Main.Instance.Configs.Load(new TModuleConfiguration());

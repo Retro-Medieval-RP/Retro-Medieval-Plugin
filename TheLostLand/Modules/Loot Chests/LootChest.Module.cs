@@ -2,8 +2,8 @@
 
 namespace TheLostLand.Modules.Loot_Chests;
 
-[ModuleInformation<LootChestModuleConfig>("Loot Chest")]
-public class LootChestModule
+[ModuleInformation<LootChestModule>("Loot Chest")]
+public partial class LootChestModule
 {
     
 }

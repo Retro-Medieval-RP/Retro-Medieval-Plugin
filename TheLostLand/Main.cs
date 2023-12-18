@@ -11,16 +11,9 @@ public sealed class Main : RocketPlugin
     {
         Instance = this;
         Configs = new Configurations(Directory);
-
-        Level.onLevelLoaded += OnLevelLoaded;
-    }
-
-    private static void OnLevelLoaded(int level)
-    {
     }
 
     protected override void Unload()
     {
-        Level.onLevelLoaded -= OnLevelLoaded;
     }
 }
