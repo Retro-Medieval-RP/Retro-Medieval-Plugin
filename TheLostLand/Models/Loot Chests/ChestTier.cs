@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Modules.Loot_Chests;
+﻿namespace TheLostLand.Models.Loot_Chests;
 
 public enum ChestTier
 {

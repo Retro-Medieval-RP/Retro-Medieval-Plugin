@@ -2,6 +2,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 using Rocket.Core.Logging;
+using TheLostLand.Modules;
 
 namespace TheLostLand.Configs;
 
@@ -15,7 +16,7 @@ public sealed class Configurations
         Configs = new Dictionary<string, Configuration>();
     }
 
-    internal void Load(ModuleConfiguration config)
+    internal void Load(IConfig config)
     {
         if (Configs.ContainsKey(config.GetType().Name))
             return;
@@ -57,7 +58,7 @@ public sealed class Configurations
         Configs.Add(config.GetType().Name, new Configuration(config, config.GetType().Name));
     }
 
-    internal void Unload(ModuleConfiguration config)
+    internal void Unload(IConfig config)
     {
         if (!Configs.ContainsKey(config.GetType().Name))
         {
@@ -67,7 +68,7 @@ public sealed class Configurations
         Configs.Remove(config.GetType().Name);
     }
 
-    internal void Reload(ModuleConfiguration config)
+    internal void Reload(IConfig config)
     {
         Unload(config);
         Load(config);

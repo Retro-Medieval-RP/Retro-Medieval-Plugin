@@ -1,6 +1,6 @@
 ﻿namespace TheLostLand.Configs;
 
-internal interface IConfig
+public interface IConfig
 {
     void LoadDefaults();
 }
