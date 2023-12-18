@@ -1,5 +1,4 @@
-﻿using TheLostLand.Configs;
-using TheLostLand.Models;
+﻿using TheLostLand.Models;
 
 namespace TheLostLand.Modules.Loot_Chests;
 
