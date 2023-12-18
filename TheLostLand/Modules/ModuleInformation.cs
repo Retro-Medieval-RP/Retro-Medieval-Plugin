@@ -10,23 +10,12 @@ public class ModuleInformation<TModuleConfiguration> : ModuleInformation where T
     {
         Main.Instance.Configs.Load(new TModuleConfiguration());
     }
-
-    public ModuleInformation()
-    {
-        ModuleName = GetType().Name;
-        Main.Instance.Configs.Load(new TModuleConfiguration());
-    }
 }
 
-[System.AttributeUsage(System.AttributeTargets.Class)]
+[System.AttributeUsage(System.AttributeTargets.Class, Inherited = false)]
 public class ModuleInformation : Attribute
 {
     public string ModuleName { get; set; }
-
-    protected ModuleInformation()
-    {
-        ModuleName = GetType().Name;
-    }
 
     protected ModuleInformation(string module_name)
     {
