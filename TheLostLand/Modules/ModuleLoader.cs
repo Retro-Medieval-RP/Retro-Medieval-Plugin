@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Rocket.Core.Logging;
 
 namespace TheLostLand.Modules;
 
@@ -18,7 +19,7 @@ public class ModuleLoader : Padlock<ModuleLoader>
 
         foreach (var module in modules)
         {
-            Load(module);
+            Logger.Log("Found Module: " + module?.ModuleInformation.ModuleName);
         }
     }
 

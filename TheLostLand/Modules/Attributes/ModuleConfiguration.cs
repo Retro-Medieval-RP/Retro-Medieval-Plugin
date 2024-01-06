@@ -1,19 +1,15 @@
 ﻿namespace TheLostLand.Modules.Attributes;
 
-[AttributeUsage(AttributeTargets.Class)]
-public class ModuleConfiguration<TConfiguration> : Attribute where TConfiguration : IConfig, new()
+public class ModuleConfiguration<TConfiguration>
+    : ModuleConfiguration where TConfiguration : IConfig
 {
-    private string ConfigName { get; }
     public TConfiguration Configuration => (TConfiguration)Configurations.Instance[ConfigName];
-    private string ModuleBase { get; }
-    
-    public ModuleConfiguration(string config_name, string module_base_name)
-    {
-        ModuleBase = module_base_name;
-        ConfigName = config_name;
-        
-        Configurations.Instance.Load(new TConfiguration(), ConfigName);
-    }
 
-    public bool ModuleMatch(string module_name) => ModuleBase == module_name;
+    public ModuleConfiguration(string config_name) : base(config_name) => Configurations.Instance.Load(Activator.CreateInstance<TConfiguration>(), ConfigName);
+}
+
+[AttributeUsage(AttributeTargets.Class)]
+public class ModuleConfiguration(string config_name) : Attribute
+{
+    public string ConfigName { get; } = config_name;
 }

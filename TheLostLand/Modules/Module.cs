@@ -4,9 +4,14 @@ namespace TheLostLand.Modules;
 
 public class Module
 {
-    internal ModuleInformation ModuleInformation { get; }
+    internal ModuleInformation ModuleInformation { get; set; }
 
     protected Module()
+    {
+        GetModuleInfo();
+    }
+
+    private void GetModuleInfo()
     {
         var attributes = GetType().GetCustomAttributes(typeof(ModuleInformation));
 
@@ -18,20 +23,16 @@ public class Module
 
         ModuleInformation = (ModuleInformation)enumerable.ToArray()[0];
     }
-    
-    protected bool GetConfiguration<TConfig>(out TConfig config_out) where TConfig : IConfig, new()
-    {
-        var configs = typeof(TConfig).GetCustomAttributes(typeof(ModuleConfiguration<TConfig>), false).Select(x => x as ModuleConfiguration<TConfig>).Where(x => x!.ModuleMatch(ModuleInformation.ModuleName));
 
-        var module_configurations = configs as ModuleConfiguration<TConfig>[] ?? configs.ToArray();
-        
-        if (!module_configurations.Any())
+    protected bool GetConfiguration<TConfig>(out TConfig config_out) where TConfig : IConfig
+    {
+        if (GetType().GetCustomAttribute(typeof(ModuleConfiguration<TConfig>)) is ModuleConfiguration<TConfig> config)
         {
-            config_out = default;
-            return false;
+            config_out = config.Configuration;
+            return true;
         }
 
-        config_out = module_configurations.ToArray()[0].Configuration;
-        return true;
+        config_out = default;
+        return false;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 using Rocket.Core.Logging;
 
@@ -80,6 +81,20 @@ public sealed class Configurations : Padlock<Configurations>
         foreach (var config in Configs)
         {
             Unload(config.Value.Config, config.Value.Name);
+        }
+    }
+
+    public void Load(Assembly assembly)
+    {
+        var configs = assembly.GetTypes()
+            .Where(x => x.BaseType == typeof(IConfig))
+            .Select(Activator.CreateInstance)
+            .Select(x => x as IConfig);
+
+        foreach (var config in configs)
+        {
+            var config_attribute = config.GetType().GetCustomAttribute(typeof(ModuleConfiguration)) as ModuleConfiguration;
+            Load(config, config_attribute.ConfigName);
         }
     }
 }

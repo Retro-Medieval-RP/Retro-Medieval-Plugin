@@ -1,6 +1,7 @@
 ﻿namespace TheLostLand.Modules.Loot_Chests;
 
 [ModuleInformation("Loot Module")]
+[ModuleConfiguration<LootChestModuleConfig>("LootChestConfiguration")]
 public class LootChestModule : Module
 {
     private Picker<LootChest> Picker { get; set; } = new();
