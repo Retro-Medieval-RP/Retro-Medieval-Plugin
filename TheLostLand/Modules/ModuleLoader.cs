@@ -5,7 +5,7 @@ namespace TheLostLand.Modules;
 
 public class ModuleLoader : Padlock<ModuleLoader>
 {
-    private IEnumerable<Module> _modulesLoaded = [];
+    private readonly List<Module> _modulesLoaded = [];
 
     public Module this[string module_name] =>
         _modulesLoaded.FirstOrDefault(x => x.ModuleInformation.ModuleName == module_name);
@@ -20,11 +20,7 @@ public class ModuleLoader : Padlock<ModuleLoader>
         foreach (var module in modules)
         {
             Logger.Log("Found Module: " + module?.ModuleInformation.ModuleName);
+            _modulesLoaded.Add(module);
         }
-    }
-
-    private void Load(Module module)
-    {
-        _modulesLoaded = _modulesLoaded.Append(module as Module);
     }
 }
