@@ -4,7 +4,7 @@ namespace TheLostLand.Modules;
 
 public class Module
 {
-    private ModuleInformation ModuleInformation { get; }
+    internal ModuleInformation ModuleInformation { get; }
 
     protected Module()
     {
