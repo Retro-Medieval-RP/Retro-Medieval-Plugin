@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using TheLostLand.Configuration;
-using TheLostLand.Modules.Attributes;
 
 namespace TheLostLand.Modules;
 

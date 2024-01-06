@@ -1,8 +1,4 @@
-﻿using TheLostLand.Models.Loot_Chests;
-using TheLostLand.Modules.Attributes;
-using TheLostLand.Utils;
-
-namespace TheLostLand.Modules.Loot_Chests;
+﻿namespace TheLostLand.Modules.Loot_Chests;
 
 [ModuleInformation("Loot Module")]
 public class LootChestModule : Module

@@ -1,8 +1,4 @@
-﻿using TheLostLand.Configuration;
-using TheLostLand.Models.Loot_Chests;
-using TheLostLand.Modules.Attributes;
-
-namespace TheLostLand.Modules.Loot_Chests;
+﻿namespace TheLostLand.Modules.Loot_Chests;
 
 [ModuleConfiguration<LootChestModuleConfig>("LootChestConfig", "Loot Module")]
 public class LootChestModuleConfig : IConfig

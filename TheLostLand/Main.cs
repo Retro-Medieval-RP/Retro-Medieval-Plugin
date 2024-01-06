@@ -1,6 +1,4 @@
-﻿using TheLostLand.Configuration;
-
-namespace TheLostLand;
+﻿namespace TheLostLand;
 
 public sealed class Main : RocketPlugin
 {

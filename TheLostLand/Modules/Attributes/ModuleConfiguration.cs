@@ -1,6 +1,4 @@
-﻿using TheLostLand.Configuration;
-
-namespace TheLostLand.Modules.Attributes;
+﻿namespace TheLostLand.Modules.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class ModuleConfiguration<TConfiguration> : Attribute where TConfiguration : IConfig, new()
