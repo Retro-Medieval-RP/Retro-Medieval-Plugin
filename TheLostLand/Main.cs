@@ -12,5 +12,6 @@ public sealed class Main : RocketPlugin
 
     protected override void Unload()
     {
+        Configurations.Instance.UnloadAll();
     }
 }

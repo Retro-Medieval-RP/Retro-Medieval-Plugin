@@ -81,4 +81,12 @@ public sealed class Configurations : Padlock<Configurations>
         GetAllConfigs().Where(x => match(x));
 
     internal IEnumerable<Configuration> GetAllConfigs() => Configs.Select(x => x.Value);
+
+    internal void UnloadAll()
+    {
+        foreach (var config in Configs)
+        {
+            Unload(config.Value.Config, config.Value.Name);
+        }
+    }
 }
