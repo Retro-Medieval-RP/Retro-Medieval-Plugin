@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 
 namespace TheLostLand.Modules;
 
@@ -9,6 +10,28 @@ public class Module
     protected Module()
     {
         GetModuleInfo();
+        GetStorages();
+        GetConfigs();
+    }
+
+    private void GetConfigs()
+    {
+        var attributes = GetType().GetCustomAttributes<ModuleConfiguration>();
+
+        foreach (var config in attributes)
+        {
+            config.LoadConfig(Path.Combine(Main.Instance.Directory, ModuleInformation.ModuleName));
+        }
+    }
+
+    private void GetStorages()
+    {
+        var attributes = GetType().GetCustomAttributes<ModuleStorage>();
+
+        foreach (var storage in attributes)
+        {
+            storage.LoadStorage(Path.Combine(Main.Instance.Directory, ModuleInformation.ModuleName));
+        }
     }
 
     private void GetModuleInfo()
@@ -24,7 +47,7 @@ public class Module
         ModuleInformation = (ModuleInformation)enumerable.ToArray()[0];
     }
 
-    protected bool GetConfiguration<TConfig>(out TConfig config_out) where TConfig : IConfig
+    protected bool GetConfiguration<TConfig>(out TConfig config_out) where TConfig : IConfig, new()
     {
         if (GetType().GetCustomAttribute(typeof(ModuleConfiguration<TConfig>)) is ModuleConfiguration<TConfig> config)
         {

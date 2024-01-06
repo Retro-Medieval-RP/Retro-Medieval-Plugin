@@ -1,6 +1,7 @@
 ﻿namespace TheLostLand.Modules.Loot_Chests;
 
 [ModuleInformation("Loot Module")]
+[ModuleStorage<LootChestLocationStorage>("LootChestLocation")]
 [ModuleConfiguration<LootChestModuleConfig>("LootChestConfiguration")]
 public class LootChestModule : Module
 {

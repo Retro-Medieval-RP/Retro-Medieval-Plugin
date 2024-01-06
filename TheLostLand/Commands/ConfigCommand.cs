@@ -53,7 +53,7 @@ public class ConfigCommand : IRocketCommand
 
         foreach (var config in Configurations.Instance.GetAllConfigs(x => x.Name == obj))
         {
-            Configurations.Instance.Unload(config.Config, config.Name);
+            Configurations.Instance.Unload(config.Name);
         }
     }
 
@@ -67,7 +67,7 @@ public class ConfigCommand : IRocketCommand
      
         foreach (var config in Configurations.Instance.GetAllConfigs(x => x.Name == obj))
         {
-            Configurations.Instance.Load(config.Config, config.Name);
+            Configurations.Instance.Load(config);
         }   
     }
 
@@ -77,7 +77,7 @@ public class ConfigCommand : IRocketCommand
         {
             foreach (var config in Configurations.Instance.GetAllConfigs())
             {
-                Configurations.Instance.Reload(config.Config, config.Name);
+                Configurations.Instance.Reload(config.Name);
             }
 
             return;
@@ -85,7 +85,7 @@ public class ConfigCommand : IRocketCommand
 
         foreach (var config in Configurations.Instance.GetAllConfigs(x => x.GetType().Name == obj))
         {
-            Configurations.Instance.Reload(config.Config, config.Name);
+            Configurations.Instance.Reload(config.Name);
         }
     }
 
@@ -94,6 +94,6 @@ public class ConfigCommand : IRocketCommand
     public string Name => "Config";
     public string Help => "This is the command for the config";
     public string Syntax => "Config [reload|load|unload] [all|<Config Name>]";
-    public List<string> Aliases => new();
-    public List<string> Permissions => new();
+    public List<string> Aliases => [];
+    public List<string> Permissions => [];
 }

@@ -10,7 +10,6 @@ public sealed class Main : RocketPlugin
     {
         Instance = this;
         
-        Configurations.SetInstance(new Configurations(Directory));
         ModuleLoader.Instance.Load(Assembly);
     }
 
