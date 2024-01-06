@@ -4,12 +4,15 @@ using Rocket.Core.Logging;
 
 namespace TheLostLand.Configuration;
 
-public sealed class Configurations
+public sealed class Configurations : Padlock<Configurations>
 {
     private string SaveDir { get; set; }
     private Dictionary<string, Configuration> Configs { get; set; }
     public IConfig this[string config_name] => Configs.ContainsKey(config_name) ? Configs[config_name].Config : null;
-    
+
+    internal Configurations()
+    {
+    }
     internal Configurations(string save_directory)
     {
         SaveDir = save_directory;

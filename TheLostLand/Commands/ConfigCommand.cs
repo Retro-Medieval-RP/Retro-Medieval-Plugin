@@ -51,9 +51,9 @@ public class ConfigCommand : IRocketCommand
             return;
         }
 
-        foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.Name == obj))
+        foreach (var config in Configurations.Instance.GetAllConfigs(x => x.Name == obj))
         {
-            Main.Instance.Configs.Unload(config.Config, config.Name);
+            Configurations.Instance.Unload(config.Config, config.Name);
         }
     }
 
@@ -65,9 +65,9 @@ public class ConfigCommand : IRocketCommand
             return;
         }
      
-        foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.Name == obj))
+        foreach (var config in Configurations.Instance.GetAllConfigs(x => x.Name == obj))
         {
-            Main.Instance.Configs.Load(config.Config, config.Name);
+            Configurations.Instance.Load(config.Config, config.Name);
         }   
     }
 
@@ -75,17 +75,17 @@ public class ConfigCommand : IRocketCommand
     {
         if (obj == "all")
         {
-            foreach (var config in Main.Instance.Configs.GetAllConfigs())
+            foreach (var config in Configurations.Instance.GetAllConfigs())
             {
-                Main.Instance.Configs.Reload(config.Config, config.Name);
+                Configurations.Instance.Reload(config.Config, config.Name);
             }
 
             return;
         }
 
-        foreach (var config in Main.Instance.Configs.GetAllConfigs(x => x.GetType().Name == obj))
+        foreach (var config in Configurations.Instance.GetAllConfigs(x => x.GetType().Name == obj))
         {
-            Main.Instance.Configs.Reload(config.Config, config.Name);
+            Configurations.Instance.Reload(config.Config, config.Name);
         }
     }
 
