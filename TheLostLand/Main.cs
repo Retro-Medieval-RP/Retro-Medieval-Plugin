@@ -7,7 +7,7 @@ public sealed class Main : RocketPlugin
     protected override void Load()
     {
         Instance = this;
-        Configurations.Instance.SetInstance(new Configurations(Directory));
+        Configurations.SetInstance(new Configurations(Directory));
     }
 
     protected override void Unload()
