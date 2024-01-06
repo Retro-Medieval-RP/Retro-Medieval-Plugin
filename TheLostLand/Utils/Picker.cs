@@ -8,21 +8,21 @@ public class Picker<T>
         public T Item;
     }
 
-    private readonly List<Entry> Entries = [];
-    private double AccumulatedWeight;
+    private readonly List<Entry> _entries = [];
+    private double _accumulatedWeight;
     private Random Random { get; set; } = new();
 
     public void AddEntry(T item, double weight)
     {
-        AccumulatedWeight += weight;
-        Entries.Add(new Entry { Item = item, AccumulatedWeight = AccumulatedWeight });
+        _accumulatedWeight += weight;
+        _entries.Add(new Entry { Item = item, AccumulatedWeight = _accumulatedWeight });
     }
 
     public T GetRandom()
     {
-        var r = Random.NextDouble() * AccumulatedWeight;
+        var r = Random.NextDouble() * _accumulatedWeight;
 
-        foreach (var entry in Entries.Where(entry => entry.AccumulatedWeight >= r))
+        foreach (var entry in _entries.Where(entry => entry.AccumulatedWeight >= r))
         {
             return entry.Item;
         }
