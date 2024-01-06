@@ -10,12 +10,9 @@ public sealed class Configurations : Padlock<Configurations>
     private Dictionary<string, Configuration> Configs { get; set; }
     public IConfig this[string config_name] => Configs.ContainsKey(config_name) ? Configs[config_name].Config : null;
 
-    internal Configurations()
-    {
-    }
     internal Configurations(string save_directory)
     {
-        SaveDir = save_directory;
+        SaveDir = Path.Combine(save_directory, "Configurations");
         Configs = new Dictionary<string, Configuration>();
     }
 
@@ -23,15 +20,10 @@ public sealed class Configurations : Padlock<Configurations>
     {
         if (Configs.ContainsKey(config_name))
             return;
-        
+
         var file_path = Path.Combine(SaveDir, config_name, config_name + ".json");
         var dir_path = Path.Combine(SaveDir, config_name);
 
-        if (!Directory.Exists(SaveDir))
-        {
-            Directory.CreateDirectory(SaveDir);
-        }
-            
         if (Directory.Exists(dir_path))
         {
             string json;
@@ -59,6 +51,7 @@ public sealed class Configurations : Padlock<Configurations>
         }
 
         Configs.Add(config_name, new Configuration(config, config_name));
+        Logger.Log("Created & Loaded Config: " + config_name);
     }
 
     internal void Unload(IConfig config, string config_name)
@@ -77,7 +70,7 @@ public sealed class Configurations : Padlock<Configurations>
         Load(config, config_name);
     }
 
-    internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) => 
+    internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) =>
         GetAllConfigs().Where(x => match(x));
 
     internal IEnumerable<Configuration> GetAllConfigs() => Configs.Select(x => x.Value);
