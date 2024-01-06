@@ -13,7 +13,7 @@ public sealed class Configurations : Padlock<Configurations>
 
     internal Configurations(string save_directory)
     {
-        SaveDir = Path.Combine(save_directory, "Configurations");
+        SaveDir = Path.Combine(save_directory);
         Configs = new Dictionary<string, Configuration>();
     }
 
