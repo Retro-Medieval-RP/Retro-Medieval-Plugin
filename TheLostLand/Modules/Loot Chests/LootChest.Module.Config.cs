@@ -1,6 +1,5 @@
 ﻿namespace TheLostLand.Modules.Loot_Chests;
 
-[ModuleConfiguration<LootChestModuleConfig>("LootChestConfig", "Loot Module")]
 public class LootChestModuleConfig : IConfig
 {
     public List<LootChest> LootChests = [];

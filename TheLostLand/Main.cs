@@ -9,7 +9,7 @@ public sealed class Main : RocketPlugin
     protected override void Load()
     {
         Instance = this;
-        Configurations.SetInstance(new Configurations(Directory));
+        
         ModuleLoader.Instance.Load(Assembly);
     }
 
