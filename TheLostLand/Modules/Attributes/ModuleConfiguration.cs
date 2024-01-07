@@ -13,13 +13,12 @@ public class ModuleConfiguration<TConfiguration>(string config_name) : ModuleCon
     public override void LoadConfig(string data_path)
     {
         var file_path = Path.Combine(data_path, ConfigName + ".json");
-        Logger.Log("Line 16");
 
         if (!Directory.Exists(data_path))
         {
             Directory.CreateDirectory(data_path);
         }
-        Logger.Log("Line 22");
+
         if (File.Exists(file_path))
         {
             string json;
@@ -28,15 +27,15 @@ public class ModuleConfiguration<TConfiguration>(string config_name) : ModuleCon
             {
                 json = stream.ReadToEnd();
             }
-            
+
             Configurations.Instance.Load(new Configuration.Configuration(
                 JsonConvert.DeserializeObject<TConfiguration>(json), ConfigName, file_path, data_path));
             return;
         }
-        Logger.Log("Line 36");
+
         var config = Activator.CreateInstance<TConfiguration>();
         config.LoadDefaults();
-        Logger.Log("Line 39");
+
         var json_save = JsonConvert.SerializeObject(config, Formatting.Indented);
 
         using (var stream = new StreamWriter(file_path, false))
@@ -45,7 +44,6 @@ public class ModuleConfiguration<TConfiguration>(string config_name) : ModuleCon
         }
 
         Configurations.Instance.Load(new Configuration.Configuration(config, ConfigName, file_path, data_path));
-        Logger.Log("Line 50");
     }
 }
 
