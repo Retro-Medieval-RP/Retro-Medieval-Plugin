@@ -43,6 +43,8 @@ public class ModuleConfiguration<TConfiguration>(string config_name) : ModuleCon
 
         Configurations.Instance.Load(new Configuration.Configuration(config, ConfigName, file_path, data_path));
     }
+
+    public override bool ConfigType(Type type) => typeof(TConfiguration) == type;
 }
 
 [AttributeUsage(AttributeTargets.Class)]
@@ -51,4 +53,6 @@ public abstract class ModuleConfiguration(string config_name) : Attribute
     protected string ConfigName { get; } = config_name;
 
     public abstract void LoadConfig(string data_path);
+
+    public abstract bool ConfigType(Type type);
 }
