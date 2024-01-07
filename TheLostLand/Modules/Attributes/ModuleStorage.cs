@@ -25,25 +25,30 @@ public class ModuleStorage : Attribute
     internal void LoadStorage(string data_path)
     {
         var file_path = Path.Combine(data_path, StorageName + ".json");
-        
-        if (Directory.Exists(data_path))
+
+        if (!Directory.Exists(data_path))
+        {
+            Directory.CreateDirectory(data_path);
+        }
+
+        if (File.Exists(file_path))
         {
             string json;
-            
+
             using (var stream = File.OpenText(file_path))
             {
                 json = stream.ReadToEnd();
             }
-            
+
             StorageData = JsonConvert.DeserializeObject(json);
             return;
         }
-        
+
         StorageData = new object();
-        
+
         Directory.CreateDirectory(data_path);
+
         var json_save = JsonConvert.SerializeObject(StorageData, Formatting.Indented);
-        
         using (var stream = new StreamWriter(file_path, false))
         {
             stream.Write(json_save);
