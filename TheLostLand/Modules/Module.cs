@@ -10,8 +10,8 @@ public class Module
     protected Module()
     {
         GetModuleInfo();
-        GetStorages();
         GetConfigs();
+        GetStorages();
     }
 
     private void GetConfigs()
@@ -45,17 +45,5 @@ public class Module
         }
 
         ModuleInformation = (ModuleInformation)enumerable.ToArray()[0];
-    }
-
-    protected bool GetConfiguration<TConfig>(out TConfig config_out) where TConfig : IConfig, new()
-    {
-        if (GetType().GetCustomAttribute(typeof(ModuleConfiguration<TConfig>)) is ModuleConfiguration<TConfig> config)
-        {
-            config_out = config.Configuration;
-            return true;
-        }
-
-        config_out = default;
-        return false;
     }
 }
