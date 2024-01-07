@@ -11,44 +11,6 @@ public sealed class Configurations : Padlock<Configurations>
 
     public Configurations() => Configs = new Dictionary<string, Configuration>();
 
-    internal void Load(IConfig config, string config_name, string path) =>
-        Load(new Configuration(config, config_name, Path.Combine(path, config_name + ".json"), path));
-
-    internal void Load(Configuration config)
-    {
-        if (Configs.ContainsKey(config.Name))
-            return;
-
-        if (Directory.Exists(config.ConfigFolderPath))
-        {
-            string json;
-
-            using (var stream = File.OpenText(config.ConfigFilePath))
-            {
-                json = stream.ReadToEnd();
-            }
-
-            var json_data = JsonConvert.DeserializeObject(json, config.GetType());
-
-            Configs.Add(config.Name, config);
-            Logger.Log("Loaded Config: " + config.Name);
-            return;
-        }
-
-        Directory.CreateDirectory(config.ConfigFolderPath);
-        config.Config.LoadDefaults();
-
-        var json_save = JsonConvert.SerializeObject(config, Formatting.Indented);
-
-        using (var stream = File.CreateText(config.ConfigFilePath))
-        {
-            stream.Write(json_save);
-        }
-
-        Configs.Add(config.Name, config);
-        Logger.Log("Created & Loaded Config: " + config.Name);
-    }
-
     internal void Unload(string config_name)
     {
         if (!Configs.ContainsKey(config_name))
@@ -57,6 +19,14 @@ public sealed class Configurations : Padlock<Configurations>
         }
 
         Configs.Remove(config_name);
+    }
+
+    internal void Load(Configuration config)
+    {
+        if(Configs.ContainsValue(config))
+            return;
+        
+        Configs.Add(config.Name, config);
     }
 
     internal void Reload(string config_name)
