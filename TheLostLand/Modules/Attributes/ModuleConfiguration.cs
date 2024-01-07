@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using UnityEngine;
-using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.Attributes;
 

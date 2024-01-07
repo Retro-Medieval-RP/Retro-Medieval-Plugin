@@ -1,8 +1,4 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Rocket.Core.Logging;
-
-namespace TheLostLand.Configuration;
+﻿namespace TheLostLand.Configuration;
 
 public sealed class Configurations : Padlock<Configurations>
 {
