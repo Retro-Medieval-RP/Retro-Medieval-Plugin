@@ -3,23 +3,11 @@ using Newtonsoft.Json;
 
 namespace TheLostLand.Modules.Attributes;
 
-public class ModuleStorage<TStorage>(string storage_name) : ModuleStorage(storage_name) where TStorage : class
+public class ModuleStorage<TStorage>(string storage_name) : ModuleStorage(storage_name) where TStorage : class, IStorage, new()
 {
-    protected TStorage Storage => StorageData as TStorage;
-}
+    public TStorage Storage => StorageData as TStorage;
 
-[AttributeUsage(AttributeTargets.Class)]
-public class ModuleStorage : Attribute
-{
-    private string StorageName { get; set; }
-    protected object StorageData { get; private set; }
-
-    protected ModuleStorage(string storage_name)
-    {
-        StorageName = storage_name;
-    }
-
-    internal void LoadStorage(string data_path)
+    internal override void LoadStorage(string data_path)
     {
         var file_path = Path.Combine(data_path, StorageName + ".json");
 
@@ -41,7 +29,7 @@ public class ModuleStorage : Attribute
             return;
         }
 
-        StorageData = new object();
+        StorageData = new TStorage();
 
         Directory.CreateDirectory(data_path);
 
@@ -51,4 +39,16 @@ public class ModuleStorage : Attribute
             stream.Write(json_save);
         }
     }
+
+    public override bool StorageType(Type type) => type == typeof(TStorage);
+}
+
+[AttributeUsage(AttributeTargets.Class)]
+public abstract class ModuleStorage(string storage_name) : Attribute
+{
+    protected string StorageName { get; set; } = storage_name;
+    protected object StorageData { get; set; }
+
+    internal abstract void LoadStorage(string data_path);
+    public abstract bool StorageType(Type type);
 }

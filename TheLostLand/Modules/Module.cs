@@ -5,10 +5,10 @@ namespace TheLostLand.Modules;
 
 public class Module
 {
-    internal ModuleInformation ModuleInformation { get; set; }
-    internal List<ModuleConfiguration> ModuleConfigurations { get; set; }
+    internal ModuleInformation ModuleInformation { get; private set; }
+    private List<ModuleConfiguration> ModuleConfigurations { get; set; }
 
-    internal List<ModuleStorage> ModuleStorages { get; set; }
+    private List<ModuleStorage> ModuleStorages { get; set; }
 
     protected Module()
     {
@@ -19,7 +19,7 @@ public class Module
 
     private void GetConfigs()
     {
-        var attributes = GetType().GetCustomAttributes<ModuleConfiguration>();
+        var attributes = GetType().GetCustomAttributes<ModuleConfiguration>().ToList();
 
         foreach (var config in attributes)
         {
@@ -31,7 +31,7 @@ public class Module
 
     private void GetStorages()
     {
-        var attributes = GetType().GetCustomAttributes<ModuleStorage>();
+        var attributes = GetType().GetCustomAttributes<ModuleStorage>().ToList();
 
         foreach (var storage in attributes)
         {
@@ -63,6 +63,18 @@ public class Module
         }
 
         config = default;
+        return false;
+    }
+
+    protected bool GetStorage<TStorage>(out TStorage storage) where TStorage : class, IStorage, new()
+    {
+        if (ModuleStorages.Exists(x => x.StorageType(typeof(TStorage))))
+        {
+            storage = GetType().GetCustomAttribute<ModuleStorage<TStorage>>().Storage;
+            return true;
+        }
+
+        storage = default;
         return false;
     }
 }

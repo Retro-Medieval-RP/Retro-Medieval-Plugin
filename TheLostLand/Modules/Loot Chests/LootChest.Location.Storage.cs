@@ -1,8 +1,14 @@
-﻿using TheLostLand.Storage;
+﻿namespace TheLostLand.Modules.Loot_Chests;
 
-namespace TheLostLand.Modules.Loot_Chests;
-
-public class LootChestLocationStorage : Storage<List<LootChestLocation>>
+public class LootChestLocationStorage : IStorage
 {
-    
+    public void Save()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Load()
+    {
+        throw new NotImplementedException();
+    }
 }
