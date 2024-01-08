@@ -21,10 +21,10 @@ public class RemoveChestCommand : IRocketCommand
         UnturnedChat.Say($"Removed chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
     }
 
-    public AllowedCaller AllowedCaller { get; }
-    public string Name { get; }
-    public string Help { get; }
-    public string Syntax { get; }
-    public List<string> Aliases { get; }
-    public List<string> Permissions { get; }
+    public AllowedCaller AllowedCaller => AllowedCaller.Player;
+    public string Name => "removechest";
+    public string Help => "Removes a Loot Chest.";
+    public string Syntax => "";
+    public List<string> Aliases => [];
+    public List<string> Permissions => [];
 }
