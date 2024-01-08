@@ -1,7 +1,7 @@
 ﻿using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
 
-namespace TheLostLand.Commands;
+namespace TheLostLand.Commands.Config;
 
 public class ConfigCommand : IRocketCommand
 {

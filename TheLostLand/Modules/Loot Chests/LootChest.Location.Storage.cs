@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TheLostLand.Storage;
+using UnityEngine;
 
 namespace TheLostLand.Modules.Loot_Chests;
 
