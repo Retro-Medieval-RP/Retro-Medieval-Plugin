@@ -6,10 +6,7 @@ namespace TheLostLand.Modules;
 public class ModuleLoader : Padlock<ModuleLoader>
 {
     private readonly List<Module> _modulesLoaded = [];
-
-    public Module this[string module_name] =>
-        _modulesLoaded.FirstOrDefault(x => x.ModuleInformation.ModuleName == module_name);
-
+    
     internal void Load(Assembly assembly)
     {
         var modules = assembly.GetTypes()
@@ -22,5 +19,17 @@ public class ModuleLoader : Padlock<ModuleLoader>
             Logger.Log("Found Module: " + module?.ModuleInformation.ModuleName);
             _modulesLoaded.Add(module);
         }
+    }
+
+    internal bool GetModule<TModule>(out TModule module) where TModule : Module
+    {
+        if (_modulesLoaded.Exists(x => x.ModuleType(typeof(TModule))))
+        {
+            module = _modulesLoaded.Find(x => x.ModuleType(typeof(TModule))) as TModule;
+            return true;
+        }
+
+        module = default;
+        return false;
     }
 }

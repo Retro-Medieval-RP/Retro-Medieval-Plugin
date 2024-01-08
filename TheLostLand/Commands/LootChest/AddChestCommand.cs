@@ -1,6 +1,30 @@
-﻿namespace TheLostLand.Commands.LootChest;
+﻿using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
+using TheLostLand.Modules;
+using TheLostLand.Modules.Loot_Chests;
 
-public class AddChestCommand
+namespace TheLostLand.Commands.LootChest;
+
+public class AddChestCommand : IRocketCommand
 {
-    
+    public void Execute(IRocketPlayer caller, string[] command)
+    {
+        if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
+        {
+            Logger.LogError("Could not find or get module [LootChestModule]!");
+            return;
+        }
+        
+        loot_chest.AddChestLocation(((UnturnedPlayer)caller).Position);
+        Logger.Log($"Added chest location {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
+        UnturnedChat.Say($"Added chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
+    }
+
+    public AllowedCaller AllowedCaller => AllowedCaller.Player;
+    public string Name => "addchest";
+    public string Help => "Adds a loot chest at location of player calling command.";
+    public string Syntax => "";
+    public List<string> Aliases => [];
+    public List<string> Permissions => [];
 }

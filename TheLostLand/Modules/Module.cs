@@ -78,4 +78,6 @@ public class Module
         storage = default;
         return false;
     }
+
+    internal bool ModuleType(Type module) => module == GetType();
 }

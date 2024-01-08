@@ -25,4 +25,12 @@ public class LootChestModule : Module
             storage.AddLocation(location);
         }
     }
+
+    public void RemoveChestLocation(Vector3 position)
+    {
+        if(GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            storage.RemoveLocation(position);
+        }
+    }
 }
