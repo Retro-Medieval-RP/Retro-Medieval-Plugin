@@ -69,7 +69,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ConfigCommand.cs" />
+    <Compile Include="Commands\Config\ConfigCommand.cs" />
+    <Compile Include="Commands\LootChest\AddChestCommand.cs" />
+    <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\Configurations.cs" />
     <Compile Include="Configuration\IConfig.cs" />

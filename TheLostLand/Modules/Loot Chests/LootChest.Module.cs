@@ -1,4 +1,6 @@
-﻿namespace TheLostLand.Modules.Loot_Chests;
+﻿using UnityEngine;
+
+namespace TheLostLand.Modules.Loot_Chests;
 
 [ModuleInformation("Loot Module")]
 [ModuleStorage<LootChestLocationStorage>("LootChestLocation")]
@@ -16,8 +18,11 @@ public class LootChestModule : Module
         }
     }
 
-    public void SpawnChest()
+    public void AddChestLocation(Vector3 location)
     {
-        
+        if(GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            storage.AddLocation(location);
+        }
     }
 }
