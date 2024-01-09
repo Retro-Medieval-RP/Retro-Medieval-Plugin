@@ -17,7 +17,7 @@ public class AddChestCommand : IRocketCommand
             UnturnedChat.Say(Syntax, Color.red);
             return;
         }
-        
+
         if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
         {
             Logger.LogError("Could not find or get module [LootChestModule]!");
