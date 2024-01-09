@@ -10,13 +10,18 @@ public class AddChestCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            return;
+        }
+        
         if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
         {
             Logger.LogError("Could not find or get module [LootChestModule]!");
             return;
         }
         
-        loot_chest.AddChestLocation(((UnturnedPlayer)caller).Position);
+        loot_chest.AddChestLocation(((UnturnedPlayer)caller).Position, command[0]);
         Logger.Log($"Added chest location {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
         UnturnedChat.Say($"Added chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
     }

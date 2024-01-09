@@ -18,11 +18,11 @@ public class LootChestModule : Module
         }
     }
 
-    public void AddChestLocation(Vector3 location)
+    public void AddChestLocation(Vector3 location, string zone)
     {
         if(GetStorage<LootChestLocationStorage>(out var storage))
         {
-            storage.AddLocation(location);
+            storage.AddLocation(location, zone);
         }
     }
 
@@ -32,5 +32,10 @@ public class LootChestModule : Module
         {
             storage.RemoveLocation(position);
         }
+    }
+
+    public void SpawnChests()
+    {
+        
     }
 }

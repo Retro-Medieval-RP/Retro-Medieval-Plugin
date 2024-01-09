@@ -5,4 +5,6 @@ public class LootChestLocation
     public float X { get; set; }
     public float Y { get; set; }
     public float Z { get; set; }
+    
+    public string ZoneName { get; set; }
 }

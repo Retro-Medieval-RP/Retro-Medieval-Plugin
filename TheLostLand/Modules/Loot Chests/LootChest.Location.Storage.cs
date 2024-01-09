@@ -14,13 +14,14 @@ public class LootChestLocationStorage : IStorage
     {
     }
 
-    public void AddLocation(Vector3 location)
+    public void AddLocation(Vector3 location, string zone)
     {
         Locations.Add(new LootChestLocation
         {
             X = location.x,
             Y = location.y,
-            Z = location.z
+            Z = location.z,
+            ZoneName = zone
         });
         
         Save();
