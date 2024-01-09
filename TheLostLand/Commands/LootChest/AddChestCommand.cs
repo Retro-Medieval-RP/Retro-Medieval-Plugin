@@ -1,8 +1,9 @@
-﻿using Rocket.Core.Logging;
-using Rocket.Unturned.Chat;
+﻿using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using TheLostLand.Modules;
 using TheLostLand.Modules.Loot_Chests;
+using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Commands.LootChest;
 
@@ -12,6 +13,8 @@ public class AddChestCommand : IRocketCommand
     {
         if (command.Length < 1)
         {
+            UnturnedChat.Say("A Syntax Error Has Occured: ", Color.red);
+            UnturnedChat.Say(Syntax, Color.red);
             return;
         }
         
@@ -29,7 +32,7 @@ public class AddChestCommand : IRocketCommand
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
     public string Name => "addchest";
     public string Help => "Adds a loot chest at location of player calling command.";
-    public string Syntax => "";
+    public string Syntax => "/addchest <zone name>";
     public List<string> Aliases => [];
     public List<string> Permissions => [];
 }
