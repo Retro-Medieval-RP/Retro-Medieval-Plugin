@@ -19,4 +19,3 @@ namespace TheLostLand.Events.Zones
             ZoneLeftEvent?.Invoke(new ZoneLeftEventArgs(user_id, zone));
     }
 }
-
