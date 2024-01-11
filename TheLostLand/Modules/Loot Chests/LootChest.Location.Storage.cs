@@ -23,14 +23,15 @@ public class LootChestLocationStorage : IStorage
             Z = location.z,
             ZoneName = zone
         });
-        
         Save();
     }
 
     public void RemoveLocation(Vector3 location)
     {
         Locations.RemoveAll(loc => location.Equals(new Vector3(loc.X, loc.Y, loc.Z)));
-        
         Save();
     }
+
+    public IEnumerable<LootChestLocation> GetLocationsFromZone(string zone) => 
+        Locations.Where(x => x.ZoneName == zone);
 }
