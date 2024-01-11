@@ -79,15 +79,21 @@
     <Compile Include="Commands\Config\ConfigCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
+    <Compile Include="Events\Zones\ZoneEntered.cs" />
+    <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Models\Loot Chests\ChestTier.cs" />
     <Compile Include="Models\Loot Chests\LootChest.cs" />
     <Compile Include="Models\Loot Chests\LootChestLocation.cs" />
     <Compile Include="Models\Loot Chests\LootItem.cs" />
+    <Compile Include="Models\Zones\Node.cs" />
+    <Compile Include="Models\Zones\Zone.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Location.Storage.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.Config.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.cs" />
+    <Compile Include="Modules\Zones\Zones.Module.cs" />
+    <Compile Include="Modules\Zones\Zones.Storage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
