@@ -1,6 +1,4 @@
-﻿using TheLostLand.Modules;
-
-namespace TheLostLand;
+﻿namespace TheLostLand;
 
 public sealed class Main : RocketPlugin
 {
@@ -10,7 +8,7 @@ public sealed class Main : RocketPlugin
     {
         Instance = this;
         
-        ModuleLoader.Instance.Load(Assembly);
+        ModuleLoader.Instance.Load(Assembly, Directory);
     }
 
     protected override void Unload()

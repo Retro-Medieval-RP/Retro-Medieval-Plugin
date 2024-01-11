@@ -79,31 +79,26 @@
     <Compile Include="Commands\Config\ConfigCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
-    <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Configuration\Configurations.cs" />
-    <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Models\Loot Chests\ChestTier.cs" />
     <Compile Include="Models\Loot Chests\LootChest.cs" />
     <Compile Include="Models\Loot Chests\LootChestLocation.cs" />
     <Compile Include="Models\Loot Chests\LootItem.cs" />
-    <Compile Include="Modules\Attributes\ModuleConfiguration.cs" />
-    <Compile Include="Modules\Attributes\ModuleInformation.cs" />
-    <Compile Include="Modules\Attributes\ModuleStorage.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Location.Storage.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.Config.cs" />
     <Compile Include="Modules\Loot Chests\LootChest.Module.cs" />
-    <Compile Include="Modules\Module.cs" />
-    <Compile Include="Modules\ModuleLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Storage\IStorage.cs" />
-    <Compile Include="Utils\Padlock.cs" />
-    <Compile Include="Utils\Picker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TheLostLand.Core\TheLostLand.Core.csproj">
+      <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
+      <Name>TheLostLand.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

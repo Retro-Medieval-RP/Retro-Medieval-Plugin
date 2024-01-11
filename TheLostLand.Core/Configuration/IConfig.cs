@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Configuration;
+﻿namespace TheLostLand.Core.Configuration;
 
 public interface IConfig
 {

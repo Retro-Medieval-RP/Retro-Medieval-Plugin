@@ -1,14 +1,21 @@
-﻿using System.Reflection;
-using Rocket.Core.Logging;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using TheLostLand.Core.Utils;
 
-namespace TheLostLand.Modules;
+namespace TheLostLand.Core.Modules;
 
 public class ModuleLoader : Padlock<ModuleLoader>
 {
     private readonly List<Module> _modulesLoaded = [];
     
-    internal void Load(Assembly assembly)
+    internal string SaveDirectory { get; private set; }
+
+    public void Load(Assembly assembly, string dir)
     {
+        SaveDirectory = dir;
+        
         var modules = assembly.GetTypes()
             .Where(x => x.BaseType == typeof(Module))
             .Select(Activator.CreateInstance)
@@ -16,12 +23,12 @@ public class ModuleLoader : Padlock<ModuleLoader>
 
         foreach (var module in modules)
         {
-            Logger.Log("Found Module: " + module?.ModuleInformation.ModuleName);
+            Console.WriteLine("Found Module: " + module?.ModuleInformation.ModuleName);
             _modulesLoaded.Add(module);
         }
     }
 
-    internal bool GetModule<TModule>(out TModule module) where TModule : Module
+    public bool GetModule<TModule>(out TModule module) where TModule : Module
     {
         if (_modulesLoaded.Exists(x => x.ModuleType(typeof(TModule))))
         {

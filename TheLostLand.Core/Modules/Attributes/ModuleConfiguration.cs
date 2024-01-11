@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
+using TheLostLand.Core.Configuration;
 
-namespace TheLostLand.Modules.Attributes;
+namespace TheLostLand.Core.Modules.Attributes;
 
 public class ModuleConfiguration<TConfiguration>(string config_name) : ModuleConfiguration(config_name)
     where TConfiguration : class, IConfig, new()

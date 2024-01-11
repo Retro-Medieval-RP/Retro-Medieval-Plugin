@@ -1,9 +1,9 @@
-﻿namespace TheLostLand.Configuration;
+﻿namespace TheLostLand.Core.Configuration;
 
 public sealed class Configuration
 {
     internal IConfig Config { get; }
-    internal string Name { get; }
+    public string Name { get; }
     internal string ConfigFilePath { get; }
     internal string ConfigFolderPath { get; }
 

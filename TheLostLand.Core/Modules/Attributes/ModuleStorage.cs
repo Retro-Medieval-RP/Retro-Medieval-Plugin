@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
-using TheLostLand.Storage;
+using TheLostLand.Core.Storage;
 
-namespace TheLostLand.Modules.Attributes;
+namespace TheLostLand.Core.Modules.Attributes;
 
 public class ModuleStorage<TStorage>(string storage_name) : ModuleStorage(storage_name) where TStorage : class, IStorage, new()
 {

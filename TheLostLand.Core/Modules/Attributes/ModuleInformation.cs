@@ -1,4 +1,6 @@
-﻿namespace TheLostLand.Modules.Attributes;
+﻿using System;
+
+namespace TheLostLand.Core.Modules.Attributes;
 
 [System.AttributeUsage(System.AttributeTargets.Class, Inherited = false)]
 public class ModuleInformation(string module_name) : Attribute

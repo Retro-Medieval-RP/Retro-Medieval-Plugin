@@ -1,6 +1,5 @@
 ﻿using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
-using TheLostLand.Modules;
 using TheLostLand.Modules.Loot_Chests;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;

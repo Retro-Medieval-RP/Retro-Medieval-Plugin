@@ -1,8 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using TheLostLand.Storage;
+using TheLostLand.Core.Configuration;
+using TheLostLand.Core.Modules.Attributes;
+using TheLostLand.Core.Storage;
 
-namespace TheLostLand.Modules;
+namespace TheLostLand.Core.Modules;
 
 public class Module
 {
@@ -24,7 +29,7 @@ public class Module
 
         foreach (var config in attributes)
         {
-            config.LoadConfig(Path.Combine(Main.Instance.Directory, ModuleInformation.ModuleName));
+            config.LoadConfig(Path.Combine(ModuleLoader.Instance.SaveDirectory, ModuleInformation.ModuleName));
         }
 
         ModuleConfigurations = attributes.ToList();
@@ -36,7 +41,7 @@ public class Module
 
         foreach (var storage in attributes)
         {
-            storage.LoadStorage(Path.Combine(Main.Instance.Directory, ModuleInformation.ModuleName));
+            storage.LoadStorage(Path.Combine(ModuleLoader.Instance.SaveDirectory, ModuleInformation.ModuleName));
         }
 
         ModuleStorages = attributes.ToList();

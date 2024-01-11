@@ -1,4 +1,8 @@
-﻿namespace TheLostLand.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TheLostLand.Core.Utils;
 
 public class Picker<T>
 {

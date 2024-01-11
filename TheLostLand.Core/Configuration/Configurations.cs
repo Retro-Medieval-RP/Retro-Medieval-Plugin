@@ -1,11 +1,16 @@
-﻿namespace TheLostLand.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TheLostLand.Core.Utils;
+
+namespace TheLostLand.Core.Configuration;
 
 public sealed class Configurations : Padlock<Configurations>
 {
     private Dictionary<string, Configuration> Configs { get; set; } = new();
     public Configuration this[string config_name] => Configs.ContainsKey(config_name) ? Configs[config_name] : null;
     
-    internal void Load(Configuration config)
+    public void Load(Configuration config)
     {
         if(Configs.ContainsValue(config))
             return;
@@ -13,7 +18,7 @@ public sealed class Configurations : Padlock<Configurations>
         Configs.Add(config.Name, config);
     }
 
-    internal void UnloadAll()
+    public void UnloadAll()
     {
         foreach (var config in Configs)
         {
@@ -21,7 +26,7 @@ public sealed class Configurations : Padlock<Configurations>
         }
     }
     
-    internal void Unload(string config_name)
+    public void Unload(string config_name)
     {
         if (!Configs.ContainsKey(config_name))
         {
@@ -31,7 +36,7 @@ public sealed class Configurations : Padlock<Configurations>
         Configs.Remove(config_name);
     }
 
-    internal void Reload(string config_name)
+    public void Reload(string config_name)
     {
         var conf = Configs[config_name];
 
@@ -39,8 +44,8 @@ public sealed class Configurations : Padlock<Configurations>
         Load(conf);
     }
     
-    internal IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) =>
+    public IEnumerable<Configuration> GetAllConfigs(Predicate<Configuration> match) =>
         GetAllConfigs().Where(x => match(x));
 
-    internal IEnumerable<Configuration> GetAllConfigs() => Configs.Select(x => x.Value);
+    public IEnumerable<Configuration> GetAllConfigs() => Configs.Select(x => x.Value);
 }
