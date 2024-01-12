@@ -34,4 +34,7 @@ public class LootChestLocationStorage : IStorage
 
     public IEnumerable<LootChestLocation> GetLocationsFromZone(string zone) => 
         Locations.Where(x => x.ZoneName == zone);
+
+    public bool AnyChestsInZone(string zone_name) => 
+        Locations.Any(x => x.ZoneName == zone_name);
 }

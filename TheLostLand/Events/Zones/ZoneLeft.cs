@@ -9,7 +9,7 @@ namespace TheLostLand.Events.Zones
         internal Zone Zone { get; set; } = zone;
     }
 
-    internal class ZoneLeftEventPublisher
+    internal static class ZoneLeftEventPublisher
     {
         public delegate void ZoneLeftEventHandler(ZoneLeftEventArgs e);
 

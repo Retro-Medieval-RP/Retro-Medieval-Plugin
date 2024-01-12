@@ -1,5 +1,8 @@
 ﻿using SDG.Unturned;
+using TheLostLand.Events.LootChests;
+using TheLostLand.Events.Zones;
 using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.Loot_Chests;
 
@@ -18,6 +21,25 @@ public class LootChestModule : Module
         {
             Picker.AddEntry(chest, chest.ChestPlaceChance);
         }
+
+        ZoneEnteredEventPublisher.ZoneEnteredEvent += OnZoneEntered;
+    }
+
+    private void OnZoneEntered(ZoneEnteredEventArgs e)
+    {
+        if (!GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            Logger.LogError("Could not get storage [LootChestLocationStorage]");
+            return;
+        }
+
+        if (!storage.AnyChestsInZone(e.Zone.ZoneName))
+        {
+            return;
+        }
+        
+        SpawnChests(e.Zone.ZoneName);
+        LootChestSpawnedEventPublisher.RaiseEvent(e.Zone);
     }
 
     public void AddChestLocation(Vector3 location, string zone)
