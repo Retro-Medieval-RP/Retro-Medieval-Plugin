@@ -14,4 +14,6 @@ public class ZonesStorage : IStorage
     public void Load()
     {
     }
+
+    public IEnumerable<Zone> GetZones() => Zones;
 }
