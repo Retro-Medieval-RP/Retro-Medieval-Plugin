@@ -79,6 +79,10 @@
     <Compile Include="Commands\Config\ConfigCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
+    <Compile Include="Commands\Zone\CreateZoneCommand.cs" />
+    <Compile Include="Commands\Zone\DeleteZoneCommand.cs" />
+    <Compile Include="Commands\Zone\Nodes\AddNodeCommand.cs" />
+    <Compile Include="Commands\Zone\Nodes\DeleteNodeCommand.cs" />
     <Compile Include="Events\LootChests\LootChestSpawned.cs" />
     <Compile Include="Events\Zones\ZoneEntered.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
