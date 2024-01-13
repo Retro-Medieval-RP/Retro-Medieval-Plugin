@@ -58,7 +58,7 @@ public class LootChestModule : Module
         }
     }
 
-    public void SpawnChests(string zone)
+    private void SpawnChests(string zone)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
