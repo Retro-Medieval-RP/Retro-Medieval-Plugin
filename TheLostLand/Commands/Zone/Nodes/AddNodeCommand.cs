@@ -26,7 +26,7 @@ public class AddNodeCommand : IRocketCommand
         zones.AddNode(command[0], ((UnturnedPlayer)caller).Position);
     }
 
-    public AllowedCaller AllowedCaller => AllowedCaller.Both;
+    public AllowedCaller AllowedCaller => AllowedCaller.Player;
     public string Name => "addnode";
     public string Help => "";
     public string Syntax => "/addnode <zone name>";
