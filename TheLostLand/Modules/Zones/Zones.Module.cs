@@ -50,4 +50,48 @@ public class ZonesModule : Module
         ZoneEnteredEventPublisher.RaiseEvent(player.CSteamID, zone);
         PlayersInZones.Add(player.CSteamID, zone);
     }
+
+    public void CreateZone(string zone)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage for Zones [ZonesStorage]");
+            return;
+        }
+
+        storage.CreateZone(zone);
+    }
+
+    public void DeleteZone(string zone)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage for Zones [ZonesStorage]");
+            return;
+        }
+
+        storage.DeleteZone(zone);
+    }
+
+    public void DeleteNode(string zone, int id)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage for Zones [ZonesStorage]");
+            return;
+        }
+
+        storage.DeleteNode(zone, id);
+    }
+
+    public void AddNode(string zone, Vector3 position)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage for Zones [ZonesStorage]");
+            return;
+        }
+
+        storage.AddNode(zone, position);
+    }
 }
