@@ -11,8 +11,8 @@ public class DeleteZoneCommand : IRocketCommand
     {
         if (command.Length < 1)
         {
-            UnturnedChat.Say("A Syntax Error Has Occured: ", Color.red);
-            UnturnedChat.Say(Syntax, Color.red);
+            UnturnedChat.Say(caller, "A Syntax Error Has Occured: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
         

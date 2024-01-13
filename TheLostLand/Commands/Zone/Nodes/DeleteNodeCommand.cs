@@ -11,15 +11,15 @@ public class DeleteNodeCommand : IRocketCommand
     {
         if (command.Length < 2)
         {
-            UnturnedChat.Say("A Syntax Error Has Occured: ", Color.red);
-            UnturnedChat.Say(Syntax, Color.red);
+            UnturnedChat.Say(caller, "A Syntax Error Has Occured: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
 
         if (!int.TryParse(command[1], out var id))
         {
-            UnturnedChat.Say("A Syntax Error Has Occured | Could not parse ID: ", Color.red);
-            UnturnedChat.Say(Syntax, Color.red);
+            UnturnedChat.Say(caller, "A Syntax Error Has Occured | Could not parse ID: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
         

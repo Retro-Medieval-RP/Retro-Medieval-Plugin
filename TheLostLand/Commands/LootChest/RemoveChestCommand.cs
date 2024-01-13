@@ -17,7 +17,7 @@ public class RemoveChestCommand : IRocketCommand
         
         loot_chest.RemoveChestLocation(((UnturnedPlayer)caller).Position);
         Logger.Log($"Removed chest location {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
-        UnturnedChat.Say($"Removed chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
+        UnturnedChat.Say(caller, $"Removed chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Player;

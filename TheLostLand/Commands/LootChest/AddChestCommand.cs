@@ -12,8 +12,8 @@ public class AddChestCommand : IRocketCommand
     {
         if (command.Length < 1)
         {
-            UnturnedChat.Say("A Syntax Error Has Occured: ", Color.red);
-            UnturnedChat.Say(Syntax, Color.red);
+            UnturnedChat.Say(caller, "A Syntax Error Has Occured: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
 
@@ -25,7 +25,7 @@ public class AddChestCommand : IRocketCommand
         
         loot_chest.AddChestLocation(((UnturnedPlayer)caller).Position, command[0]);
         Logger.Log($"Added chest location {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
-        UnturnedChat.Say($"Added chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
+        UnturnedChat.Say(caller, $"Added chest location at  {((UnturnedPlayer)caller).Position.x} {((UnturnedPlayer)caller).Position.y} {((UnturnedPlayer)caller).Position.z}");
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
