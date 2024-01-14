@@ -21,15 +21,11 @@ public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManag
         return true;
     }
 
-    public void Add(Configuration item)
-    {
+    public void Add(Configuration item) => 
         _items.Add(item);
-    }
 
-    public void Remove(Configuration item)
-    {
+    public void Remove(Configuration item) => 
         _items.Remove(item);
-    }
 
     public bool Has(string name) => 
         _items.Exists(x => x.ConfigName == name);
