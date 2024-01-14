@@ -46,6 +46,10 @@
         <Compile Include="Modules\Attributes\ModuleConfiguration.cs" />
         <Compile Include="Modules\Attributes\ModuleInformation.cs" />
         <Compile Include="Modules\Attributes\ModuleStorage.cs" />
+        <Compile Include="Modules\Configuration\Config.cs" />
+        <Compile Include="Modules\Configuration\ConfigurationManager.cs" />
+        <Compile Include="Modules\Configuration\IConfig.cs" />
+        <Compile Include="Modules\IManager.cs" />
         <Compile Include="Modules\Module.cs" />
         <Compile Include="Modules\ModuleLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
@@ -53,7 +57,6 @@
         <Compile Include="Utils\Picker.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Modules\Configuration\" />
       <Folder Include="Modules\Storage\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
