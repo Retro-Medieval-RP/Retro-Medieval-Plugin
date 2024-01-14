@@ -43,18 +43,17 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Configuration\Configuration.cs" />
-        <Compile Include="Configuration\Configurations.cs" />
-        <Compile Include="Configuration\IConfig.cs" />
         <Compile Include="Modules\Attributes\ModuleConfiguration.cs" />
         <Compile Include="Modules\Attributes\ModuleInformation.cs" />
         <Compile Include="Modules\Attributes\ModuleStorage.cs" />
         <Compile Include="Modules\Module.cs" />
-        <Compile Include="Modules\ModuleLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Storage\IStorage.cs" />
         <Compile Include="Utils\Padlock.cs" />
         <Compile Include="Utils\Picker.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Modules\Configuration\" />
+      <Folder Include="Modules\Storage\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,8 +2,8 @@
 
 namespace TheLostLand.Core.Modules.Attributes;
 
-[System.AttributeUsage(System.AttributeTargets.Class, Inherited = false)]
-public class ModuleInformation(string module_name) : Attribute
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class ModuleInformation : Attribute
 {
-    public string ModuleName { get; set; } = module_name;
+    
 }
