@@ -14,7 +14,7 @@ public class Picker<T>
 
     private readonly List<Entry> _entries = [];
     private double _accumulatedWeight;
-    private Random Random { get; set; } = new();
+    private Random Random { get; } = new();
 
     public void AddEntry(T item, double weight)
     {
