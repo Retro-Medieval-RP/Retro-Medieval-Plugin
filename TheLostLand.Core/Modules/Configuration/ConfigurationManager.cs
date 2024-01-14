@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules.Configuration;
 
-public sealed class ConfigurationManager : IManager<Config>
+public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Config>
 {
     private List<Config> _items { get; set; }
     public IReadOnlyList<Config> Items => _items;
@@ -29,4 +30,7 @@ public sealed class ConfigurationManager : IManager<Config>
     {
         _items.Remove(item);
     }
+
+    public bool Has(string name) => 
+        _items.Exists(x => x.ConfigName == name);
 }
