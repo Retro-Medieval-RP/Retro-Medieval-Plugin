@@ -6,7 +6,7 @@ namespace TheLostLand.Core.Modules.Configuration;
 
 public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Configuration>
 {
-    private List<Configuration> _items { get; set; }
+    private List<Configuration> _items { get; } = [];
     public IReadOnlyList<Configuration> Items => _items;
 
     public bool Get(Predicate<Configuration> condition, out Configuration item)

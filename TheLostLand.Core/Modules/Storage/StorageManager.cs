@@ -6,7 +6,7 @@ namespace TheLostLand.Core.Modules.Storage;
 
 public sealed class StorageManager : Padlock<StorageManager>, IManager<Storage>
 {
-    private List<Storage> _items { get; set; }
+    private List<Storage> _items { get; } = [];
     public IReadOnlyList<Storage> Items => _items;
     
     public bool Get(Predicate<Storage> condition, out Storage item)
