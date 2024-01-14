@@ -4,12 +4,12 @@ using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules.Configuration;
 
-public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Config>
+public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Configuration>
 {
-    private List<Config> _items { get; set; }
-    public IReadOnlyList<Config> Items => _items;
+    private List<Configuration> _items { get; set; }
+    public IReadOnlyList<Configuration> Items => _items;
 
-    public bool Get(Predicate<Config> condition, out Config item)
+    public bool Get(Predicate<Configuration> condition, out Configuration item)
     {
         if (!_items.Exists(condition))
         {
@@ -21,12 +21,12 @@ public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManag
         return true;
     }
 
-    public void Add(Config item)
+    public void Add(Configuration item)
     {
         _items.Add(item);
     }
 
-    public void Remove(Config item)
+    public void Remove(Configuration item)
     {
         _items.Remove(item);
     }

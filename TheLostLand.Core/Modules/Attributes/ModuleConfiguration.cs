@@ -30,7 +30,7 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
             }
 
             ConfigurationManager.Instance.Add(
-                new Config(Name, JsonConvert.DeserializeObject<TConfiguration>(data_text)));
+                new Configuration.Configuration(Name, JsonConvert.DeserializeObject<TConfiguration>(data_text)));
             return true;
         }
         
