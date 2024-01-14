@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TheLostLand.Core.Modules;
 
-public interface IManager<T>
+internal interface IManager<T>
 {
     IReadOnlyList<T> Items { get; }
     

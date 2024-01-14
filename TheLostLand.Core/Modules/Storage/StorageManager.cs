@@ -4,7 +4,7 @@ using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules.Storage;
 
-public sealed class StorageManager : Padlock<StorageManager>, IManager<Storage>
+internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage>
 {
     private List<Storage> _items { get; } = [];
     public IReadOnlyList<Storage> Items => _items;

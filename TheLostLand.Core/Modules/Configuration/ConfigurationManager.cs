@@ -4,7 +4,7 @@ using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules.Configuration;
 
-public sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Configuration>
+internal sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Configuration>
 {
     private List<Configuration> _items { get; } = [];
     public IReadOnlyList<Configuration> Items => _items;
