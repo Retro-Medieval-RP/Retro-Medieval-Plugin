@@ -1,12 +1,26 @@
 ﻿using System;
+using System.IO;
+using TheLostLand.Core.Modules.Storage;
 
 namespace TheLostLand.Core.Modules.Attributes;
 
-public class ModuleStorage<TStorage>(string name) : ModuleStorage(name)
+public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TStorage : class, IStorage, new()
 {
     internal override bool LoadedStorage(string data_path, string file_name)
     {
-        return false;
+        if (StorageManager.Instance.Has(Name))
+        {
+            return false;
+        }
+
+        if (!Directory.Exists(data_path))
+        {
+            Directory.CreateDirectory(data_path);
+        }
+
+        var file_path = Path.Combine(data_path, file_name);
+
+        return new TStorage().Load(file_path);
     }
 
     internal override bool IsStorageOfType(Type t) => t == typeof(TStorage);
