@@ -9,7 +9,7 @@ using TheLostLand.Core.Modules.Storage;
 
 namespace TheLostLand.Core.Modules;
 
-public class Module
+public abstract class Module
 {
     private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
     private List<ModuleConfiguration> Configurations { get; set; } = [];
@@ -20,6 +20,9 @@ public class Module
         LoadConfigs();
         LoadStorages();
     }
+
+    public abstract void Load();
+    public abstract void Unload();
     
     private void LoadConfigs()
     {

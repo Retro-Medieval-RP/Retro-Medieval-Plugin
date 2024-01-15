@@ -8,4 +8,11 @@ namespace TheLostLand.Modules;
 [ModuleStorage<TestingModuleStorage>("TestingModuleStorage")]
 internal class TestingModule : Module
 {
+    public override void Load()
+    {
+    }
+
+    public override void Unload()
+    {
+    }
 }

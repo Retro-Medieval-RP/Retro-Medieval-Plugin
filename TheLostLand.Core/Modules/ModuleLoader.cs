@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules;
@@ -23,7 +22,8 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         foreach (var m in modules)
         {
             var module = Activator.CreateInstance(m) as Module;
-            var ats = module.GetType().GetCustomAttributes(false);
+            module?.Load();
+            
             Modules.Add(module);
         }
     }
