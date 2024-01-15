@@ -11,6 +11,18 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
     internal string ModuleDirectory { get; private set; }
 
     private List<Module> Modules { get; set; } = [];
+
+    public bool GetModule<TModule>(out TModule module) where TModule : class
+    {
+        if (Modules.All(x => x.GetType() != typeof(TModule)))
+        {
+            module = default;
+            return false;
+        }
+
+        module = Modules.Find(x => x.GetType() == typeof(TModule)) as TModule;
+        return true;
+    }
     
     public void SetDirectory(string dir) => ModuleDirectory = dir;
 
