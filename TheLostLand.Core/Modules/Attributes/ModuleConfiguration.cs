@@ -7,6 +7,15 @@ namespace TheLostLand.Core.Modules.Attributes;
 
 public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleConfiguration(name) where TConfiguration : class, IConfig, new()
 {
+    internal TConfiguration Configuration => GetConfig();
+    
+    private TConfiguration GetConfig()
+    {
+        ConfigurationManager.Instance.Get((x => x.ConfigName == Name), out var config);
+
+        return (TConfiguration)config.Config;
+    }
+    
     internal override bool LoadedConfiguration(string data_path, string file_name)
     {
         if (ConfigurationManager.Instance.Has(Name))
@@ -43,6 +52,8 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
             using var stream = new StreamWriter(file_path, false);
             stream.Write(obj_data);
 
+            ConfigurationManager.Instance.Add(new Configuration.Configuration(Name, config));
+            
             return true;
         }
     }
@@ -53,7 +64,6 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
 [AttributeUsage(AttributeTargets.Class)]
 public abstract class ModuleConfiguration(string name) : Attribute
 {
-    internal IConfig Configuration { get; set; }
     internal string Name { get; } = name;
 
     internal abstract bool LoadedConfiguration(string data_path, string file_name);
