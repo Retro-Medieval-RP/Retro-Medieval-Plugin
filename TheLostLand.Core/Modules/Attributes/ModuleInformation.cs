@@ -9,8 +9,8 @@ namespace TheLostLand.Core.Modules.Attributes;
 public sealed class ModuleInformation : Attribute
 {
     private string ModuleName { get; }
-    private List<ModuleConfiguration> Configs { get; }
-    private List<ModuleStorage> Storages { get; }
+    internal List<ModuleConfiguration> Configs { get; }
+    internal List<ModuleStorage> Storages { get; }
 
     public ModuleInformation(string module_name)
     {

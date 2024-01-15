@@ -9,8 +9,9 @@ namespace TheLostLand.Core.Modules;
 
 public class Module
 {
-    internal IEnumerable<ModuleConfiguration> Configurations { get; set; }
-    internal IEnumerable<ModuleStorage> Storages { get; set; }
+    protected ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
+    private IEnumerable<ModuleConfiguration> Configurations => Information.Configs;
+    private IEnumerable<ModuleStorage> Storages  => Information.Storages;
     
     protected bool GetConfiguration<TConfiguration>(out TConfiguration config) where TConfiguration : class, IConfig, new()
     {
