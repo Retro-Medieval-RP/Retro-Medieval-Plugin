@@ -1,4 +1,8 @@
-﻿namespace TheLostLand.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TheLostLand.Core.Utils;
 
 public class Picker<T>
 {
@@ -10,7 +14,7 @@ public class Picker<T>
 
     private readonly List<Entry> _entries = [];
     private double _accumulatedWeight;
-    private Random Random { get; set; } = new();
+    private Random Random { get; } = new();
 
     public void AddEntry(T item, double weight)
     {

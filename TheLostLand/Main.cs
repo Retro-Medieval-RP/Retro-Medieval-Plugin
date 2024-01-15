@@ -1,20 +1,17 @@
-﻿using TheLostLand.Modules;
+﻿using Rocket.Core.Plugins;
+using TheLostLand.Core.Modules;
 
 namespace TheLostLand;
 
-public sealed class Main : RocketPlugin
+internal class Main : RocketPlugin
 {
-    public static Main Instance { get; private set; }
-
     protected override void Load()
     {
-        Instance = this;
-        
-        ModuleLoader.Instance.Load(Assembly);
+        ModuleLoader.Instance.SetDirectory(Directory);
+        ModuleLoader.Instance.LoadModules(Assembly);
     }
 
     protected override void Unload()
     {
-        Configurations.Instance.UnloadAll();
     }
 }
