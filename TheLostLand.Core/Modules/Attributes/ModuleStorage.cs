@@ -6,6 +6,15 @@ namespace TheLostLand.Core.Modules.Attributes;
 
 public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TStorage : class, IStorage, new()
 {
+    public TStorage Storage => GetStorage();
+    
+    private TStorage GetStorage()
+    {
+        StorageManager.Instance.Get((x => x.StorageName == Name), out var storage);
+
+        return (TStorage)storage.Store;
+    }
+    
     internal override bool LoadedStorage(string data_path, string file_name)
     {
         if (StorageManager.Instance.Has(Name))
