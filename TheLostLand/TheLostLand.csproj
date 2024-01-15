@@ -77,6 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="Models\Zones\Node.cs" />
+    <Compile Include="Models\Zones\Zone.cs" />
+    <Compile Include="Modules\Zones\ZonesModule.cs" />
+    <Compile Include="Modules\Zones\ZonesStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +91,6 @@
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>TheLostLand.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
