@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Core.Utils;
 
 namespace TheLostLand.Core.Modules;
@@ -17,10 +18,13 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
     public void LoadModules(Assembly plugin)
     {
         var modules = plugin.GetTypes()
-            .Where(x => x.BaseType == typeof(Module))
-            .Select(Activator.CreateInstance)
-            .Select(x => x as Module);
-        
-        Modules.AddRange(modules);
+            .Where(x => x.BaseType == typeof(Module));
+
+        foreach (var m in modules)
+        {
+            var module = Activator.CreateInstance(m) as Module;
+            var ats = module.GetType().GetCustomAttributes(false);
+            Modules.Add(module);
+        }
     }
 }

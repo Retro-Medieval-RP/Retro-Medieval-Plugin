@@ -8,5 +8,4 @@ namespace TheLostLand.Modules;
 [ModuleStorage<TestingModuleStorage>("TestingModuleStorage")]
 internal class TestingModule : Module
 {
-    
 }

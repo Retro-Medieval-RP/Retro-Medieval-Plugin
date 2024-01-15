@@ -25,7 +25,10 @@ internal class TestingModuleStorage : IStorage
             return true;
         }
 
-        return false;
+        StorageExampleData = "Example Storage Data";
+        
+        Save();
+        return true;
     }
 
     public void Save()

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Rocket.Core.Logging;
 using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Core.Modules.Configuration;
 using TheLostLand.Core.Modules.Storage;
@@ -9,9 +11,49 @@ namespace TheLostLand.Core.Modules;
 
 public class Module
 {
-    protected ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
-    private IEnumerable<ModuleConfiguration> Configurations => Information.Configs;
-    private IEnumerable<ModuleStorage> Storages  => Information.Storages;
+    private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
+    private List<ModuleConfiguration> Configurations { get; set; } = [];
+    private List<ModuleStorage> Storages { get; set; } = [];
+
+    protected Module()
+    {
+        LoadConfigs();
+        LoadStorages();
+    }
+    
+    private void LoadConfigs()
+    {
+        var configs = GetType().GetCustomAttributes<ModuleConfiguration>();
+
+        foreach (var config in configs)
+        {
+            if (config.LoadedConfiguration(Path.Combine(ModuleLoader.Instance.ModuleDirectory, Information.ModuleName), config.Name + ".json"))
+            {
+                Configurations.Add(config);
+                Logger.Log("Successfully Loaded Config: " + config.Name);
+                continue;
+            }
+            
+            Logger.Log("Failed To Load Config: " + config.Name);
+        }
+    }
+
+    private void LoadStorages()
+    {
+        var configs = GetType().GetCustomAttributes<ModuleStorage>();
+
+        foreach (var storage in configs)
+        {
+            if (storage.LoadedStorage(Path.Combine(ModuleLoader.Instance.ModuleDirectory, Information.ModuleName), storage.Name + ".json"))
+            {
+                Storages.Add(storage);
+                Logger.Log("Successfully Loaded Storage: " + storage.Name);
+                continue;
+            }
+            
+            Logger.Log("Failed To Load Storage: " + storage.Name);
+        }
+    }
     
     protected bool GetConfiguration<TConfiguration>(out TConfiguration config) where TConfiguration : class, IConfig, new()
     {
