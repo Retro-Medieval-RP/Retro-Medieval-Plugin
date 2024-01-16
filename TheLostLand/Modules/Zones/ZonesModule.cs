@@ -52,6 +52,7 @@ public class ZonesModule : Module
 
     public override void Unload()
     {
+        UnturnedPlayerEvents.OnPlayerUpdatePosition -= OnPlayerMove;
     }
 
     private bool IsInZone(Vector3 point) =>
