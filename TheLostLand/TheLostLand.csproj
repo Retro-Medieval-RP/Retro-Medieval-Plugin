@@ -76,6 +76,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\Zones\ZoneEnter.cs" />
+    <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
