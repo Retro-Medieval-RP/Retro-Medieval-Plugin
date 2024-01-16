@@ -32,7 +32,7 @@ public class ZonesModule : Module
 
             var zone = GetZone(position);
             PlayersInZones.Add(player, zone);
-            
+
             ZoneEnterEventPublisher.RaiseEvent(player, zone);
             return;
         }
@@ -41,11 +41,11 @@ public class ZonesModule : Module
         {
             return;
         }
-        
+
         {
             var zone = PlayersInZones[player];
             PlayersInZones.Remove(player);
-            
+
             ZoneLeftEventPublisher.RaiseEvent(player, zone);
         }
     }
@@ -59,13 +59,28 @@ public class ZonesModule : Module
         GetStorage<ZonesStorage>(out var storage) &&
         storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
 
-    private Zone GetZone(Vector3 point)
+    private Zone GetZone(Vector3 point) =>
+        GetStorage<ZonesStorage>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;
+
+    public bool CreateZone(string zone_name)
     {
-        if (GetStorage<ZonesStorage>(out var storage))
+        if (!GetStorage<ZonesStorage>(out var storage))
         {
-            return storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point));
+            return false;
         }
 
-        return null;
+        storage.AddZone(zone_name);
+        return true;
+    }
+
+    public bool DeleteZone(string zone_name)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            return false;
+        }
+
+        storage.RemoveZone(zone_name);
+        return true;
     }
 }

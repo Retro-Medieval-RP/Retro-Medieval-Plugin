@@ -43,9 +43,9 @@ public class ZonesStorage : IStorage
         stream.Write(obj_data);
     }
 
-    public void AddZone(Zone zone)
+    public void AddZone(string zone_name)
     {
-        Zones.Add(zone);
+        Zones.Add(new Zone(zone_name, []));
         Save();
     }
 
