@@ -12,11 +12,14 @@ namespace TheLostLand.Core.Modules;
 public abstract class Module
 {
     private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
-    private List<ModuleConfiguration> Configurations { get; } = [];
-    private List<ModuleStorage> Storages { get; } = [];
+    protected List<ModuleConfiguration> Configurations { get; }
+    protected List<ModuleStorage> Storages { get; }
 
     protected Module()
     {
+        Configurations = new List<ModuleConfiguration>();
+        Storages = new List<ModuleStorage>();
+        
         LoadConfigs();
         LoadStorages();
     }
@@ -74,10 +77,10 @@ public abstract class Module
     {
         if (Storages.Any(x => x.IsStorageOfType(typeof(TStorage))))
         {
-            storage = (Storages.Find(x => x.IsStorageOfType(typeof(TStorage))) as ModuleStorage<TStorage>)?.Storage;
+            storage = ((ModuleStorage<TStorage>)Storages.First(x => x.IsStorageOfType(typeof(TStorage)))).Storage;
             return true;
         }
-
+        
         storage = default;
         return false;
     }
