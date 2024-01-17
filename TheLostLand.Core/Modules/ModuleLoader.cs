@@ -10,7 +10,7 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
 {
     internal string ModuleDirectory { get; private set; }
 
-    private List<Module> Modules { get; set; } = [];
+    private List<Module> Modules { get; } = [];
 
     public bool GetModule<TModule>(out TModule module) where TModule : class
     {

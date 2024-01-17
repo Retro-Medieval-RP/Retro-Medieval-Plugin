@@ -14,7 +14,7 @@ namespace TheLostLand.Modules.Zones;
 [ModuleStorage<ZonesStorage>("ZonesList")]
 public class ZonesModule : Module
 {
-    private Dictionary<UnturnedPlayer, Zone> PlayersInZones { get; set; } = [];
+    private Dictionary<UnturnedPlayer, Zone> PlayersInZones { get; } = [];
 
     public override void Load()
     {

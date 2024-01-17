@@ -12,8 +12,8 @@ namespace TheLostLand.Core.Modules;
 public abstract class Module
 {
     private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
-    private List<ModuleConfiguration> Configurations { get; set; } = [];
-    private List<ModuleStorage> Storages { get; set; } = [];
+    private List<ModuleConfiguration> Configurations { get; } = [];
+    private List<ModuleStorage> Storages { get; } = [];
 
     protected Module()
     {
@@ -37,7 +37,7 @@ public abstract class Module
                 continue;
             }
             
-            Logger.Log("Failed To Load Config: " + config.Name);
+            Logger.LogError("Failed To Load Config: " + config.Name);
         }
     }
 
@@ -54,7 +54,7 @@ public abstract class Module
                 continue;
             }
             
-            Logger.Log("Failed To Load Storage: " + storage.Name);
+            Logger.LogError("Failed To Load Storage: " + storage.Name);
         }
     }
     
@@ -62,7 +62,7 @@ public abstract class Module
     {
         if (Configurations.Any(x => x.IsConfigOfType(typeof(TConfiguration))))
         {
-            config = GetType().GetCustomAttribute<ModuleConfiguration<TConfiguration>>().Configuration;
+            config = (Configurations.Find(x => x.IsConfigOfType(typeof(TConfiguration))) as ModuleConfiguration<TConfiguration>)?.Configuration;
             return true;
         }
 
@@ -74,7 +74,7 @@ public abstract class Module
     {
         if (Storages.Any(x => x.IsStorageOfType(typeof(TStorage))))
         {
-            storage = GetType().GetCustomAttribute<ModuleStorage<TStorage>>().Storage;
+            storage = (Storages.Find(x => x.IsStorageOfType(typeof(TStorage))) as ModuleStorage<TStorage>)?.Storage;
             return true;
         }
 
