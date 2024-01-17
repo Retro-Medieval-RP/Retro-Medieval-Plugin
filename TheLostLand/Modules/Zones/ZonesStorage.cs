@@ -76,7 +76,7 @@ public class ZonesStorage : IStorage
         }
 
         var zone = Zones.Find(x => x.ZoneName == zone_name);
-        zone.Nodes.RemoveAll(x => x.X == point.x && x.Y == point.y && x.Z == point.z);
+        zone.Nodes.RemoveAll(x => point.Equals(new Vector3(x.X, x.Y, x.Z)));
         
         Save();
     }
