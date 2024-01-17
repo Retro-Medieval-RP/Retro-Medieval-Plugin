@@ -25,7 +25,7 @@ public class ZonesStorage : IStorage
                 data_text = stream.ReadToEnd();
             }
 
-            Zones = JsonConvert.DeserializeObject<System.Collections.Generic.List<Zone>>(data_text);
+            Zones = JsonConvert.DeserializeObject<List<Zone>>(data_text);
             return true;
         }
 
