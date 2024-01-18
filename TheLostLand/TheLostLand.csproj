@@ -76,10 +76,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Zones\AddNodeCommand.cs" />
+    <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
+    <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
+    <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
+    <Compile Include="Events\Zones\ZoneEnter.cs" />
+    <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Modules\TestingModule.cs" />
-    <Compile Include="Modules\TestingModuleConfig.cs" />
-    <Compile Include="Modules\TestingModuleStorage.cs" />
+    <Compile Include="Models\Zones\Node.cs" />
+    <Compile Include="Models\Zones\Zone.cs" />
+    <Compile Include="Modules\Zones\ZonesModule.cs" />
+    <Compile Include="Modules\Zones\ZonesStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

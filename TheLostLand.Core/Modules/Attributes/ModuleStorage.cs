@@ -11,7 +11,6 @@ public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TS
     private TStorage GetStorage()
     {
         StorageManager.Instance.Get((x => x.StorageName == Name), out var storage);
-
         return (TStorage)storage.Store;
     }
     
@@ -28,8 +27,11 @@ public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TS
         }
 
         var file_path = Path.Combine(data_path, file_name);
-
-        return new TStorage().Load(file_path);
+        var store = new TStorage();
+        
+        StorageManager.Instance.Add(new Storage.Storage(Name, store));
+        
+        return store.Load(file_path);
     }
 
     internal override bool IsStorageOfType(Type t) => t == typeof(TStorage);
