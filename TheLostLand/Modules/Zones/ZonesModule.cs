@@ -69,7 +69,7 @@ public class ZonesModule : Module
         {
             return false;
         }
-        
+
         storage.AddZone(zone_name);
         return true;
     }
@@ -82,6 +82,33 @@ public class ZonesModule : Module
         }
 
         storage.RemoveZone(zone_name);
+        return true;
+    }
+
+    public bool AddNode(string zone_name, Vector3 point, out int id)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            id = default;
+            return false;
+        }
+
+        storage.AddNode(zone_name, new Node(point));
+
+        var zone = storage.GetZone(zone_name);
+        id = zone.Nodes.Count - 1;
+
+        return true;
+    }
+
+    public bool RemoveNode(string zone_name, int id)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            return false;
+        }
+        
+        storage.RemoveNode(zone_name, id);
         return true;
     }
 }

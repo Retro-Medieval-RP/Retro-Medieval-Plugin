@@ -68,7 +68,7 @@ public class ZonesStorage : IStorage
         Save();
     }
 
-    public void RemoveNode(string zone_name, Vector3 point)
+    public void RemoveNode(string zone_name, int id)
     {
         if (Zones.All(x => x.ZoneName != zone_name))
         {
@@ -76,11 +76,14 @@ public class ZonesStorage : IStorage
         }
 
         var zone = Zones.Find(x => x.ZoneName == zone_name);
-        zone.Nodes.RemoveAll(x => point.Equals(new Vector3(x.X, x.Y, x.Z)));
+        zone.Nodes.RemoveAt(id);
         
         Save();
     }
 
     public List<Zone> GetZones() => 
         Zones;
+
+    public Zone GetZone(string zone_name) => 
+        GetZones().Find(x => x.ZoneName == zone_name);
 }
