@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace TheLostLand.Core.Modules.Storage;
+namespace TheLostLand.Core.Modules.Storage.Savers;
 
 public class MySqlSaver<T> : IStorage<T> where T : new()
 {
