@@ -3,13 +3,13 @@ using TheLostLand.Models.Zones;
 
 namespace TheLostLand.Events.Zones
 {
-    internal class ZoneEnterEventArgs(UnturnedPlayer player, Zone zone)
+    public class ZoneEnterEventArgs(UnturnedPlayer player, Zone zone)
     {
         internal UnturnedPlayer Player { get; set; } = player;
         internal Zone Zone { get; set; } = zone;
     }
 
-    internal static class ZoneEnterEventPublisher
+    public static class ZoneEnterEventPublisher
     {
         public delegate void ZoneEnterEventHandler(ZoneEnterEventArgs e);
 
