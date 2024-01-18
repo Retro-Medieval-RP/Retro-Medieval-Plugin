@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using Rocket.API;
-using Rocket.Unturned;
 using Rocket.Unturned.Chat;
 using TheLostLand.Core.Modules;
 using TheLostLand.Modules.Zones;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace TheLostLand.Commands;
+namespace TheLostLand.Commands.Zones;
 
-internal class CreateZoneCommand : IRocketCommand
+internal class DeleteZoneCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
@@ -26,19 +25,19 @@ internal class CreateZoneCommand : IRocketCommand
             return;
         }
 
-        if (module.CreateZone(command[0]))
+        if (module.DeleteZone(command[0]))
         {
-            UnturnedChat.Say(caller, "Created zone: " + command[0]);
+            UnturnedChat.Say(caller, "Deleted zone: " + command[0]);
             return;
         }
         
-        UnturnedChat.Say(caller, "Could not create zone: " + command[0], Color.red);
+        UnturnedChat.Say(caller, "Could not delete zone: " + command[0], Color.red);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;
-    public string Name => "createzone";
-    public string Help => "Creates a zone with a specified name";
-    public string Syntax => "createzone <name>";
+    public string Name => "deletezone";
+    public string Help => "Deletes a zone on the server.";
+    public string Syntax => "deletezone <name>";
     public List<string> Aliases => [];
     public List<string> Permissions => [];
 }

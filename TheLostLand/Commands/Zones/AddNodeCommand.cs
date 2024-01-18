@@ -7,7 +7,7 @@ using TheLostLand.Modules.Zones;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace TheLostLand.Commands;
+namespace TheLostLand.Commands.Zones;
 
 internal class AddNodeCommand : IRocketCommand
 {
