@@ -13,7 +13,7 @@ internal class AddNodeCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (command.Length < 2)
+        if (command.Length < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, Syntax, Color.red);
