@@ -76,8 +76,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddNodeCommand.cs" />
     <Compile Include="Commands\CreateZoneCommand.cs" />
     <Compile Include="Commands\DeleteZoneCommand.cs" />
+    <Compile Include="Commands\RemoveNodeCommand.cs" />
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
