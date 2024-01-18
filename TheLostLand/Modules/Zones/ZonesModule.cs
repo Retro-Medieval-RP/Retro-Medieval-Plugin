@@ -20,7 +20,12 @@ public class ZonesModule : Module
     {
         UnturnedPlayerEvents.OnPlayerUpdatePosition += OnPlayerMove;
     }
-
+    
+    public override void Unload()
+    {
+        UnturnedPlayerEvents.OnPlayerUpdatePosition -= OnPlayerMove;
+    }
+    
     private void OnPlayerMove(UnturnedPlayer player, Vector3 position)
     {
         if (IsInZone(position))
@@ -49,12 +54,7 @@ public class ZonesModule : Module
             ZoneLeftEventPublisher.RaiseEvent(player, zone);
         }
     }
-
-    public override void Unload()
-    {
-        UnturnedPlayerEvents.OnPlayerUpdatePosition -= OnPlayerMove;
-    }
-
+    
     private bool IsInZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) &&
         storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
