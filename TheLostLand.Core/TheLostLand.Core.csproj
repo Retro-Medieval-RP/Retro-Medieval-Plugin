@@ -57,6 +57,7 @@
         <Compile Include="Modules\ModuleLoader.cs" />
         <Compile Include="Modules\Storage\IStorage.cs" />
         <Compile Include="Modules\Storage\Savers\JsonSaver.cs" />
+        <Compile Include="Modules\Storage\Savers\MySqlSaver.cs" />
         <Compile Include="Modules\Storage\Storage.cs" />
         <Compile Include="Modules\Storage\StorageManager.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
