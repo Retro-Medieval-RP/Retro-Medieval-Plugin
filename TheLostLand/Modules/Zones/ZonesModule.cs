@@ -7,7 +7,6 @@ using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.Zones;
 using UnityEngine;
-using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.Zones;
 
