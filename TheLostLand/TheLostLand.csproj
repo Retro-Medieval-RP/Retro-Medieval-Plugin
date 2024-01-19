@@ -165,6 +165,10 @@
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>TheLostLand.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TheLostLand.Savers\TheLostLand.Savers.csproj">
+      <Project>{62685150-2781-4a46-bb23-9a88635140ab}</Project>
+      <Name>TheLostLand.Savers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

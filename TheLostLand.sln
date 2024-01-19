@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLostLand", "TheLostLand\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLostLand.Core", "TheLostLand.Core\TheLostLand.Core.csproj", "{9642ECB9-9358-489E-AF91-35D6F517F354}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLostLand.Savers", "TheLostLand.Savers\TheLostLand.Savers.csproj", "{62685150-2781-4A46-BB23-9A88635140AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9642ECB9-9358-489E-AF91-35D6F517F354}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9642ECB9-9358-489E-AF91-35D6F517F354}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9642ECB9-9358-489E-AF91-35D6F517F354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62685150-2781-4A46-BB23-9A88635140AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62685150-2781-4A46-BB23-9A88635140AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62685150-2781-4A46-BB23-9A88635140AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62685150-2781-4A46-BB23-9A88635140AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

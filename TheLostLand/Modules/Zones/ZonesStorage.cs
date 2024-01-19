@@ -1,5 +1,5 @@
-﻿using TheLostLand.Core.Modules.Storage.Savers;
-using TheLostLand.Models.Zones;
+﻿using TheLostLand.Models.Zones;
+using TheLostLand.Savers.MySql;
 
 namespace TheLostLand.Modules.Zones;
 
