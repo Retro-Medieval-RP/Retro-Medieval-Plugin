@@ -11,7 +11,7 @@ using UnityEngine;
 namespace TheLostLand.Modules.Zones;
 
 [ModuleInformation("Zones")]
-[ModuleStorage<ZonesStorage>("ZonesList")]
+[ModuleStorage<ZonesStorageOld>("ZonesList")]
 public class ZonesModule : Module
 {
     private Dictionary<UnturnedPlayer, Zone> PlayersInZones { get; } = [];
@@ -56,15 +56,15 @@ public class ZonesModule : Module
     }
     
     private bool IsInZone(Vector3 point) =>
-        GetStorage<ZonesStorage>(out var storage) &&
+        GetStorage<ZonesStorageOld>(out var storage) &&
         storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
 
     private Zone GetZone(Vector3 point) =>
-        GetStorage<ZonesStorage>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;
+        GetStorage<ZonesStorageOld>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;
 
     public bool CreateZone(string zone_name)
     {
-        if (!GetStorage<ZonesStorage>(out var storage))
+        if (!GetStorage<ZonesStorageOld>(out var storage))
         {
             return false;
         }
@@ -75,7 +75,7 @@ public class ZonesModule : Module
 
     public bool DeleteZone(string zone_name)
     {
-        if (!GetStorage<ZonesStorage>(out var storage))
+        if (!GetStorage<ZonesStorageOld>(out var storage))
         {
             return false;
         }
@@ -86,7 +86,7 @@ public class ZonesModule : Module
 
     public bool AddNode(string zone_name, Vector3 point, out int id)
     {
-        if (!GetStorage<ZonesStorage>(out var storage))
+        if (!GetStorage<ZonesStorageOld>(out var storage))
         {
             id = default;
             return false;
@@ -102,7 +102,7 @@ public class ZonesModule : Module
 
     public bool RemoveNode(string zone_name, int id)
     {
-        if (!GetStorage<ZonesStorage>(out var storage))
+        if (!GetStorage<ZonesStorageOld>(out var storage))
         {
             return false;
         }
