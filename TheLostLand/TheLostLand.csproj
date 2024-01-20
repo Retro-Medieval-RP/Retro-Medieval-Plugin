@@ -153,7 +153,6 @@
     <Compile Include="Models\Zones\Zone.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
-    <Compile Include="Modules\Zones\ZonesStorageOld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

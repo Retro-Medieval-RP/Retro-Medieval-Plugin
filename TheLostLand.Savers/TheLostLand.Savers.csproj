@@ -44,7 +44,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Json\JsonSaver.cs" />
-        <Compile Include="MySql\MySqlSaver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
