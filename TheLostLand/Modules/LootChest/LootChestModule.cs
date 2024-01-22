@@ -1,9 +1,11 @@
-﻿using Rocket.Core.Logging;
+﻿using SDG.Unturned;
 using TheLostLand.Core.Modules;
 using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Core.Utils;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.LootChest;
+using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.LootChest;
 
