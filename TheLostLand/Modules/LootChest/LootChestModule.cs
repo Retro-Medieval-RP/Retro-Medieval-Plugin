@@ -106,4 +106,30 @@ internal class LootChestModule : Module
             storage!.items.tryAddItem(new Item(item.LootItemID, true));
         }
     }
+
+    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, out int id)
+    {
+        if (!GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            id = default;
+            return false;
+        }
+
+        storage.AddLocation(zone_name, position, rotation);
+        var location = storage.GetLocations(zone_name);
+        id = location.Locations.Count - 1;
+
+        return true;
+    }
+
+    public bool RemoveChest(string zone_name, int id)
+    {
+        if (!GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            return false;
+        }
+
+        storage.RemoveLocation(zone_name, id);
+        return true;
+    }
 }
