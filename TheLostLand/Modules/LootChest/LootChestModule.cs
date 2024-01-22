@@ -31,13 +31,13 @@ internal class LootChestModule : Module
 
         ZoneEnterEventPublisher.ZoneEnterEvent += OnZoneEntered;
     }
-
-    private static void OnZoneEntered(ZoneEnterEventArgs e)
-    {
-    }
-
+    
     public override void Unload()
     {
         ZoneEnterEventPublisher.ZoneEnterEvent -= OnZoneEntered;
+    }
+
+    private static void OnZoneEntered(ZoneEnterEventArgs e)
+    {
     }
 }
