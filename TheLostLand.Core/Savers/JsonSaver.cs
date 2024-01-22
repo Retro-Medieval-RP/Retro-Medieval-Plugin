@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using TheLostLand.Core.Modules.Storage;
 
-namespace TheLostLand.Savers.Json
+namespace TheLostLand.Core.Savers
 {
     public class JsonSaver<T> : IStorage<T> where T : new()
     {
