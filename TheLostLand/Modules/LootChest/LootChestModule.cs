@@ -1,4 +1,5 @@
-﻿using SDG.Unturned;
+﻿using System.Linq;
+using SDG.Unturned;
 using TheLostLand.Core.Modules;
 using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Core.Utils;
@@ -38,6 +39,26 @@ internal class LootChestModule : Module
     }
 
     private void OnZoneEntered(ZoneEnterEventArgs e)
+    {
+        if (!GetStorage<LootChestLocationStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestLocationStorage]");
+            return;
+        }
+
+        if (storage.StorageItem.All(x => x.ZoneName != e.Zone.ZoneName))
+        {
+            return;
+        }
+
+        var chest_locations = storage.StorageItem.Find(x => x.ZoneName == e.Zone.ZoneName);
+        foreach (var chest in chest_locations.Locations)
+        {
+            SpawnChest(chest);
+        }
+    }
+
+    private void SpawnChest(Location chest)
     {
     }
 }
