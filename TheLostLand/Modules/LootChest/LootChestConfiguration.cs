@@ -11,10 +11,10 @@ internal class LootChestConfiguration : IConfig
     public void LoadDefaults()
     {
         Chests = [
-            new Chest(0.5, ChestRarity.Common),
-            new Chest(0.4, ChestRarity.Uncommon),
-            new Chest(0.08, ChestRarity.Rare),
-            new Chest(0.02, ChestRarity.Legendary)
+            new Chest(0.5, ChestRarity.Common, 63000),
+            new Chest(0.4, ChestRarity.Uncommon, 63001),
+            new Chest(0.08, ChestRarity.Rare, 63002),
+            new Chest(0.02, ChestRarity.Legendary, 63003)
         ];
     }
 }

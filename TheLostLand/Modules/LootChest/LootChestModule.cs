@@ -58,7 +58,14 @@ internal class LootChestModule : Module
         }
     }
 
-    private void SpawnChest(Location chest)
+    private void SpawnChest(Location chest_location)
     {
+        var chest = _chestPicker.GetRandom();
+        
+        var chest_point = new Vector3(chest_location.X, chest_location.Y, chest_location.Z);
+        var chest_angle = new Quaternion(chest_location.AngleX, chest_location.AngleY, chest_location.AngleZ, chest_location.AngleW);
+        var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
+        
+        var barricade_transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
     }
 }
