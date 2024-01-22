@@ -76,14 +76,23 @@ internal class LootChestModule : Module
             return;
         }
 
-        var storage = barricade_drop.interactable as InteractableStorage;
+        InsertItems(chest, AddItemsToPicker(chest), barricade_drop.interactable as InteractableStorage);
+    }
+
+    private static Picker<LootItem> AddItemsToPicker(Chest chest)
+    {
         var item_picker = new Picker<LootItem>();
-        
+
         foreach (var loot_item in chest.SpawnTable)
         {
             item_picker.AddEntry(loot_item, loot_item.SpawnChance);
         }
 
+        return item_picker;
+    }
+
+    private static void InsertItems(Chest chest, Picker<LootItem> item_picker, InteractableStorage storage)
+    {
         var items_to_spawn = new List<LootItem>();
         for (var i = 0; i < chest.AmountToPick; i++)
         {
