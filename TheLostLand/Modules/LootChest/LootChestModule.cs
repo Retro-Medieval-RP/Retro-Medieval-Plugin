@@ -73,6 +73,8 @@ internal class LootChestModule : Module
         
         if (barricade_drop.interactable as InteractableStorage == null)
         {
+            var data = BarricadeManager.tryGetRegion(barricade_transform, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
             return;
         }
 
