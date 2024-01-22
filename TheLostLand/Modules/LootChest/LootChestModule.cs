@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SDG.Unturned;
 using TheLostLand.Core.Modules;
 using TheLostLand.Core.Modules.Attributes;
@@ -67,5 +68,31 @@ internal class LootChestModule : Module
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
         
         var barricade_transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
+
+        var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(barricade_transform);
+        
+        if (barricade_drop.interactable as InteractableStorage == null)
+        {
+            return;
+        }
+
+        var storage = barricade_drop.interactable as InteractableStorage;
+        var item_picker = new Picker<LootItem>();
+        
+        foreach (var loot_item in chest.SpawnTable)
+        {
+            item_picker.AddEntry(loot_item, loot_item.SpawnChance);
+        }
+
+        var items_to_spawn = new List<LootItem>();
+        for (var i = 0; i < chest.AmountToPick; i++)
+        {
+            items_to_spawn.Add(item_picker.GetRandom());
+        }
+
+        foreach (var item in items_to_spawn)
+        {
+            storage!.items.tryAddItem(new Item(item.LootItemID, true));
+        }
     }
 }
