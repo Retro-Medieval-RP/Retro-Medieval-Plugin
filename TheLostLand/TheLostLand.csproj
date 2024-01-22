@@ -150,10 +150,12 @@
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
+    <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
+    <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />

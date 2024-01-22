@@ -9,6 +9,7 @@ namespace TheLostLand.Modules.LootChest;
 
 [ModuleInformation("LootChest")]
 [ModuleConfiguration<LootChestConfiguration>("LootChestConfig")]
+[ModuleStorage<LootChestLocationStorage>("LocationsStorage")]
 internal class LootChestModule : Module
 {
     private readonly Picker<Chest> _chestPicker = new();
