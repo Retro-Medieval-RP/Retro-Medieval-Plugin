@@ -1,5 +1,5 @@
 ﻿using Rocket.Core.Plugins;
-using TheLostLand.Core.Modules;
+using TheLostLand.Modules;
 
 namespace TheLostLand;
 

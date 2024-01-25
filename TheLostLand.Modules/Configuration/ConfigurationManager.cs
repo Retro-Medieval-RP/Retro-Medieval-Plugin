@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheLostLand.Core.Utils;
+using TheLostLand.Utils;
 
-namespace TheLostLand.Core.Modules.Configuration;
+namespace TheLostLand.Modules.Configuration;
 
 internal sealed class ConfigurationManager : Padlock<ConfigurationManager>, IManager<Configuration>
 {

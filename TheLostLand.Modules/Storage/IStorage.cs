@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Core.Modules.Storage;
+﻿namespace TheLostLand.Modules.Storage;
 
 public interface IStorage<T> : IStorage
 {

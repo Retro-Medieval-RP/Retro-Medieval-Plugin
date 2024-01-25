@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheLostLand.Core.Modules.Attributes;
+namespace TheLostLand.Modules.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ModuleInformation(string module_name) : Attribute

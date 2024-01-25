@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using TheLostLand.Core.Modules.Storage;
+using TheLostLand.Modules.Storage;
 
-namespace TheLostLand.Core.Modules.Attributes;
+namespace TheLostLand.Modules.Attributes;
 
 public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TStorage : class, IStorage, new()
 {

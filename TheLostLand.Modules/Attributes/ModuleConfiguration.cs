@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
-using TheLostLand.Core.Modules.Configuration;
+using TheLostLand.Modules.Configuration;
 
-namespace TheLostLand.Core.Modules.Attributes;
+namespace TheLostLand.Modules.Attributes;
 
 public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleConfiguration(name) where TConfiguration : class, IConfig, new()
 {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TheLostLand.Core.Utils;
+using TheLostLand.Utils;
 
-namespace TheLostLand.Core.Modules;
+namespace TheLostLand.Modules;
 
 public sealed class ModuleLoader : Padlock<ModuleLoader>
 {

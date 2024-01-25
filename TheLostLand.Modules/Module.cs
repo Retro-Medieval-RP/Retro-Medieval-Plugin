@@ -3,22 +3,22 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Rocket.Core.Logging;
-using TheLostLand.Core.Modules.Attributes;
-using TheLostLand.Core.Modules.Configuration;
-using TheLostLand.Core.Modules.Storage;
+using TheLostLand.Modules.Attributes;
+using TheLostLand.Modules.Configuration;
+using TheLostLand.Modules.Storage;
 
-namespace TheLostLand.Core.Modules;
+namespace TheLostLand.Modules;
 
 public abstract class Module
 {
     private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
-    protected List<ModuleConfiguration> Configurations { get; }
-    protected List<ModuleStorage> Storages { get; }
+    private List<ModuleConfiguration> Configurations { get; }
+    private List<ModuleStorage> Storages { get; }
 
     protected Module()
     {
-        Configurations = new List<ModuleConfiguration>();
-        Storages = new List<ModuleStorage>();
+        Configurations = [];
+        Storages = [];
         
         LoadConfigs();
         LoadStorages();

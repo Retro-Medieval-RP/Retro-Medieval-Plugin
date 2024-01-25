@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using TheLostLand.Core.Modules.Configuration;
 using TheLostLand.Models.LootChest;
+using TheLostLand.Modules.Configuration;
 
 namespace TheLostLand.Modules.LootChest;
 

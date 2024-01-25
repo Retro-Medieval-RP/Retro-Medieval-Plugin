@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheLostLand.Core.Utils;
+namespace TheLostLand.Utils;
 
 public class Padlock<T> where T : class
 {

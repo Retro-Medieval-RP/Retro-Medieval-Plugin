@@ -8,8 +8,8 @@
         <ProjectGuid>{9642ECB9-9358-489E-AF91-35D6F517F354}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>TheLostLand.Core</RootNamespace>
-        <AssemblyName>TheLostLand.Core</AssemblyName>
+        <RootNamespace>TheLostLand.Utils</RootNamespace>
+        <AssemblyName>TheLostLand.Utils</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
@@ -126,22 +126,9 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Modules\Attributes\ModuleConfiguration.cs" />
-        <Compile Include="Modules\Attributes\ModuleInformation.cs" />
-        <Compile Include="Modules\Attributes\ModuleStorage.cs" />
-        <Compile Include="Modules\Configuration\Configuration.cs" />
-        <Compile Include="Modules\Configuration\ConfigurationManager.cs" />
-        <Compile Include="Modules\Configuration\IConfig.cs" />
-        <Compile Include="Modules\IManager.cs" />
-        <Compile Include="Modules\Module.cs" />
-        <Compile Include="Modules\ModuleLoader.cs" />
-        <Compile Include="Modules\Storage\IStorage.cs" />
-        <Compile Include="Modules\Storage\Storage.cs" />
-        <Compile Include="Modules\Storage\StorageManager.cs" />
+        <Compile Include="Padlock.cs" />
+        <Compile Include="Picker.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Savers\JsonSaver.cs" />
-        <Compile Include="Utils\Padlock.cs" />
-        <Compile Include="Utils\Picker.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />

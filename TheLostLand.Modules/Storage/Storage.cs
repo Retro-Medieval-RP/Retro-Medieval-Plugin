@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Core.Modules.Storage;
+﻿namespace TheLostLand.Modules.Storage;
 
 internal class Storage(string name, IStorage storage)
 {

@@ -2,7 +2,7 @@
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
-using TheLostLand.Core.Modules;
+using TheLostLand.Modules;
 using TheLostLand.Modules.LootChest;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;

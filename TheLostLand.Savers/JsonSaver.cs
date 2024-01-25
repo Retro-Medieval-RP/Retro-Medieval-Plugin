@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using TheLostLand.Core.Modules.Storage;
+using TheLostLand.Modules.Storage;
 
-namespace TheLostLand.Core.Savers
+namespace TheLostLand.Savers
 {
     public class JsonSaver<T> : IStorage<T> where T : new()
     {

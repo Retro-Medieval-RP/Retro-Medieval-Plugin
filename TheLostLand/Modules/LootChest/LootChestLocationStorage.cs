@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TheLostLand.Core.Savers;
 using TheLostLand.Models.LootChest;
+using TheLostLand.Savers;
 using UnityEngine;
 
 namespace TheLostLand.Modules.LootChest;

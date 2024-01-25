@@ -2,10 +2,9 @@
 using System.Linq;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
-using TheLostLand.Core.Modules;
-using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.Zones;
+using TheLostLand.Modules.Attributes;
 using UnityEngine;
 
 namespace TheLostLand.Modules.Zones;
@@ -36,9 +35,15 @@ public class ZonesModule : Module
             }
 
             var zone = GetZone(position);
-            PlayersInZones.Add(player, zone);
 
-            ZoneEnterEventPublisher.RaiseEvent(player, zone);
+            var allow_activation = true;
+            ZoneEnterEventPublisher.RaiseEvent(ref player, ref zone, ref allow_activation);
+
+            if (allow_activation)
+            {
+                PlayersInZones.Add(player, zone);
+            }
+            
             return;
         }
 

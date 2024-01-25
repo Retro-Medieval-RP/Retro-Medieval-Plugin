@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheLostLand.Core.Utils;
+namespace TheLostLand.Utils;
 
 public class Picker<T>
 {

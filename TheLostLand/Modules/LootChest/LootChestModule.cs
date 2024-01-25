@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SDG.Unturned;
-using TheLostLand.Core.Modules;
-using TheLostLand.Core.Modules.Attributes;
-using TheLostLand.Core.Utils;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.LootChest;
+using TheLostLand.Modules.Attributes;
+using TheLostLand.Utils;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 

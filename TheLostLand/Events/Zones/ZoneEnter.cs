@@ -3,10 +3,11 @@ using TheLostLand.Models.Zones;
 
 namespace TheLostLand.Events.Zones;
 
-public class ZoneEnterEventArgs(UnturnedPlayer player, Zone zone)
+public class ZoneEnterEventArgs(ref UnturnedPlayer player, ref Zone zone, ref bool allow)
 {
     internal UnturnedPlayer Player { get; set; } = player;
     internal Zone Zone { get; set; } = zone;
+    internal bool Allow { get; set; } = allow;
 }
 
 public static class ZoneEnterEventPublisher
@@ -15,6 +16,6 @@ public static class ZoneEnterEventPublisher
 
     public static event ZoneEnterEventHandler ZoneEnterEvent;
 
-    internal static void RaiseEvent(UnturnedPlayer player, Zone zone) =>
-        ZoneEnterEvent?.Invoke(new ZoneEnterEventArgs(player, zone));
+    internal static void RaiseEvent(ref UnturnedPlayer player, ref Zone zone,ref bool allow) =>
+        ZoneEnterEvent?.Invoke(new ZoneEnterEventArgs(ref player, ref zone, ref allow));
 }

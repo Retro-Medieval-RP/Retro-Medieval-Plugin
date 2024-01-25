@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheLostLand.Core.Utils;
+using TheLostLand.Utils;
 
-namespace TheLostLand.Core.Modules.Storage;
+namespace TheLostLand.Modules.Storage;
 
 internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage>
 {

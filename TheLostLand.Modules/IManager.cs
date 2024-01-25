@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TheLostLand.Core.Modules;
+namespace TheLostLand.Modules;
 
 internal interface IManager<T>
 {
