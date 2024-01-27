@@ -38,7 +38,7 @@ internal class RemoveChestCommand : IRocketCommand
             Logger.LogError("Could not find module [LootChestModule]!");
             return;
         }
-
+        
         if (!zones_module.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
