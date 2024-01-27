@@ -30,7 +30,7 @@ internal class AddChestCommand : IRocketCommand
         if (!zones_module.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
-            UnturnedChat.Say(caller, "Zone {command[0]} does not exist!", Color.red);
+            UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
         
