@@ -51,4 +51,7 @@ public class ZonesStorage : JsonSaver<List<Zone>>
 
     public Zone GetZone(string zone_name) =>
         GetZones().Find(x => x.ZoneName == zone_name);
+
+    public bool Exists(string zone_name) => 
+        GetZones().Exists(x => x.ZoneName == zone_name);
 }

@@ -4,6 +4,7 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using TheLostLand.Modules;
 using TheLostLand.Modules.LootChest;
+using TheLostLand.Modules.Zones;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
@@ -20,6 +21,19 @@ internal class AddChestCommand : IRocketCommand
             return;
         }
 
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        {
+            Logger.LogError("Could not find module [ZonesModule]!");
+            return;   
+        }
+
+        if (!zones_module.Exists(command[0]))
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, "Zone {command[0]} does not exist!", Color.red);
+            return;
+        }
+        
         if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
         {
             Logger.LogError("Could not find module [LootChestModule]!");
