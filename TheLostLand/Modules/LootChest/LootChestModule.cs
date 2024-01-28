@@ -85,12 +85,12 @@ internal class LootChestModule : Module
         }
     }
 
-    private bool SpawnChest(Location chest_location, out Transform transform)
+    private void SpawnChest(Location chest_location, out Transform transform)
     {
         var chest = _chestPicker.GetRandom();
         
         var chest_point = new Vector3(chest_location.X, chest_location.Y, chest_location.Z);
-        var chest_angle = Quaternion.Euler(-90, chest_location.Rot, 0);
+        var chest_angle = Quaternion.Euler(90, chest_location.Rot, 0);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
         
         transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
@@ -101,11 +101,10 @@ internal class LootChestModule : Module
         {
             BarricadeManager.tryGetRegion(transform, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
-            return false;
+            return;
         }
 
         InsertItems(chest, AddItemsToPicker(chest), barricade_drop.interactable as InteractableStorage);
-        return true;
     }
 
     private static Picker<LootItem> AddItemsToPicker(Chest chest)
