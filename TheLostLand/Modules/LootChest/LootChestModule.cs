@@ -52,6 +52,17 @@ internal class LootChestModule : Module
         foreach (var chest in chests)
         {
             var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(chest);
+            
+            var storage = barricade_drop.interactable as InteractableStorage;
+            if (storage != null)
+            {
+                while (storage.items.items.Count > 0)
+                {
+                    var item_jar = storage.items.items.First();
+                    storage.items.items.RemoveAt(storage.items.getIndex(item_jar.x, item_jar.y));
+                }
+            }
+
             BarricadeManager.tryGetRegion(chest, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
         }
