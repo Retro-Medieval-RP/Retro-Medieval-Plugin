@@ -38,4 +38,5 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CSteamLibrary_005Csteamapps_005Ccommon_005CUnturned_005CUnturned_005FData_005CManaged_005CSDG_002ENetTransport_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CSteamLibrary_005Csteamapps_005Ccommon_005CUnturned_005CUnturned_005FData_005CManaged_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CSteamLibrary_005Csteamapps_005Ccommon_005CUnturned_005CUnturned_005FData_005CManaged_005CUnityEngine_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CSteamLibrary_005Csteamapps_005Ccommon_005CUnturned_005CUnturned_005FData_005CManaged_005CUnityEngine_002EPhysicsModule_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CSteamLibrary_005Csteamapps_005Ccommon_005CUnturned_005CUnturned_005FData_005CManaged_005CUnityEngine_002EPhysicsModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=Parameters/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aa_bb" /&gt;</s:String></wpf:ResourceDictionary>
