@@ -2,9 +2,11 @@
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
+using SDG.Unturned;
 using TheLostLand.Modules;
 using TheLostLand.Modules.LootChest;
 using TheLostLand.Modules.Zones;
+using TheLostLand.Utils;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
@@ -33,6 +35,17 @@ internal class AddChestCommand : IRocketCommand
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
+
+        ;
+
+        if (!BarricadeRaycaster.RaycastBarricade(((UnturnedPlayer)caller).Player, out var transform))
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, $"Please look at a barricade!", Color.red);
+            return;
+        }
+
+        var drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         
         if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
         {
@@ -40,7 +53,7 @@ internal class AddChestCommand : IRocketCommand
             return;
         }
 
-        if (loot_chest.AddChest(command[0], ((UnturnedPlayer)caller).Position, ((UnturnedPlayer)caller).Rotation, out var node_id))
+        if (loot_chest.AddChest(command[0], drop.model.position, drop.model.rotation , out var node_id))
         {
             UnturnedChat.Say(caller, $"Added chest to zone {command[0]} with id: " + node_id);
             return;

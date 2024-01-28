@@ -6,5 +6,8 @@ internal class Location
     public float Y { get; set; }
     public float Z { get; set; }
     
-    public float Rot { get; set; }
+    public float RotX { get; set; }
+    public float RotY { get; set; }
+    public float RotZ { get; set; }
+    public float RotW { get; set; }
 }

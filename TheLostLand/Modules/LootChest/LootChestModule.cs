@@ -101,11 +101,10 @@ internal class LootChestModule : Module
         var chest = _chestPicker.GetRandom();
         
         var chest_point = new Vector3(chest_location.X, chest_location.Y, chest_location.Z);
-        var chest_angle = Quaternion.Euler(90, chest_location.Rot, 0);
+        var chest_angle = new Quaternion(chest_location.RotX, chest_location.RotY, chest_location.RotZ, chest_location.RotW);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
-        
         transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
-
+        
         var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         
         if (barricade_drop.interactable as InteractableStorage == null)
@@ -144,7 +143,7 @@ internal class LootChestModule : Module
         }
     }
 
-    public bool AddChest(string zone_name, Vector3 position, float rotation, out int id)
+    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, out int id)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
