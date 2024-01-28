@@ -165,7 +165,6 @@ internal class LootChestModule : Module
             return false;
         }
 
-        storage.RemoveLocation(zone_name, id);
-        return true;
+        return storage.RemoveLocation(zone_name, id);
     }
 }

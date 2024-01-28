@@ -37,16 +37,29 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
         Save();
     }
 
-    public void RemoveLocation(string zone_name, int id)
+    public bool RemoveLocation(string zone_name, int id)
     {
         var locations = GetLocations(zone_name);
-        locations.Locations.RemoveAt(id);
 
+        if (locations.Locations.Count == 0)
+        {
+            return false;
+        }
+        
+        locations.Locations.RemoveAt(id);
+        RemoveLootZone(zone_name);
+        
+        Save();
+        return true;
+    }
+
+    private void RemoveLootZone(string zone_name)
+    {
+        var locations = GetLocations(zone_name);
+        
         if (locations.Locations.Count == 0)
         {
             StorageItem.RemoveFast(locations);
         }
-        
-        Save();
     }
 }
