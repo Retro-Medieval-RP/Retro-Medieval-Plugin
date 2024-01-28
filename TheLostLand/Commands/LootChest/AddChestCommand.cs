@@ -40,7 +40,7 @@ internal class AddChestCommand : IRocketCommand
             return;
         }
 
-        if (loot_chest.AddChest(command[0], ((UnturnedPlayer)caller).Position, ((UnturnedPlayer)caller).Player.look.transform.rotation, out var node_id))
+        if (loot_chest.AddChest(command[0], ((UnturnedPlayer)caller).Position, ((UnturnedPlayer)caller).Rotation, out var node_id))
         {
             UnturnedChat.Say(caller, $"Added chest to zone {command[0]} with id: " + node_id);
             return;

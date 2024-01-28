@@ -3,6 +3,7 @@ using System.Linq;
 using SDG.Unturned;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.LootChest;
+using TheLostLand.Models.Zones;
 using TheLostLand.Modules.Attributes;
 using TheLostLand.Utils;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace TheLostLand.Modules.LootChest;
 internal class LootChestModule : Module
 {
     private readonly Picker<Chest> _chestPicker = new();
+    private readonly Dictionary<Zone, List<Transform>> _lootChest = [];
     
     public override void Load()
     {
@@ -31,13 +33,30 @@ internal class LootChestModule : Module
         }
 
         ZoneEnterEventPublisher.ZoneEnterEvent += OnZoneEntered;
+        ZoneLeftEventPublisher.ZoneLeftEvent += OnZoneLeft;
     }
     
     public override void Unload()
     {
         ZoneEnterEventPublisher.ZoneEnterEvent -= OnZoneEntered;
+        ZoneLeftEventPublisher.ZoneLeftEvent -= OnZoneLeft;
     }
 
+    private void OnZoneLeft(ZoneLeftEventArgs e)
+    {
+        if (!_lootChest.TryGetValue(e.Zone, out var chests))
+        {
+            return;
+        }
+        
+        foreach (var chest in chests)
+        {
+            var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(chest);
+            BarricadeManager.tryGetRegion(chest, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+        }
+    }
+    
     private void OnZoneEntered(ZoneEnterEventArgs e)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
@@ -54,30 +73,39 @@ internal class LootChestModule : Module
         var chest_locations = storage.StorageItem.Find(x => x.ZoneName == e.Zone.ZoneName);
         foreach (var chest in chest_locations.Locations)
         {
-            SpawnChest(chest);
+            SpawnChest(chest, out var trans);
+
+            if (_lootChest.ContainsKey(e.Zone))
+            {
+                _lootChest[e.Zone].Add(trans);
+                continue;
+            }
+            
+            _lootChest.Add(e.Zone, [trans]);
         }
     }
 
-    private void SpawnChest(Location chest_location)
+    private bool SpawnChest(Location chest_location, out Transform transform)
     {
         var chest = _chestPicker.GetRandom();
         
         var chest_point = new Vector3(chest_location.X, chest_location.Y, chest_location.Z);
-        var chest_angle = new Quaternion(chest_location.AngleX, chest_location.AngleY, chest_location.AngleZ, chest_location.AngleW);
+        var chest_angle = Quaternion.Euler(-90, chest_location.Rot, 0);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
         
-        var barricade_transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
+        transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
 
-        var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(barricade_transform);
+        var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         
         if (barricade_drop.interactable as InteractableStorage == null)
         {
-            BarricadeManager.tryGetRegion(barricade_transform, out var x, out var y, out var plant, out _);
+            BarricadeManager.tryGetRegion(transform, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
-            return;
+            return false;
         }
 
         InsertItems(chest, AddItemsToPicker(chest), barricade_drop.interactable as InteractableStorage);
+        return true;
     }
 
     private static Picker<LootItem> AddItemsToPicker(Chest chest)
@@ -106,7 +134,7 @@ internal class LootChestModule : Module
         }
     }
 
-    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, out int id)
+    public bool AddChest(string zone_name, Vector3 position, float rotation, out int id)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {

@@ -11,17 +11,14 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
     public ChestLocation GetLocations(string zone_name) => 
         StorageItem.First(x => x.ZoneName == zone_name);
 
-    public void AddLocation(string zone_name, Vector3 position, Quaternion rotation)
+    public void AddLocation(string zone_name, Vector3 position, float rotation)
     {
-        var location = new Location()
+        var location = new Location
         {
             X = position.x,
             Y = position.y,
             Z = position.z,
-            AngleX = rotation.x,
-            AngleY = rotation.y,
-            AngleZ = rotation.z,
-            AngleW = rotation.w
+            Rot = rotation
         };
         
         if (StorageItem.Exists(x => x.ZoneName == zone_name))

@@ -3,8 +3,18 @@ using System.Linq;
 
 namespace TheLostLand.Models.LootChest;
 
-internal class ChestLocation(string zone_name, params Location[] locations)
+internal class ChestLocation
 {
-    public string ZoneName { get; set; } = zone_name;
-    public List<Location> Locations { get; set; } = locations.ToList();
+    public ChestLocation()
+    {
+    }
+    
+    public ChestLocation(string zone_name, params Location[] locations)
+    {
+        ZoneName = zone_name;
+        Locations = locations.ToList();
+    }
+
+    public string ZoneName { get; set; }
+    public List<Location> Locations { get; set; }
 }
