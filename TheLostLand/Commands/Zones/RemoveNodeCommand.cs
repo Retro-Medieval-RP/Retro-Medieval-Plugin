@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
-using TheLostLand.Core.Modules;
+using TheLostLand.Modules;
 using TheLostLand.Modules.Zones;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
@@ -26,13 +26,20 @@ internal class RemoveNodeCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;
         }
-
-        if (module.RemoveNode(command[0], id))
+        
+        if (!zones_module.Exists(command[0]))
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, $"Zone {command[0]} does already exist!", Color.red);
+            return;
+        }
+        
+        if (zones_module.RemoveNode(command[0], id))
         {
             UnturnedChat.Say(caller, $"Removed node ({id}) for zone: " + command[0]);
             return;

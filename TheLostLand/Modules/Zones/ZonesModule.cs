@@ -2,10 +2,9 @@
 using System.Linq;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
-using TheLostLand.Core.Modules;
-using TheLostLand.Core.Modules.Attributes;
 using TheLostLand.Events.Zones;
 using TheLostLand.Models.Zones;
+using TheLostLand.Modules.Attributes;
 using UnityEngine;
 
 namespace TheLostLand.Modules.Zones;
@@ -20,12 +19,12 @@ public class ZonesModule : Module
     {
         UnturnedPlayerEvents.OnPlayerUpdatePosition += OnPlayerMove;
     }
-    
+
     public override void Unload()
     {
         UnturnedPlayerEvents.OnPlayerUpdatePosition -= OnPlayerMove;
     }
-    
+
     private void OnPlayerMove(UnturnedPlayer player, Vector3 position)
     {
         if (IsInZone(position))
@@ -36,9 +35,15 @@ public class ZonesModule : Module
             }
 
             var zone = GetZone(position);
-            PlayersInZones.Add(player, zone);
 
-            ZoneEnterEventPublisher.RaiseEvent(player, zone);
+            var allow_activation = true;
+            ZoneEnterEventPublisher.RaiseEvent(ref player, ref zone, ref allow_activation);
+
+            if (allow_activation)
+            {
+                PlayersInZones.Add(player, zone);
+            }
+
             return;
         }
 
@@ -54,7 +59,7 @@ public class ZonesModule : Module
             ZoneLeftEventPublisher.RaiseEvent(player, zone);
         }
     }
-    
+
     private bool IsInZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) &&
         storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
@@ -106,8 +111,18 @@ public class ZonesModule : Module
         {
             return false;
         }
-        
+
         storage.RemoveNode(zone_name, id);
         return true;
+    }
+
+    public bool Exists(string zone_name)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            return false;
+        }
+
+        return storage.Exists(zone_name);
     }
 }
