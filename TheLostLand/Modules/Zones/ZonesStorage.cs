@@ -33,7 +33,28 @@ public class ZonesStorage : JsonSaver<List<Zone>>
         Save();
     }
 
-    public void RemoveNode(string zone_name, int id)
+    public bool RemoveNode(string zone_name, int id)
+    {
+        if (StorageItem.All(x => x.ZoneName != zone_name))
+        {
+            return false;
+        }
+
+        var zone = StorageItem.Find(x => x.ZoneName == zone_name);
+
+        if (zone.Nodes.Count == 0)
+        {
+            return false;
+        }
+        
+        zone.Nodes.RemoveAt(id);
+        RemoveIfEmpty(zone_name);
+
+        Save();
+        return true;
+    }
+
+    private void RemoveIfEmpty(string zone_name)
     {
         if (StorageItem.All(x => x.ZoneName != zone_name))
         {
@@ -41,11 +62,15 @@ public class ZonesStorage : JsonSaver<List<Zone>>
         }
 
         var zone = StorageItem.Find(x => x.ZoneName == zone_name);
-        zone.Nodes.RemoveAt(id);
 
-        Save();
+        if (zone.Nodes.Count == 0)
+        {
+            return;
+        }
+        
+        RemoveZone(zone_name);
     }
-
+    
     public List<Zone> GetZones() =>
         StorageItem;
 
