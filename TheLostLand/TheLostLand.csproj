@@ -126,7 +126,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Groups\CreateGroupCommand.cs" />
+    <Compile Include="Commands\Groups\GroupCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
     <Compile Include="Commands\Zones\AddNodeCommand.cs" />

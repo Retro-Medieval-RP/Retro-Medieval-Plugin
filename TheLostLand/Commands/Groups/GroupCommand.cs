@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
@@ -9,7 +10,7 @@ using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Commands.Groups;
 
-public class CreateGroupCommand : IRocketCommand
+public class GroupCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
@@ -17,6 +18,23 @@ public class CreateGroupCommand : IRocketCommand
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, Syntax, Color.red);
+            return;
+        }
+
+        switch (command[0].ToLower())
+        {
+            case "create":
+                CreateGroup(caller, command.Skip(1).ToArray());
+                break;
+        }
+    }
+
+    private static void CreateGroup(IRocketPlayer caller, IReadOnlyList<string> command)
+    {
+        if (command.Count < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, "group create <group name>", Color.red);
             return;
         }
         
@@ -42,11 +60,14 @@ public class CreateGroupCommand : IRocketCommand
         UnturnedChat.Say(caller, "Error: ", Color.red);
         UnturnedChat.Say(caller, "A group with the name " + command[0] + " could not be created.", Color.red);
     }
-
+    
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
-    public string Name => "creategroup";
-    public string Help => "Creates a group.";
-    public string Syntax => "creategroup <group name>";
-    public List<string> Aliases => [];
+    public string Name => "group";
+    public string Help => "General group command";
+    public string Syntax => "group <create | delete | join | leave>";
+    public List<string> Aliases => 
+    [
+        "g"
+    ];
     public List<string> Permissions => [];
 }
