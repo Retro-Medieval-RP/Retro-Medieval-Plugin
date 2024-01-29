@@ -3,8 +3,7 @@
 namespace TheLostLand.Modules.Groups;
 
 [ModuleInformation("Groups")]
-[ModuleStorage<GuildGroupStorage>("Guilds")]
-[ModuleStorage<KingdomsGroupStorage>("Kingdoms")]
+[ModuleStorage<GroupsStorage>("Groups")]
 public class GroupsModule : Module
 {
     public override void Load()

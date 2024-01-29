@@ -4,7 +4,7 @@ using TheLostLand.Savers;
 
 namespace TheLostLand.Modules.Groups;
 
-public class KingdomsGroupStorage : JsonSaver<List<Kingdom>>
+public class GroupsStorage : JsonSaver<List<Group>>
 {
     
 }

@@ -1,4 +1,4 @@
-﻿namespace TheLostLand.Models.Groups.Base_Data;
+﻿namespace TheLostLand.Models.Groups;
 
 public class BaseLocation
 {
