@@ -28,9 +28,18 @@ public class CreateGroupCommand : IRocketCommand
         if (groups_module.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
-            UnturnedChat.Say(caller, "A group with the name" + command[0] + " already exists.", Color.red);
+            UnturnedChat.Say(caller, "A group with the name " + command[0] + " already exists.", Color.red);
             return;
         }
+
+        if (groups_module.CreateGroup(command[0]))
+        {
+            UnturnedChat.Say(caller, "A group with the name " + command[0] + " was created.");
+            return;
+        }
+        
+        UnturnedChat.Say(caller, "Error: ", Color.red);
+        UnturnedChat.Say(caller, "A group with the name " + command[0] + " could not be created.", Color.red);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
