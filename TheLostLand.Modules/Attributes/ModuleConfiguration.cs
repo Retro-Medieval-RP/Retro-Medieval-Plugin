@@ -61,7 +61,7 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
     internal override bool IsConfigOfType(Type t) => t == typeof(TConfiguration);
 }
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public abstract class ModuleConfiguration(string name) : Attribute
 {
     internal string Name { get; } = name;

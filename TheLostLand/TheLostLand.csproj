@@ -135,6 +135,9 @@
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Models\Groups\Group.cs" />
+    <Compile Include="Models\Groups\Guild.cs" />
+    <Compile Include="Models\Groups\Kingdom.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
@@ -142,6 +145,9 @@
     <Compile Include="Models\LootChest\LootItem.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
+    <Compile Include="Modules\Groups\GroupsModule.cs" />
+    <Compile Include="Modules\Groups\GuildGroupStorage.cs" />
+    <Compile Include="Modules\Groups\KingdomsGroupStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />

@@ -37,7 +37,7 @@ public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TS
     internal override bool IsStorageOfType(Type t) => t == typeof(TStorage);
 }
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public abstract class ModuleStorage(string name) : Attribute
 {
     internal string Name { get; } = name;
