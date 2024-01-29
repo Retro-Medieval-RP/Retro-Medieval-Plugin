@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
 using TheLostLand.Modules;
 using TheLostLand.Modules.Groups;
 using UnityEngine;
@@ -32,7 +33,7 @@ public class CreateGroupCommand : IRocketCommand
             return;
         }
 
-        if (groups_module.CreateGroup(command[0]))
+        if (groups_module.CreateGroup(command[0], ((UnturnedPlayer)caller).CSteamID.m_SteamID))
         {
             UnturnedChat.Say(caller, "A group with the name " + command[0] + " was created.");
             return;
