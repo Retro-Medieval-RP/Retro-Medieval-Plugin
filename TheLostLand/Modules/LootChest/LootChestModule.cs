@@ -158,13 +158,6 @@ internal class LootChestModule : Module
         return true;
     }
 
-    public bool RemoveChest(string zone_name, int id)
-    {
-        if (!GetStorage<LootChestLocationStorage>(out var storage))
-        {
-            return false;
-        }
-
-        return storage.RemoveLocation(zone_name, id);
-    }
+    public bool RemoveChest(string zone_name, int id) => 
+        GetStorage<LootChestLocationStorage>(out var storage) && storage.RemoveLocation(zone_name, id);
 }
