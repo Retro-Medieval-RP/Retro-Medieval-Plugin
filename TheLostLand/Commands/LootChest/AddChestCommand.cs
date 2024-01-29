@@ -31,7 +31,7 @@ internal class AddChestCommand : IRocketCommand
 
         if (!zones_module.Exists(command[0]))
         {
-            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
@@ -39,7 +39,7 @@ internal class AddChestCommand : IRocketCommand
         var result = Raycaster.RayCastPlayer((UnturnedPlayer)caller, RayMasks.BARRICADE_INTERACT);
         if (!result.RaycastHit)
         {
-            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, "Please look at a barricade!", Color.red);
             return;
         }
