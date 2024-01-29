@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TheLostLand.Models.Groups.Base_Data;
+namespace TheLostLand.Models.Groups;
 
 public class Group
 {
