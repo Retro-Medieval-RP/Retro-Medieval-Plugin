@@ -135,7 +135,10 @@
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Models\Groups\Group.cs" />
+    <Compile Include="Models\Groups\Base Data\BaseLocation.cs" />
+    <Compile Include="Models\Groups\Base Data\Group.cs" />
+    <Compile Include="Models\Groups\Base Data\GroupMember.cs" />
+    <Compile Include="Models\Groups\Base Data\GroupRank.cs" />
     <Compile Include="Models\Groups\Guild.cs" />
     <Compile Include="Models\Groups\Kingdom.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />

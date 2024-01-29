@@ -1,4 +1,6 @@
-﻿namespace TheLostLand.Models.Groups;
+﻿using TheLostLand.Models.Groups.Base_Data;
+
+namespace TheLostLand.Models.Groups;
 
 public class Guild : Group
 {
