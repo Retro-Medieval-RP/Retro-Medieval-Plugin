@@ -26,6 +26,18 @@ public class GroupCommand : IRocketCommand
             case "create":
                 CreateGroup(caller, command.Skip(1).ToArray());
                 break;
+            case "delete":
+                break;
+            case "join":
+                break;
+            case "leave":
+                break;
+            case "kick":
+                break;
+            case "ban":
+                break;
+            case "unban":
+                break;
         }
     }
 
@@ -64,7 +76,7 @@ public class GroupCommand : IRocketCommand
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
     public string Name => "group";
     public string Help => "General group command";
-    public string Syntax => "group <create | delete | join | leave>";
+    public string Syntax => "group <create | delete | join | leave | kick | ban | unban>";
     public List<string> Aliases => 
     [
         "g"
