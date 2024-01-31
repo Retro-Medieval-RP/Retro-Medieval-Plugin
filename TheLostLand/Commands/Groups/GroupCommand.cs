@@ -241,7 +241,7 @@ public class GroupCommand : IRocketCommand
             UnturnedChat.Say(caller, "A group with the name " + command[0] + " already exists.", Color.red);
             return;
         }
-
+        
         if (groups_module.CreateGroup(command[0], ((UnturnedPlayer)caller).CSteamID.m_SteamID))
         {
             UnturnedChat.Say(caller, "A group with the name " + command[0] + " was created.");
@@ -252,7 +252,7 @@ public class GroupCommand : IRocketCommand
         UnturnedChat.Say(caller, "A group with the name " + command[0] + " could not be created.", Color.red);
     }
     
-    public AllowedCaller AllowedCaller => AllowedCaller.Player;
+    public AllowedCaller AllowedCaller => AllowedCaller.Both;
     public string Name => "group";
     public string Help => "General group command";
     public string Syntax => "group <create | delete | join | leave | kick | ban | unban>";
@@ -262,10 +262,10 @@ public class GroupCommand : IRocketCommand
     ];
     public List<string> Permissions => [];
 
-    public string CreateGroupSyntax => "group create <group name>";
-    public string DeleteGroupSyntax => "group delete <group name>";
-    public string JoinGroupSyntax => "group join <group name>";
-    public string KickFromGroupSyntax => "group kick <player name | player steam id>";
-    public string BanFromGroupSyntax => "group ban <player name | player steam id>";
-    public string UnbanFromGroupSyntax => "group unban <player name | player steam id>";
+    private static string CreateGroupSyntax => "group create <group name>";
+    private static string DeleteGroupSyntax => "group delete <group name>";
+    private static string JoinGroupSyntax => "group join <group name>";
+    private static string KickFromGroupSyntax => "group kick <player name | player steam id>";
+    private static string BanFromGroupSyntax => "group ban <player name | player steam id>";
+    private static string UnbanFromGroupSyntax => "group unban <player name | player steam id>";
 }
