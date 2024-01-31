@@ -14,6 +14,7 @@ public class GroupsStorage : JsonSaver<List<Group>>
         {
             GroupName = group_name,
             BaseLocations = [],
+            DefaultRankId = 1,
             GroupMembers =
             [
                 new GroupMember
@@ -36,6 +37,12 @@ public class GroupsStorage : JsonSaver<List<Group>>
                     ],
                     RankID = 0,
                     RankName = "GroupOwner",
+                },
+                new GroupRank
+                {
+                    PermissionLevels = [],
+                    RankID = 1,
+                    RankName = "Member"
                 }
             ]
         };
