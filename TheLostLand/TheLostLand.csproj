@@ -140,6 +140,7 @@
     <Compile Include="Models\Groups\Group.cs" />
     <Compile Include="Models\Groups\GroupMember.cs" />
     <Compile Include="Models\Groups\GroupRank.cs" />
+    <Compile Include="Models\Groups\PermissionLevel.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />

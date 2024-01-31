@@ -25,10 +25,13 @@ public class GroupsStorage : JsonSaver<List<Group>>
             [
                 new GroupRank
                 {
-                    UnbanUsers = true,
-                    AcceptUsers = true,
-                    BanUsers = true,
-                    KickUsers = true,
+                    PermissionLevels = [
+                        PermissionLevel.Ban,
+                        PermissionLevel.Kick,
+                        PermissionLevel.Unban,
+                        PermissionLevel.RejectUsers,
+                        PermissionLevel.AcceptUsers
+                    ],
                     RankID = 0,
                     RankName = "GroupOwner",
                 }
