@@ -29,4 +29,7 @@ internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage
 
     public bool Has(string name) => 
         _items.Exists(x => x.StorageName == name);
+
+    public void Clear() => 
+        _items.Clear();
 }

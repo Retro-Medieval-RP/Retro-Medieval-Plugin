@@ -129,6 +129,7 @@
     <Compile Include="Commands\Groups\GroupCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
+    <Compile Include="Commands\System Level\ReloadCommand.cs" />
     <Compile Include="Commands\Zones\AddNodeCommand.cs" />
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />

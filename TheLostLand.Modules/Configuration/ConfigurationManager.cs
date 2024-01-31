@@ -29,4 +29,7 @@ internal sealed class ConfigurationManager : Padlock<ConfigurationManager>, IMan
 
     public bool Has(string name) => 
         _items.Exists(x => x.ConfigName == name);
+
+    public void Clear() => 
+        _items.Clear();
 }

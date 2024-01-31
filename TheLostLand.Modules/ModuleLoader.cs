@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TheLostLand.Modules.Configuration;
+using TheLostLand.Modules.Storage;
 using TheLostLand.Utils;
 
 namespace TheLostLand.Modules;
@@ -39,4 +41,22 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
             Modules.Add(module);
         }
     }
+
+    public void ReloadAllModules(Assembly plugin)
+    {
+        ConfigurationManager.Instance.Clear();
+        StorageManager.Instance.Clear();
+
+        foreach (var m in Modules)
+        {
+            m.Unload();
+        }
+        
+        Modules.Clear();
+        
+        LoadModules(plugin);
+    }
+
+    public bool Exists(string module_name) => 
+        Modules.Any(x => x.NameIs(module_name));
 }

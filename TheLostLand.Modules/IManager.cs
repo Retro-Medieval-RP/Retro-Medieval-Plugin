@@ -12,4 +12,5 @@ internal interface IManager<T>
     public void Add(T item);
     public void Remove(T item);
     public bool Has(string name);
+    public void Clear();
 }

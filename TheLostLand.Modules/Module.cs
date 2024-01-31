@@ -84,4 +84,7 @@ public abstract class Module
         storage = default;
         return false;
     }
+
+    internal bool NameIs(string module_name) => 
+        Information.ModuleName == module_name;
 }
