@@ -3,6 +3,7 @@ using System.Linq;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
+using TheLostLand.Models.Groups;
 using TheLostLand.Modules;
 using TheLostLand.Modules.Groups;
 using UnityEngine;
