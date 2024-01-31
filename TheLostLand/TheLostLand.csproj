@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>C:\Users\jack\Downloads\Stalker RP\ChatExtensions\ChatExtensions\Libraries\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -154,6 +157,7 @@
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
+    <Compile Include="Patches\Death\DamagePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

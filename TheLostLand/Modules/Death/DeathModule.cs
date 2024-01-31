@@ -19,59 +19,11 @@ public class DeathModule : Module
 {
     public override void Load()
     {
-        UnturnedPlayerEvents.OnPlayerDead += OnPlayerDeath;
         UnturnedPlayerEvents.OnPlayerUpdateGesture += OnPlayerGesture;
-    }
-
-    private void OnPlayerDeath(UnturnedPlayer player, Vector3 position)
-    {
-        var player_items = new List<DeathItem>();
-
-        for (byte i = 0; i < PlayerInventory.PAGES; i++)
-        {
-            if (i == PlayerInventory.AREA)
-                continue;
-
-            var count = player.Inventory.getItemCount(i);
-
-            for (byte index = 0; index < count; index++)
-            {
-                var item = player.Inventory.getItem(i, 0);
-                player_items.Add(new DeathItem(item.item.id, item.item.amount, item.item.quality, item.item.state));
-                player.Inventory.removeItem(i, 0);
-            }
-        }
-
-        var barricade_drop = PlaceBarricade(player);
-
-        if (barricade_drop.interactable as InteractableMannequin == null)
-        {
-            BarricadeManager.tryGetRegion(barricade_drop.model, out var x, out var y, out var plant, out _);
-            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
-            return;
-        }
-
-        var man = barricade_drop.interactable as InteractableMannequin;
-
-        if (man == null)
-        {
-            return;
-        }
-        
-        man.clothes.backpack = player.Player.clothing.backpack;
-        man.clothes.hat = player.Player.clothing.hat;
-        man.clothes.shirt = player.Player.clothing.shirt;
-        man.clothes.pants = player.Player.clothing.pants;
-        man.clothes.vest = player.Player.clothing.vest;
-        man.clothes.glasses = player.Player.clothing.glasses;
-        man.clothes.mask = player.Player.clothing.mask;
-
-        SaveInventory(barricade_drop.model, player_items);
     }
 
     public override void Unload()
     {
-        UnturnedPlayerEvents.OnPlayerDead -= OnPlayerDeath;
         UnturnedPlayerEvents.OnPlayerUpdateGesture -= OnPlayerGesture;
     }
     
@@ -146,5 +98,63 @@ public class DeathModule : Module
         
         var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         return barricade_drop;
+    }
+
+    public void SendDeath(UnturnedPlayer player)
+    {
+        var player_items = new List<DeathItem>();
+
+        for (byte i = 0; i < PlayerInventory.PAGES; i++)
+        {
+            if (i == PlayerInventory.AREA)
+                continue;
+
+            var count = player.Inventory.getItemCount(i);
+
+            for (byte index = 0; index < count; index++)
+            {
+                var item = player.Inventory.getItem(i, 0);
+                player_items.Add(new DeathItem(item.item.id, item.item.amount, item.item.quality, item.item.state));
+                player.Inventory.removeItem(i, 0);
+            }
+        }
+
+        var barricade_drop = PlaceBarricade(player);
+
+        if (barricade_drop.interactable as InteractableMannequin == null)
+        {
+            BarricadeManager.tryGetRegion(barricade_drop.model, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            return;
+        }
+
+        var man = barricade_drop.interactable as InteractableMannequin;
+
+        if (man == null)
+        {
+            return;
+        }
+        
+        man.updateClothes(
+            player.Player.clothing.shirt, player.Player.clothing.shirtQuality, player.Player.clothing.shirtState,
+            player.Player.clothing.pants, player.Player.clothing.pantsQuality, player.Player.clothing.pantsState,
+            player.Player.clothing.hat, player.Player.clothing.hatQuality, player.Player.clothing.hatState,
+            player.Player.clothing.backpack, player.Player.clothing.backpackQuality, player.Player.clothing.backpackState,
+            player.Player.clothing.vest, player.Player.clothing.vestQuality, player.Player.clothing.vestState,
+            player.Player.clothing.mask, player.Player.clothing.maskQuality, player.Player.clothing.maskState,
+            player.Player.clothing.glasses, player.Player.clothing.glassesQuality, player.Player.clothing.glassesState
+            );
+        
+        player.Player.clothing.askWearShirt(0, 0, [], false);
+        player.Player.clothing.askWearPants(0, 0, [], false);
+        player.Player.clothing.askWearHat(0, 0, [], false);
+        player.Player.clothing.askWearBackpack(0, 0, [], false);
+        player.Player.clothing.askWearVest(0, 0, [], false);
+        player.Player.clothing.askWearMask(0, 0, [], false);
+        player.Player.clothing.askWearGlasses(0, 0, [], false);
+        
+        man.clothes.apply();
+
+        SaveInventory(barricade_drop.model, player_items);
     }
 }
