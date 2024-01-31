@@ -252,7 +252,7 @@ public class GroupCommand : IRocketCommand
         UnturnedChat.Say(caller, "A group with the name " + command[0] + " could not be created.", Color.red);
     }
     
-    public AllowedCaller AllowedCaller => AllowedCaller.Both;
+    public AllowedCaller AllowedCaller => AllowedCaller.Player;
     public string Name => "group";
     public string Help => "General group command";
     public string Syntax => "group <create | delete | join | leave | kick | ban | unban>";
