@@ -47,9 +47,9 @@ public class GroupCommand : IRocketCommand
         }
     }
 
-    private void UnbanFromGroup(IRocketPlayer caller, string[] command)
+    private void UnbanFromGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
-        if (command.Length < 1)
+        if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, UnbanFromGroupSyntax, Color.red);
@@ -57,9 +57,9 @@ public class GroupCommand : IRocketCommand
         }
     }
 
-    private void BanFromGroup(IRocketPlayer caller, string[] command)
+    private void BanFromGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
-        if (command.Length < 1)
+        if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, BanFromGroupSyntax, Color.red);
@@ -67,9 +67,9 @@ public class GroupCommand : IRocketCommand
         }
     }
 
-    private void KickFromGroup(IRocketPlayer caller, string[] command)
+    private void KickFromGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
-        if (command.Length < 1)
+        if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, KickFromGroupSyntax, Color.red);
@@ -77,13 +77,13 @@ public class GroupCommand : IRocketCommand
         }
     }
 
-    private void LeaveGroup(IRocketPlayer caller, string[] command)
+    private void LeaveGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
     }
 
-    private void JoinGroup(IRocketPlayer caller, string[] command)
+    private void JoinGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
-        if (command.Length < 1)
+        if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, JoinGroupSyntax, Color.red);
@@ -91,9 +91,9 @@ public class GroupCommand : IRocketCommand
         }
     }
 
-    private void DeleteGroup(IRocketPlayer caller, string[] command)
+    private void DeleteGroup(IRocketPlayer caller, IReadOnlyCollection<string> command)
     {
-        if (command.Length < 1)
+        if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, DeleteGroupSyntax, Color.red);
