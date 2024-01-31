@@ -69,7 +69,7 @@ public class GroupCommand : IRocketCommand
             return;
         }
 
-        if (groups_module.Unban(command[0]))
+        if (groups_module.Unban(((UnturnedPlayer)caller).CSteamID.m_SteamID, command[0]))
         {
             UnturnedChat.Say(caller, "You have unbanned user " + command[0] + " from group.");
             return;
@@ -100,7 +100,7 @@ public class GroupCommand : IRocketCommand
             return;
         }
 
-        if (groups_module.Ban(command[0]))
+        if (groups_module.Ban(((UnturnedPlayer)caller).CSteamID.m_SteamID, command[0]))
         {
             UnturnedChat.Say(caller, "You have banned user " + command[0] + " from group.");
             return;
@@ -131,7 +131,7 @@ public class GroupCommand : IRocketCommand
             return;
         }
 
-        if (groups_module.Kick(command[0]))
+        if (groups_module.Kick(((UnturnedPlayer)caller).CSteamID.m_SteamID, command[0]))
         {
             UnturnedChat.Say(caller, "You have kicked user " + command[0] + " from group.");
             return;
