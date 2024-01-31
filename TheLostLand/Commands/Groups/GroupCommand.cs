@@ -27,18 +27,48 @@ public class GroupCommand : IRocketCommand
                 CreateGroup(caller, command.Skip(1).ToArray());
                 break;
             case "delete":
+                DeleteGroup(caller, command.Skip(1).ToArray());
                 break;
             case "join":
+                JoinGroup(caller, command.Skip(1).ToArray());
                 break;
             case "leave":
+                LeaveGroup(caller, command.Skip(1).ToArray());
                 break;
             case "kick":
+                KickFromGroup(caller, command.Skip(1).ToArray());
                 break;
             case "ban":
+                BanFromGroup(caller, command.Skip(1).ToArray());
                 break;
             case "unban":
+                UnbanFromGroup(caller, command.Skip(1).ToArray());
                 break;
         }
+    }
+
+    private void UnbanFromGroup(IRocketPlayer caller, string[] command)
+    {
+    }
+
+    private void BanFromGroup(IRocketPlayer caller, string[] command)
+    {
+    }
+
+    private void KickFromGroup(IRocketPlayer caller, string[] command)
+    {
+    }
+
+    private void LeaveGroup(IRocketPlayer caller, string[] command)
+    {
+    }
+
+    private void JoinGroup(IRocketPlayer caller, string[] command)
+    {
+    }
+
+    private void DeleteGroup(IRocketPlayer caller, string[] command)
+    {
     }
 
     private static void CreateGroup(IRocketPlayer caller, IReadOnlyList<string> command)
