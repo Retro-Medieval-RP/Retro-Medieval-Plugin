@@ -49,14 +49,32 @@ public class GroupCommand : IRocketCommand
 
     private void UnbanFromGroup(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, UnbanFromGroupSyntax, Color.red);
+            return;
+        }
     }
 
     private void BanFromGroup(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, BanFromGroupSyntax, Color.red);
+            return;
+        }
     }
 
     private void KickFromGroup(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, KickFromGroupSyntax, Color.red);
+            return;
+        }
     }
 
     private void LeaveGroup(IRocketPlayer caller, string[] command)
@@ -65,18 +83,30 @@ public class GroupCommand : IRocketCommand
 
     private void JoinGroup(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, JoinGroupSyntax, Color.red);
+            return;
+        }
     }
 
     private void DeleteGroup(IRocketPlayer caller, string[] command)
     {
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, DeleteGroupSyntax, Color.red);
+            return;
+        }
     }
 
-    private static void CreateGroup(IRocketPlayer caller, IReadOnlyList<string> command)
+    private void CreateGroup(IRocketPlayer caller, IReadOnlyList<string> command)
     {
         if (command.Count < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
-            UnturnedChat.Say(caller, "group create <group name>", Color.red);
+            UnturnedChat.Say(caller, CreateGroupSyntax, Color.red);
             return;
         }
         
@@ -112,4 +142,11 @@ public class GroupCommand : IRocketCommand
         "g"
     ];
     public List<string> Permissions => [];
+
+    public string CreateGroupSyntax => "group create <group name>";
+    public string DeleteGroupSyntax => "group delete <group name>";
+    public string JoinGroupSyntax => "group join <group name>";
+    public string KickFromGroupSyntax => "group kick <player name | player steam id>";
+    public string BanFromGroupSyntax => "group ban <player name | player steam id>";
+    public string UnbanFromGroupSyntax => "group unban <player name | player steam id>";
 }
