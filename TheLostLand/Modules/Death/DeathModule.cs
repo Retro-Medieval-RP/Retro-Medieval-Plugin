@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using Rocket.Unturned.Chat;
-using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
-using Steamworks;
 using TheLostLand.Events.Unturned;
 using TheLostLand.Models.Death;
 using TheLostLand.Modules.Attributes;
@@ -32,7 +29,7 @@ public class DeathModule : Module
     
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
     {
-        if (e.Gesture != EPlayerGesture.PUNCH_LEFT && e.Gesture != EPlayerGesture.PUNCH_RIGHT)
+        if (e.Gesture != EPlayerGesture.POINT)
         {
             return;
         }
@@ -113,7 +110,7 @@ public class DeathModule : Module
         var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         return barricade_drop;
     }
-
+    
     private void SendDeath(UnturnedPlayer player)
     {
         var player_items = new List<DeathItem>();
@@ -157,7 +154,7 @@ public class DeathModule : Module
             player.Player.clothing.vest, player.Player.clothing.vestQuality, player.Player.clothing.vestState,
             player.Player.clothing.mask, player.Player.clothing.maskQuality, player.Player.clothing.maskState,
             player.Player.clothing.glasses, player.Player.clothing.glassesQuality, player.Player.clothing.glassesState
-            );
+        );
         
         player.Player.clothing.askWearShirt(0, 0, [], false);
         player.Player.clothing.askWearPants(0, 0, [], false);
