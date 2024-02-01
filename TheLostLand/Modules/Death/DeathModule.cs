@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Rocket.Unturned.Player;
@@ -24,20 +25,20 @@ public class DeathModule : Module
         DamageEventEventPublisher.DamageEventEvent += OnDamage;
         GestureEventEventPublisher.GestureEventEvent += OnGesture;
     }
-    
+
     public override void Unload()
     {
         DamageEventEventPublisher.DamageEventEvent -= OnDamage;
         GestureEventEventPublisher.GestureEventEvent -= OnGesture;
     }
-    
+
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
     {
         if (e.Gesture != EPlayerGesture.POINT)
         {
             return;
         }
-        
+
         var result = Raycaster.RayCastPlayer(e.Player, RayMasks.BARRICADE_INTERACT);
         if (!result.RaycastHit)
         {
@@ -45,7 +46,7 @@ public class DeathModule : Module
         }
 
         var drop = BarricadeManager.FindBarricadeByRootTransform(result.BarricadeRootTransform);
-        
+
         if (!GetStorage<DeathsStorage>(out var storage))
         {
             return;
@@ -65,22 +66,21 @@ public class DeathModule : Module
         {
             inventory.tryAddItem(new Item(item.Item, item.Amount, item.Quality, item.State));
         }
-        
+
         e.Player.Inventory.updateItems(7, inventory);
         e.Player.Inventory.sendStorage();
-
     }
-    
+
     private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
     {
         if (e.Amount >= e.Player.life.health)
         {
             return;
         }
-        
+
         SendDeath(UnturnedPlayer.FromPlayer(e.Player));
     }
-    
+
     private void SaveInventory(Transform model, List<DeathItem> player_items)
     {
         var inv = new Inventory
@@ -90,7 +90,7 @@ public class DeathModule : Module
             LocY = model.position.y,
             LocZ = model.position.z
         };
-        
+
         if (!GetStorage<DeathsStorage>(out var storage))
         {
             return;
@@ -106,15 +106,15 @@ public class DeathModule : Module
             Logger.LogError("Could not gather configuration [DeathsConfiguration]");
             return null;
         }
-        
+
         var barri_angle = new Quaternion(0f, 0f, 0f, 0f);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, config.ManID));
         var transform = BarricadeManager.dropNonPlantedBarricade(barricade, player.Position, barri_angle, 0, 0);
-        
+
         var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
         return barricade_drop;
     }
-    
+
     private void SendDeath(UnturnedPlayer player)
     {
         var player_items = new List<DeathItem>();
@@ -149,27 +149,20 @@ public class DeathModule : Module
         {
             return;
         }
-        
+
         man.updateClothes(
             player.Player.clothing.shirt, player.Player.clothing.shirtQuality, player.Player.clothing.shirtState,
             player.Player.clothing.pants, player.Player.clothing.pantsQuality, player.Player.clothing.pantsState,
             player.Player.clothing.hat, player.Player.clothing.hatQuality, player.Player.clothing.hatState,
-            player.Player.clothing.backpack, player.Player.clothing.backpackQuality, player.Player.clothing.backpackState,
+            player.Player.clothing.backpack, player.Player.clothing.backpackQuality,
+            player.Player.clothing.backpackState,
             player.Player.clothing.vest, player.Player.clothing.vestQuality, player.Player.clothing.vestState,
             player.Player.clothing.mask, player.Player.clothing.maskQuality, player.Player.clothing.maskState,
             player.Player.clothing.glasses, player.Player.clothing.glassesQuality, player.Player.clothing.glassesState
         );
         
-        player.Player.clothing.askWearShirt(0, 0, [], false);
-        player.Player.clothing.askWearPants(0, 0, [], false);
-        player.Player.clothing.askWearHat(0, 0, [], false);
-        player.Player.clothing.askWearBackpack(0, 0, [], false);
-        player.Player.clothing.askWearVest(0, 0, [], false);
-        player.Player.clothing.askWearMask(0, 0, [], false);
-        player.Player.clothing.askWearGlasses(0, 0, [], false);
-        
         man.rebuildState();
-        
+
         var block = new Block();
         block.write(man.owner, man.group);
         block.writeInt32(man.visualShirt);
@@ -202,7 +195,44 @@ public class DeathModule : Module
         block.writeByteArray(man.glassesState);
         block.writeByte(man.pose_comp);
         BarricadeManager.updateState(man.transform, block.getBytes(out var size), size);
-        
+
         SaveInventory(barricade_drop.model, player_items);
+        Main.Instance.StartCoroutine(ClearInventoryCoroutine(player.SteamPlayer()));
+    }
+
+    private static IEnumerator ClearInventoryCoroutine(SteamPlayer player)
+    {
+        for (byte page = 0; page < 6; page++)
+        {
+            for (byte i = 0; i < player.player.inventory.items[page].getItemCount(); i++)
+            {
+                var item = player.player.inventory.items[page].getItem(i);
+                player.player.inventory.removeItem(page, player.player.inventory.getIndex(page, item.x, item.y));
+            }
+        }
+
+        var remove_unequipped = () =>
+        {
+            for (byte i = 0; i < player.player.inventory.getItemCount(2); i++)
+            {
+                player.player.inventory.removeItem(2, 0);
+            }
+        };
+
+        player.player.clothing.askWearBackpack(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearGlasses(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearHat(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearPants(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearMask(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearShirt(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        player.player.clothing.askWearVest(0, 0, Array.Empty<byte>(), true);
+        remove_unequipped();
+        yield return null;
     }
 }
