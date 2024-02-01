@@ -4,6 +4,7 @@ using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using TheLostLand.Events.Unturned;
 using TheLostLand.Models.Death;
 using TheLostLand.Modules.Attributes;
 using TheLostLand.Utils;
@@ -19,22 +20,24 @@ public class DeathModule : Module
 {
     public override void Load()
     {
-        UnturnedPlayerEvents.OnPlayerUpdateGesture += OnPlayerGesture;
-    }
-
-    public override void Unload()
-    {
-        UnturnedPlayerEvents.OnPlayerUpdateGesture -= OnPlayerGesture;
+        DamageEventEventPublisher.DamageEventEvent += OnDamage;
+        GestureEventEventPublisher.GestureEventEvent += OnGesture;
     }
     
-    private void OnPlayerGesture(UnturnedPlayer player, UnturnedPlayerEvents.PlayerGesture gesture)
+    public override void Unload()
     {
-        if (gesture != UnturnedPlayerEvents.PlayerGesture.PunchLeft && gesture != UnturnedPlayerEvents.PlayerGesture.PunchRight)
+        DamageEventEventPublisher.DamageEventEvent -= OnDamage;
+        GestureEventEventPublisher.GestureEventEvent -= OnGesture;
+    }
+    
+    private void OnGesture(GestureEventEventArgs e, ref bool allow)
+    {
+        if (e.Gesture != EPlayerGesture.PUNCH_LEFT && e.Gesture != EPlayerGesture.PUNCH_RIGHT)
         {
             return;
         }
         
-        var result = Raycaster.RayCastPlayer(player, RayMasks.BARRICADE_INTERACT);
+        var result = Raycaster.RayCastPlayer(e.Player, RayMasks.BARRICADE_INTERACT);
         if (!result.RaycastHit)
         {
             return;
@@ -62,10 +65,21 @@ public class DeathModule : Module
             inventory.tryAddItem(new Item(item.Item, item.Amount, item.Quality, item.State));
         }
         
-        player.Inventory.updateItems(7, inventory);
-        player.Inventory.sendStorage();
-    }
+        e.Player.Inventory.updateItems(7, inventory);
+        e.Player.Inventory.sendStorage();
 
+    }
+    
+    private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
+    {
+        if (e.Amount < e.Player.life.health)
+        {
+            return;
+        }
+        
+        SendDeath(UnturnedPlayer.FromPlayer(e.Player));
+    }
+    
     private void SaveInventory(Transform model, List<DeathItem> player_items)
     {
         var inv = new Inventory
@@ -100,7 +114,7 @@ public class DeathModule : Module
         return barricade_drop;
     }
 
-    public void SendDeath(UnturnedPlayer player)
+    private void SendDeath(UnturnedPlayer player)
     {
         var player_items = new List<DeathItem>();
 

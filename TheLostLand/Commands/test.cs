@@ -5,7 +5,7 @@ using SDG.Unturned;
 
 namespace TheLostLand.Commands;
 
-public class test : IRocketCommand
+public class Test : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {

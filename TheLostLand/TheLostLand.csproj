@@ -137,6 +137,8 @@
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
     <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
+    <Compile Include="Events\Unturned\DamageEvent.cs" />
+    <Compile Include="Events\Unturned\GestureEvent.cs" />
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
@@ -157,7 +159,8 @@
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
-    <Compile Include="Patches\Death\DamagePatch.cs" />
+    <Compile Include="Patches\DamagePatch.cs" />
+    <Compile Include="Patches\GesturePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
