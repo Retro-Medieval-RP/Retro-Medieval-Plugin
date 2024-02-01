@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Rocket.Unturned.Player;
+using SDG.NetTransport;
 using SDG.Unturned;
 using TheLostLand.Events.Unturned;
 using TheLostLand.Models.Death;
 using TheLostLand.Modules.Attributes;
 using TheLostLand.Utils;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.Death;
@@ -69,7 +73,7 @@ public class DeathModule : Module
     
     private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
     {
-        if (e.Amount < e.Player.life.health)
+        if (e.Amount >= e.Player.life.health)
         {
             return;
         }
@@ -164,8 +168,41 @@ public class DeathModule : Module
         player.Player.clothing.askWearMask(0, 0, [], false);
         player.Player.clothing.askWearGlasses(0, 0, [], false);
         
-        man.clothes.apply();
-
+        man.rebuildState();
+        
+        var block = new Block();
+        block.write(man.owner, man.group);
+        block.writeInt32(man.visualShirt);
+        block.writeInt32(man.visualPants);
+        block.writeInt32(man.visualHat);
+        block.writeInt32(man.visualBackpack);
+        block.writeInt32(man.visualVest);
+        block.writeInt32(man.visualMask);
+        block.writeInt32(man.visualGlasses);
+        block.writeUInt16(man.clothes.shirt);
+        block.writeByte(man.shirtQuality);
+        block.writeUInt16(man.clothes.pants);
+        block.writeByte(man.pantsQuality);
+        block.writeUInt16(man.clothes.hat);
+        block.writeByte(man.hatQuality);
+        block.writeUInt16(man.clothes.backpack);
+        block.writeByte(man.backpackQuality);
+        block.writeUInt16(man.clothes.vest);
+        block.writeByte(man.vestQuality);
+        block.writeUInt16(man.clothes.mask);
+        block.writeByte(man.maskQuality);
+        block.writeUInt16(man.clothes.glasses);
+        block.writeByte(man.glassesQuality);
+        block.writeByteArray(man.shirtState);
+        block.writeByteArray(man.pantsState);
+        block.writeByteArray(man.hatState);
+        block.writeByteArray(man.backpackState);
+        block.writeByteArray(man.vestState);
+        block.writeByteArray(man.maskState);
+        block.writeByteArray(man.glassesState);
+        block.writeByte(man.pose_comp);
+        BarricadeManager.updateState(man.transform, block.getBytes(out var size), size);
+        
         SaveInventory(barricade_drop.model, player_items);
     }
 }
