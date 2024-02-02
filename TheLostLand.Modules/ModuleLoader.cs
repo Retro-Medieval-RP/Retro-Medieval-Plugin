@@ -77,6 +77,6 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
-        foreach (var m in Modules) m.OnTimerTick();
+        foreach (var m in Modules) m.CallTick();
     }
 }
