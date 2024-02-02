@@ -83,6 +83,11 @@ public class DeathModule : Module
 
     private void SaveInventory(Transform model, List<DeathItem> player_items)
     {
+        if (player_items.Count <= 0)
+        {
+            return;
+        }
+
         var inv = new Inventory
         {
             Items = player_items,
@@ -160,7 +165,7 @@ public class DeathModule : Module
             player.Player.clothing.mask, player.Player.clothing.maskQuality, player.Player.clothing.maskState,
             player.Player.clothing.glasses, player.Player.clothing.glassesQuality, player.Player.clothing.glassesState
         );
-        
+
         man.rebuildState();
 
         var block = new Block();
