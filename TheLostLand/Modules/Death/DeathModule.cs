@@ -197,7 +197,7 @@ public class DeathModule : Module
         block.writeByteArray(man.maskState);
         block.writeByteArray(man.glassesState);
         block.writeByte(man.pose_comp);
-        BarricadeManager.updateState(man.transform, block.getBytes(out var size), size);
+        BarricadeManager.updateReplicatedState(man.transform, block.getBytes(out var size), size);
 
         SaveInventory(barricade_drop.model, player_items);
         Main.Instance.StartCoroutine(ClearInventoryCoroutine(player.SteamPlayer()));
