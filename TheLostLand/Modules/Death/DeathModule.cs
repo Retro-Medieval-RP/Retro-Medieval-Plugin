@@ -75,10 +75,8 @@ public class DeathModule : Module
     {
         if (e.Amount >= e.Player.life.health)
         {
-            return;
+            SendDeath(UnturnedPlayer.FromPlayer(e.Player));
         }
-
-        SendDeath(UnturnedPlayer.FromPlayer(e.Player));
     }
 
     private void SaveInventory(Transform model, List<DeathItem> player_items)
