@@ -10,7 +10,6 @@ using TheLostLand.Models.Death;
 using TheLostLand.Modules.Attributes;
 using TheLostLand.Utils;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace TheLostLand.Modules.Death;
@@ -30,6 +29,29 @@ public class DeathModule : Module
     {
         DamageEventEventPublisher.DamageEventEvent -= OnDamage;
         GestureEventEventPublisher.GestureEventEvent -= OnGesture;
+    }
+
+    protected override void OnTimerTick()
+    {
+        if (!GetStorage<DeathsStorage>(out var storage))
+        {
+            return;
+        }
+        
+        if (!GetConfiguration<DeathsConfiguration>(out var config))
+        {
+            Logger.LogError("Could not gather configuration [DeathsConfiguration]");
+            return;
+        }
+        
+        for(var i = storage.StorageItem.Count - 1; i >= 0; i--)
+        {
+            var body = storage.StorageItem[i];
+            if ((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)
+            {
+                storage.StorageItem.RemoveAt(i);
+            }
+        }
     }
 
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
@@ -81,13 +103,9 @@ public class DeathModule : Module
 
     private void SaveInventory(Transform model, List<DeathItem> player_items)
     {
-        if (player_items.Count <= 0)
+        var inv = new Body
         {
-            return;
-        }
-
-        var inv = new Inventory
-        {
+            BodySpawnTime = DateTime.Now,
             Items = player_items,
             LocX = model.position.x,
             LocY = model.position.y,

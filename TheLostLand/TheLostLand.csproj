@@ -143,7 +143,7 @@
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Models\Death\DeathItem.cs" />
-    <Compile Include="Models\Death\Inventory.cs" />
+    <Compile Include="Models\Death\Body.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
