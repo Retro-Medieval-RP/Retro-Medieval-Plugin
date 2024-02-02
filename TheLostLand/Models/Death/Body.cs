@@ -2,7 +2,7 @@
 
 namespace TheLostLand.Models.Death;
 
-public class Inventory
+public class Body
 {
     public float LocX { get; set; }
     public float LocY { get; set; }
