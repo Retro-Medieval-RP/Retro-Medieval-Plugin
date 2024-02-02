@@ -27,7 +27,7 @@ public abstract class Module
     public abstract void Load();
     public abstract void Unload();
 
-    public virtual void OnTimerTick()
+    protected virtual void OnTimerTick()
     {
     }
     
