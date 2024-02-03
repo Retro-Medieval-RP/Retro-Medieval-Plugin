@@ -150,17 +150,11 @@ public class DeathModule : Module
 
         var barricade_drop = PlaceBarricade(player);
 
-        if (barricade_drop.interactable as InteractableMannequin == null)
+        var man = barricade_drop.interactable as InteractableMannequin;
+        if (man == null|| player_items.Count <= 0)
         {
             BarricadeManager.tryGetRegion(barricade_drop.model, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
-            return;
-        }
-
-        var man = barricade_drop.interactable as InteractableMannequin;
-
-        if (man == null)
-        {
             return;
         }
 
