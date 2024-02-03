@@ -144,6 +144,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="Models\Death\DeathItem.cs" />
     <Compile Include="Models\Death\Body.cs" />
+    <Compile Include="Models\EntitySpawns\Entity.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
@@ -154,6 +155,8 @@
     <Compile Include="Modules\Death\DeathModule.cs" />
     <Compile Include="Modules\Death\DeathsConfiguration.cs" />
     <Compile Include="Modules\Death\DeathsStorage.cs" />
+    <Compile Include="Modules\EntitySpawns\EntitySpawnsModule.cs" />
+    <Compile Include="Modules\EntitySpawns\EntitySpawnsStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
