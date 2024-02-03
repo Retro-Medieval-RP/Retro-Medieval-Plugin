@@ -19,4 +19,10 @@ public class DeathsStorage : JsonSaver<List<Body>>
 
     public Body GetInv(Vector3 position) => 
         StorageItem.Find(x => new Vector3(x.LocX, x.LocY, x.LocZ) == position);
+
+    public void Set(List<Body> to_keep)
+    {
+        StorageItem = to_keep;
+        Save();
+    }
 }

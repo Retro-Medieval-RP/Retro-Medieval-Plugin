@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using TheLostLand.Events.Unturned;
@@ -41,15 +42,9 @@ public class DeathModule : Module
             Logger.LogError("Could not gather configuration [DeathsConfiguration]");
             return;
         }
-        
-        for(var i = storage.StorageItem.Count - 1; i >= 0; i--)
-        {
-            var body = storage.StorageItem[i];
-            if ((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)
-            {
-                storage.StorageItem.RemoveAt(i);
-            }
-        }
+
+        var to_keep = storage.StorageItem.Where(body => !((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)).ToList();
+        storage.Set(to_keep);
     }
 
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
