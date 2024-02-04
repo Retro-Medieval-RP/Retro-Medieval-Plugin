@@ -35,7 +35,7 @@ public class EntitySpawnsModule : Module
                 0f,
                 false
             ]) as Animal;
-                
+            
             AnimalManager.sendAnimalAlive(animal, new Vector3(e.LocationX, e.LocationY, e.LocationZ), 0);
         }
     }
