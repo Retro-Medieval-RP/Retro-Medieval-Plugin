@@ -1,4 +1,6 @@
-﻿using Rocket.Core.Plugins;
+﻿using System.Timers;
+using HarmonyLib;
+using Rocket.Core.Plugins;
 using TheLostLand.Modules;
 
 namespace TheLostLand;
@@ -13,6 +15,10 @@ internal class Main : RocketPlugin
         
         ModuleLoader.Instance.SetDirectory(Directory);
         ModuleLoader.Instance.LoadModules(Assembly);
+        ModuleLoader.Instance.SetUpdateTimer(new Timer(10000));
+        
+        var harmony = new Harmony("com.thelostland.patch");
+        harmony.PatchAll();
     }
 
     protected override void Unload()

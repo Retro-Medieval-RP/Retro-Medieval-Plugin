@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Timers;
 using TheLostLand.Modules.Configuration;
 using TheLostLand.Modules.Storage;
 using TheLostLand.Utils;
@@ -13,7 +14,15 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
     internal string ModuleDirectory { get; private set; }
 
     private List<Module> Modules { get; } = [];
+    
+    private Timer Timer { get; set; }
 
+    ~ModuleLoader()
+    {
+        Timer.Elapsed -= OnTimerElapsed;
+        Timer = null;
+    }
+    
     public bool GetModule<TModule>(out TModule module) where TModule : class
     {
         if (Modules.All(x => x.GetType() != typeof(TModule)))
@@ -59,4 +68,15 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
 
     public bool Exists(string module_name) => 
         Modules.Any(x => x.NameIs(module_name));
+
+    public void SetUpdateTimer(Timer timer)
+    {
+        Timer = timer;
+        Timer.Elapsed += OnTimerElapsed;
+    }
+
+    private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        foreach (var m in Modules) m.CallTick();
+    }
 }
