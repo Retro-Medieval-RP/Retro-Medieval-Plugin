@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using HarmonyLib;
+using RetroMedieval.Events.Unturned.CloathingDequip;
 using RetroMedieval.Events.Unturned.Clothing;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -16,6 +18,13 @@ internal class EquipShirtPatch
         {
             if (__instance.player == null)
             {
+                return;
+            }
+
+            if (id == Guid.Empty)
+            {
+                ShirtDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
                 return;
             }
 
@@ -43,6 +52,13 @@ internal class EquipPantsPatch
                 return;
             }
 
+            if (id == Guid.Empty)
+            {
+                PantsDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
+                return;
+            }
+
             var item = Assets.find(id);
             PantsEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
             ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
@@ -64,6 +80,13 @@ internal class EquipHatPatch
         {
             if (__instance.player == null)
             {
+                return;
+            }
+
+            if (id == Guid.Empty)
+            {
+                HatDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat);
                 return;
             }
 
@@ -91,6 +114,13 @@ internal class EquipBackpackPatch
                 return;
             }
 
+            if (id == Guid.Empty)
+            {
+                BackpackDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack);
+                return;
+            }
+
             var item = Assets.find(id);
             BackpackEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
             ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
@@ -112,6 +142,13 @@ internal class EquipVestPatch
         {
             if (__instance.player == null)
             {
+                return;
+            }
+
+            if (id == Guid.Empty)
+            {
+                VestDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest);
                 return;
             }
 
@@ -139,6 +176,13 @@ internal class EquipMaskPatch
                 return;
             }
 
+            if (id == Guid.Empty)
+            {
+                MaskDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask);
+                return;
+            }
+
             var item = Assets.find(id);
             MaskEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
             ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
@@ -160,6 +204,13 @@ internal class EquipGlassesPatch
         {
             if (__instance.player == null)
             {
+                return;
+            }
+
+            if (id == Guid.Empty)
+            {
+                GlassesDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses);
                 return;
             }
 
