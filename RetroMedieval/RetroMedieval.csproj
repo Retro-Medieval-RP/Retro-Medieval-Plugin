@@ -137,11 +137,20 @@
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
     <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
+    <Compile Include="Events\Unturned\Clothing\BackpackEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\ClothingEquip.cs" />
+    <Compile Include="Events\Unturned\Clothing\GlassesEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\HatEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\MaskEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\PantsEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\ShirtEquipped.cs" />
+    <Compile Include="Events\Unturned\Clothing\VestEquipped.cs" />
     <Compile Include="Events\Unturned\DamageEvent.cs" />
     <Compile Include="Events\Unturned\GestureEvent.cs" />
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
     <Compile Include="Models\Death\DeathItem.cs" />
     <Compile Include="Models\Death\Body.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
@@ -151,6 +160,8 @@
     <Compile Include="Models\LootChest\LootItem.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
+    <Compile Include="Modules\ArmorEquip\ArmorEquipConfiguration.cs" />
+    <Compile Include="Modules\ArmorEquip\ArmorEquipModule.cs" />
     <Compile Include="Modules\Death\DeathModule.cs" />
     <Compile Include="Modules\Death\DeathsConfiguration.cs" />
     <Compile Include="Modules\Death\DeathsStorage.cs" />
@@ -160,6 +171,7 @@
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
     <Compile Include="Patches\DamagePatch.cs" />
+    <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
