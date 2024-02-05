@@ -150,6 +150,7 @@
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Models\ArmorEquip\ArmorItem.cs" />
     <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
     <Compile Include="Models\Death\DeathItem.cs" />
     <Compile Include="Models\Death\Body.cs" />
@@ -191,18 +192,6 @@
     <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>RetroMedieval.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Modules\TheLostLand.Modules.csproj">
-      <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
-      <Name>TheLostLand.Modules</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Savers\TheLostLand.Savers.csproj">
-      <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
-      <Name>TheLostLand.Savers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Utils\TheLostLand.Utils.csproj">
-      <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
-      <Name>TheLostLand.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
