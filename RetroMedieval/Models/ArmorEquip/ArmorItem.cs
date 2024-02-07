@@ -1,17 +1,17 @@
-﻿namespace TheLostLand.Models.Death;
+namespace RetroMedieval.Models.ArmorEquip;
 
-public class DeathItem
+internal class ArmorItem
 {
     public ushort Item;
     public byte Amount;
     public byte Quality;
     public byte[] State;
 
-    public DeathItem()
+    public ArmorItem()
     {
     }
 
-    public DeathItem(ushort item, byte amount, byte quality, byte[] state)
+    public ArmorItem(ushort item, byte amount, byte quality, byte[] state)
     {
         Item = item;
         Amount = amount;

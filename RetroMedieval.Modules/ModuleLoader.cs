@@ -73,6 +73,7 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
     {
         Timer = timer;
         Timer.Elapsed += OnTimerElapsed;
+        Timer.Start();
     }
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)

@@ -147,11 +147,28 @@
     <Compile Include="Events\Unturned\Clothing\PantsEquipped.cs" />
     <Compile Include="Events\Unturned\Clothing\ShirtEquipped.cs" />
     <Compile Include="Events\Unturned\Clothing\VestEquipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\HatDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\MaskDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\PantsDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\ShirtDequipped.cs" />
+    <Compile Include="Events\Unturned\CloathingDequip\VestDequipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\BackpackEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\ClothingEquip.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\GlassesEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\HatEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\MaskEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\PantsEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\ShirtEquipped.cs" />
+    <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
     <Compile Include="Events\Unturned\DamageEvent.cs" />
     <Compile Include="Events\Unturned\GestureEvent.cs" />
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Models\ArmorEquip\ArmorItem.cs" />
     <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
     <Compile Include="Models\Death\DeathItem.cs" />
     <Compile Include="Models\Death\Body.cs" />
@@ -175,6 +192,7 @@
     <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
+    <Compile Include="Patches\ClothingDequipPatch.cs" />
     <Compile Include="Patches\DamagePatch.cs" />
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
@@ -196,18 +214,6 @@
     <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>RetroMedieval.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Modules\TheLostLand.Modules.csproj">
-      <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
-      <Name>TheLostLand.Modules</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Savers\TheLostLand.Savers.csproj">
-      <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
-      <Name>TheLostLand.Savers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheLostLand.Utils\TheLostLand.Utils.csproj">
-      <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
-      <Name>TheLostLand.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
