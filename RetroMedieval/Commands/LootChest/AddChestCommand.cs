@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.LootChest;
 using RetroMedieval.Modules.Zones;
@@ -52,7 +53,7 @@ internal class AddChestCommand : IRocketCommand
             return;
         }
 
-        if (loot_chest.AddChest(command[0], new Vector3(drop.model.position.x, ((UnturnedPlayer)caller).Position.y, drop.model.position.z), drop.model.rotation, out var node_id))
+        if (loot_chest.AddChest(command[0], new Vector3(drop.model.position.x, ((UnturnedPlayer)caller).Position.y, drop.model.position.z), drop.model.rotation, string.Join("¬", command.Skip(1)), out var node_id))
         {
             UnturnedChat.Say(caller, $"Added chest to zone {command[0]} with id: " + node_id);
             return;
@@ -64,7 +65,7 @@ internal class AddChestCommand : IRocketCommand
     public AllowedCaller AllowedCaller => AllowedCaller.Player;
     public string Name => "addchest";
     public string Help => "Adds a chest at a location and at an angle.";
-    public string Syntax => "addchest <zone name>";
+    public string Syntax => "addchest <zone name> <flags>";
     public List<string> Aliases => [];
     public List<string> Permissions => [];
 }

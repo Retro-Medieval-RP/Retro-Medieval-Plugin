@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.LootChest;
@@ -148,7 +149,7 @@ internal class LootChestModule : Module
         }
     }
 
-    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, out int id)
+    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, string flags, out int id)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
@@ -156,7 +157,17 @@ internal class LootChestModule : Module
             return false;
         }
 
-        storage.AddLocation(zone_name, position, rotation);
+
+        var flags_list = new List<LootChestFlags>();
+        foreach(var flag in flags.Split('¬'))
+        {
+            if (Enum.TryParse<LootChestFlags>(flag, out var flag_enum))
+            {
+                flags_list.Add(flag_enum);
+            }
+        }
+        
+        storage.AddLocation(zone_name, position, rotation, flags_list);
         var location = storage.GetLocations(zone_name);
         id = location.Locations.Count - 1;
 
