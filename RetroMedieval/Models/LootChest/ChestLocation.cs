@@ -17,4 +17,5 @@ internal class ChestLocation
 
     public string ZoneName { get; set; }
     public List<Location> Locations { get; set; }
+    public List<LootChestFlags> Flags { get; set; }
 }

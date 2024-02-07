@@ -12,6 +12,4 @@ internal class Location
     public float RotY { get; set; }
     public float RotZ { get; set; }
     public float RotW { get; set; }
-    
-    public List<LootChestFlags> Flags { get; set; }
 }
