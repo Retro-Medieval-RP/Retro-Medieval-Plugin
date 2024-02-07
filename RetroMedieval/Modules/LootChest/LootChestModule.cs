@@ -42,13 +42,17 @@ internal class LootChestModule : Module
         ZoneLeftEventPublisher.ZoneLeftEvent -= OnZoneLeft;
     }
 
-    private void OnZoneLeft(ZoneLeftEventArgs e)
+    private void OnZoneLeft(ZoneLeftEventArgs e) => RemoveLootChestsInZone(e);
+
+    private void OnZoneEntered(ZoneEnterEventArgs e) => SpawnNewLootChests(e);
+    
+    private void RemoveLootChestsInZone(ZoneLeftEventArgs e)
     {
         if (!_lootChest.TryGetValue(e.Zone, out var chests))
         {
             return;
         }
-        
+
         foreach (var chest in chests)
         {
             var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(chest);
@@ -67,8 +71,9 @@ internal class LootChestModule : Module
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
         }
     }
-    
-    private void OnZoneEntered(ZoneEnterEventArgs e)
+
+
+    private void SpawnNewLootChests(ZoneEnterEventArgs e)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
