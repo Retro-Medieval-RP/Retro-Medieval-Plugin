@@ -139,14 +139,6 @@
     <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
     <Compile Include="Events\LootChests\LootChestRemove.cs" />
     <Compile Include="Events\LootChests\LootChestSpawn.cs" />
-    <Compile Include="Events\Unturned\Clothing\BackpackEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\ClothingEquip.cs" />
-    <Compile Include="Events\Unturned\Clothing\GlassesEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\HatEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\MaskEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\PantsEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\ShirtEquipped.cs" />
-    <Compile Include="Events\Unturned\Clothing\VestEquipped.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
