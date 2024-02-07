@@ -137,6 +137,8 @@
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
     <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
+    <Compile Include="Events\LootChests\LootChestRemove.cs" />
+    <Compile Include="Events\LootChests\LootChestSpawn.cs" />
     <Compile Include="Events\Unturned\Clothing\BackpackEquipped.cs" />
     <Compile Include="Events\Unturned\Clothing\ClothingEquip.cs" />
     <Compile Include="Events\Unturned\Clothing\GlassesEquipped.cs" />
