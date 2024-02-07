@@ -1,3 +1,4 @@
+using RetroMedieval.Models.LootChest;
 using RetroMedieval.Models.Zones;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Zones;
@@ -8,6 +9,7 @@ namespace RetroMedieval.Events.LootChests;
 public class LootChestSpawnEventArgs
 {
     public string ZoneName { get; set; }
+    public LootChestFlags Flag { get; set; }
 
     public bool Zone(out Zone zone)
     {
@@ -35,9 +37,10 @@ public static class LootChestSpawnEventPublisher
 
     public static event LootChestSpawnEventHandler LootChestSpawnEvent;
 
-    internal static void RaiseEvent(string zone_name) =>
+    internal static void RaiseEvent(string zone_name, LootChestFlags flag) =>
         LootChestSpawnEvent?.Invoke(new LootChestSpawnEventArgs
         {
-            ZoneName = zone_name
+            ZoneName = zone_name,
+            Flag = flag
         });
 }
