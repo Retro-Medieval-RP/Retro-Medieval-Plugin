@@ -7,9 +7,11 @@ namespace RetroMedieval.Modules.LootChest;
 internal class LootChestConfiguration : IConfig
 {
     public List<Chest> Chests { get; set; }
-    
+    public int DespawnRate { get; set; }
+
     public void LoadDefaults()
     {
+        DespawnRate = 120000;
         Chests = [
             new Chest(0.5, ChestRarity.Common, 63000, 5, 
             [

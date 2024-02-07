@@ -6,6 +6,7 @@ using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.LootChest;
 using RetroMedieval.Models.Zones;
 using RetroMedieval.Modules.Attributes;
+using RetroMedieval.Modules.Storage;
 using RetroMedieval.Utils;
 using SDG.Unturned;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace RetroMedieval.Modules.LootChest;
 [ModuleInformation("LootChest")]
 [ModuleConfiguration<LootChestConfiguration>("LootChestConfig")]
 [ModuleStorage<LootChestLocationStorage>("LocationsStorage")]
+[ModuleStorage<LootChestSpawnedStorage>("SpawnedLootChests")]
 internal class LootChestModule : Module
 {
     private readonly Picker<Chest> _chestPicker = new();
@@ -46,6 +48,43 @@ internal class LootChestModule : Module
         ZoneLeftEventPublisher.ZoneLeftEvent -= OnZoneLeft;
         LootChestSpawnEventPublisher.LootChestSpawnEvent -= ChestToSpawn;
         LootChestRemoveEventPublisher.LootChestRemoveEvent -= ChestToRemove;
+    }
+
+    protected override void OnTimerTick()
+    {
+        if (!GetStorage<LootChestSpawnedStorage>(out var storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
+            return;
+        }
+
+        if (!GetConfiguration<LootChestConfiguration>(out var config))
+        {
+            Logger.LogError("Could not gather configuration [LootChestConfiguration]");
+            return;
+        }
+
+        var expired = storage.GetExpiredChests(config.DespawnRate);
+        storage.NewLoadOfChests(storage.StorageItem.Where(x => !expired.Contains(x)));
+
+        foreach (var exp in expired)
+        {
+            var chest_pos = new Vector3(exp.LocX, exp.LocY, exp.LocZ);
+            var trans = new List<Transform>();
+            BarricadeManager.getBarricadesInRadius(chest_pos, 1, trans);
+
+            foreach (var tran in trans)
+            {
+                if (tran.position != chest_pos)
+                {
+                    continue;
+                }
+                
+                var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(tran);
+                BarricadeManager.tryGetRegion(tran, out var x, out var y, out var plant, out _);
+                BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            }
+        }
     }
 
     private void ChestToSpawn(LootChestSpawnEventArgs e)
@@ -81,6 +120,12 @@ internal class LootChestModule : Module
             return;
         }
 
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
+            return;
+        }
+        
         foreach (var chest in chests)
         {
             var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(chest);
@@ -97,6 +142,9 @@ internal class LootChestModule : Module
 
             BarricadeManager.tryGetRegion(chest, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+
+            var position = chest.position;
+            spawned_storage.RemoveChest(position.x, position.y, position.z);
         }
     }
     
@@ -105,6 +153,12 @@ internal class LootChestModule : Module
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
             Logger.LogError("Could not gather storage [LootChestLocationStorage]");
+            return;
+        }
+        
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
             return;
         }
 
@@ -122,6 +176,13 @@ internal class LootChestModule : Module
         foreach (var chest in chest_locations.Locations)
         {
             SpawnChest(chest, out var trans);
+            spawned_storage.AddedChest(new SpawnedChest
+            {
+                LocX = trans.position.x,
+                LocY = trans.position.y,
+                LocZ = trans.position.z,
+                SpawnedDateTime = DateTime.Now
+            });
 
             if (_lootChest.ContainsKey(e))
             {
