@@ -21,8 +21,7 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
             RotX = rotation.x,
             RotY = rotation.y,
             RotZ = rotation.z,
-            RotW = rotation.w,
-            Flags = flags_list
+            RotW = rotation.w
         };
         
         if (StorageItem.Exists(x => x.ZoneName == zone_name))
@@ -34,7 +33,10 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
             return;
         }
         
-        StorageItem.Add(new ChestLocation(zone_name, location));
+        StorageItem.Add(new ChestLocation(zone_name, location)
+        {
+            Flags = flags_list
+        });
         Save();
     }
 
