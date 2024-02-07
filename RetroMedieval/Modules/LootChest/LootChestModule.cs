@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using RetroMedieval.Events.LootChests;
 using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.LootChest;
 using RetroMedieval.Models.Zones;
 using RetroMedieval.Modules.Attributes;
+using RetroMedieval.Modules.Storage;
 using RetroMedieval.Utils;
 using SDG.Unturned;
 using UnityEngine;
@@ -14,6 +17,7 @@ namespace RetroMedieval.Modules.LootChest;
 [ModuleInformation("LootChest")]
 [ModuleConfiguration<LootChestConfiguration>("LootChestConfig")]
 [ModuleStorage<LootChestLocationStorage>("LocationsStorage")]
+[ModuleStorage<LootChestSpawnedStorage>("SpawnedLootChests")]
 internal class LootChestModule : Module
 {
     private readonly Picker<Chest> _chestPicker = new();
@@ -34,18 +38,91 @@ internal class LootChestModule : Module
 
         ZoneEnterEventPublisher.ZoneEnterEvent += OnZoneEntered;
         ZoneLeftEventPublisher.ZoneLeftEvent += OnZoneLeft;
+        LootChestSpawnEventPublisher.LootChestSpawnEvent += ChestToSpawn;
+        LootChestRemoveEventPublisher.LootChestRemoveEvent += ChestToRemove;
     }
-    
+
     public override void Unload()
     {
         ZoneEnterEventPublisher.ZoneEnterEvent -= OnZoneEntered;
         ZoneLeftEventPublisher.ZoneLeftEvent -= OnZoneLeft;
+        LootChestSpawnEventPublisher.LootChestSpawnEvent -= ChestToSpawn;
+        LootChestRemoveEventPublisher.LootChestRemoveEvent -= ChestToRemove;
     }
 
-    private void OnZoneLeft(ZoneLeftEventArgs e)
+    protected override void OnTimerTick()
     {
-        if (!_lootChest.TryGetValue(e.Zone, out var chests))
+        if (!GetStorage<LootChestSpawnedStorage>(out var storage))
         {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
+            return;
+        }
+
+        if (!GetConfiguration<LootChestConfiguration>(out var config))
+        {
+            Logger.LogError("Could not gather configuration [LootChestConfiguration]");
+            return;
+        }
+
+        var expired = storage.GetExpiredChests(config.DespawnRate);
+        storage.NewLoadOfChests(storage.StorageItem.Where(x => !expired.Contains(x)));
+
+        foreach (var exp in expired)
+        {
+            var chest_pos = new Vector3(exp.LocX, exp.LocY, exp.LocZ);
+            var trans = new List<Transform>();
+            BarricadeManager.getBarricadesInRadius(chest_pos, 1, trans);
+
+            foreach (var tran in trans)
+            {
+                if (tran.position != chest_pos)
+                {
+                    continue;
+                }
+                
+                var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(tran);
+                BarricadeManager.tryGetRegion(tran, out var x, out var y, out var plant, out _);
+                BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            }
+        }
+    }
+
+    private void ChestToSpawn(LootChestSpawnEventArgs e)
+    {
+        if (!e.Zone(out var zone))
+        {
+            return;
+        }
+        
+        SpawnNewLootChests(zone, e.Flag);
+    }
+    
+    private void ChestToRemove(LootChestRemoveEventArgs e)
+    {
+        if (!e.Zone(out var zone))
+        {
+            return;
+        }
+        
+        RemoveLootChestsInZone(zone);
+    }
+    
+    private void OnZoneLeft(ZoneLeftEventArgs e) => 
+        RemoveLootChestsInZone(e.Zone);
+
+    private void OnZoneEntered(ZoneEnterEventArgs e) => 
+        SpawnNewLootChests(e.Zone, LootChestFlags.ZoneEntered);
+    
+    private void RemoveLootChestsInZone(Zone e)
+    {
+        if (!_lootChest.TryGetValue(e, out var chests))
+        {
+            return;
+        }
+
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
             return;
         }
         
@@ -65,34 +142,55 @@ internal class LootChestModule : Module
 
             BarricadeManager.tryGetRegion(chest, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+
+            var position = chest.position;
+            spawned_storage.RemoveChest(position.x, position.y, position.z);
         }
     }
     
-    private void OnZoneEntered(ZoneEnterEventArgs e)
+    private void SpawnNewLootChests(Zone e, LootChestFlags flag)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
             Logger.LogError("Could not gather storage [LootChestLocationStorage]");
             return;
         }
+        
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        {
+            Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
+            return;
+        }
 
-        if (storage.StorageItem.All(x => x.ZoneName != e.Zone.ZoneName))
+        if (storage.StorageItem.All(x => x.ZoneName != e.ZoneName))
         {
             return;
         }
 
-        var chest_locations = storage.StorageItem.Find(x => x.ZoneName == e.Zone.ZoneName);
+        if (!storage.StorageItem.Find(x => x.ZoneName == e.ZoneName).Flags.Contains(flag))
+        {
+            return;
+        }
+        
+        var chest_locations = storage.StorageItem.Find(x => x.ZoneName == e.ZoneName);
         foreach (var chest in chest_locations.Locations)
         {
             SpawnChest(chest, out var trans);
-
-            if (_lootChest.ContainsKey(e.Zone))
+            spawned_storage.AddedChest(new SpawnedChest
             {
-                _lootChest[e.Zone].Add(trans);
+                LocX = trans.position.x,
+                LocY = trans.position.y,
+                LocZ = trans.position.z,
+                SpawnedDateTime = DateTime.Now
+            });
+
+            if (_lootChest.ContainsKey(e))
+            {
+                _lootChest[e].Add(trans);
                 continue;
             }
             
-            _lootChest.Add(e.Zone, [trans]);
+            _lootChest.Add(e, [trans]);
         }
     }
 
@@ -143,15 +241,24 @@ internal class LootChestModule : Module
         }
     }
 
-    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, out int id)
+    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, string flags, out int id)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
             id = default;
             return false;
         }
-
-        storage.AddLocation(zone_name, position, rotation);
+        
+        var flags_list = new List<LootChestFlags>();
+        foreach(var flag in flags.Split('¬'))
+        {
+            if (Enum.TryParse<LootChestFlags>(flag, out var flag_enum))
+            {
+                flags_list.Add(flag_enum);
+            }
+        }
+        
+        storage.AddLocation(zone_name, position, rotation, flags_list);
         var location = storage.GetLocations(zone_name);
         id = location.Locations.Count - 1;
 

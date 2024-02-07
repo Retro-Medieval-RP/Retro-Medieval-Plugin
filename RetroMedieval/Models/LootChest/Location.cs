@@ -1,4 +1,6 @@
-﻿namespace RetroMedieval.Models.LootChest;
+﻿using System.Collections.Generic;
+
+namespace RetroMedieval.Models.LootChest;
 
 internal class Location
 {

@@ -64,7 +64,7 @@ public class ZonesModule : Module
         GetStorage<ZonesStorage>(out var storage) &&
         storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
 
-    private Zone GetZone(Vector3 point) =>
+    public Zone GetZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;
 
     public bool CreateZone(string zone_name)
@@ -124,5 +124,17 @@ public class ZonesModule : Module
         }
 
         return storage.Exists(zone_name);
+    }
+
+    public bool GetZone(string zone_name, out Zone zone)
+    {
+        if (!GetStorage<ZonesStorage>(out var storage))
+        {
+            zone = null;
+            return false;
+        }
+
+        zone = storage.GetZone(zone_name);
+        return true;
     }
 }
