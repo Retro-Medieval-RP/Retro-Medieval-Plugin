@@ -43,7 +43,7 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="JsonSaver.cs" />
+        <Compile Include="Json\JsonSaver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
@@ -58,6 +58,9 @@
         <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
         <Name>TheLostLand.Modules</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="MySql\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

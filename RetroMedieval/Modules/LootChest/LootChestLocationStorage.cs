@@ -2,6 +2,7 @@
 using System.Linq;
 using RetroMedieval.Models.LootChest;
 using RetroMedieval.Savers;
+using RetroMedieval.Savers.Json;
 using UnityEngine;
 
 namespace RetroMedieval.Modules.LootChest;
