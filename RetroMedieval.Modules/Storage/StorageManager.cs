@@ -26,7 +26,7 @@ internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage
         return true;
     }
 
-    public SavingConfiguration GetConfig()
+    public static SavingConfiguration GetSavingConfig()
     {
         if (!ConfigurationManager.Instance.Get((x => x.Config.GetType() == typeof(SavingConfiguration)), out var config))
         {
