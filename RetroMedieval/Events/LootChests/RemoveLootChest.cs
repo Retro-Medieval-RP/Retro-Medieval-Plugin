@@ -5,7 +5,7 @@ using Rocket.Core.Logging;
 
 namespace RetroMedieval.Events.LootChests;
 
-public class LootChestRemoveEventArgs
+public class RemoveLootChestEventArgs
 {
     public string ZoneName { get; set; }
 
@@ -29,14 +29,14 @@ public class LootChestRemoveEventArgs
     }
 }
 
-public static class LootChestRemoveEventPublisher
+public static class RemoveLootChestEventPublisher
 {
-    public delegate void LootChestRemoveEventHandler(LootChestRemoveEventArgs e);
+    public delegate void RemoveLootChestEventHandler(RemoveLootChestEventArgs e);
 
-    public static event LootChestRemoveEventHandler LootChestRemoveEvent;
+    public static event RemoveLootChestEventHandler RemoveLootChestEvent;
 
     internal static void RaiseEvent(string zone_name) =>
-        LootChestRemoveEvent?.Invoke(new LootChestRemoveEventArgs
+        RemoveLootChestEvent?.Invoke(new RemoveLootChestEventArgs
         {
             ZoneName = zone_name
         });

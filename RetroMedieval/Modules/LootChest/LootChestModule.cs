@@ -38,16 +38,16 @@ internal class LootChestModule : Module
 
         ZoneEnterEventPublisher.ZoneEnterEvent += OnZoneEntered;
         ZoneLeftEventPublisher.ZoneLeftEvent += OnZoneLeft;
-        LootChestSpawnEventPublisher.LootChestSpawnEvent += ChestToSpawn;
-        LootChestRemoveEventPublisher.LootChestRemoveEvent += ChestToRemove;
+        SpawnLootChestEventPublisher.SpawnLootChestEvent += ChestTo;
+        RemoveLootChestEventPublisher.RemoveLootChestEvent += ChestTo;
     }
 
     public override void Unload()
     {
         ZoneEnterEventPublisher.ZoneEnterEvent -= OnZoneEntered;
         ZoneLeftEventPublisher.ZoneLeftEvent -= OnZoneLeft;
-        LootChestSpawnEventPublisher.LootChestSpawnEvent -= ChestToSpawn;
-        LootChestRemoveEventPublisher.LootChestRemoveEvent -= ChestToRemove;
+        SpawnLootChestEventPublisher.SpawnLootChestEvent -= ChestTo;
+        RemoveLootChestEventPublisher.RemoveLootChestEvent -= ChestTo;
     }
 
     protected override void OnTimerTick()
@@ -87,7 +87,7 @@ internal class LootChestModule : Module
         }
     }
 
-    private void ChestToSpawn(LootChestSpawnEventArgs e)
+    private void ChestTo(SpawnLootChestEventArgs e)
     {
         if (!e.Zone(out var zone))
         {
@@ -97,7 +97,7 @@ internal class LootChestModule : Module
         SpawnNewLootChests(zone, e.Flag);
     }
     
-    private void ChestToRemove(LootChestRemoveEventArgs e)
+    private void ChestTo(RemoveLootChestEventArgs e)
     {
         if (!e.Zone(out var zone))
         {
