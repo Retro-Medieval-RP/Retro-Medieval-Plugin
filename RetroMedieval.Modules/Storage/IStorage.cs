@@ -8,6 +8,7 @@ public interface IStorage<T> : IStorage
 public interface IStorage
 {
     public string SavePath { get; }
+    public StorageType StorageType { get; }
     bool Load(string file_path);
     void Save();
 }

@@ -60,6 +60,7 @@
         <Compile Include="Storage\SavingConfiguration.cs" />
         <Compile Include="Storage\Storage.cs" />
         <Compile Include="Storage\StorageManager.cs" />
+        <Compile Include="Storage\StorageType.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
