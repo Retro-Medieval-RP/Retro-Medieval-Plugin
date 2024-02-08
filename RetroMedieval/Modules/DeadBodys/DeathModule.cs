@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using RetroMedieval.Events.DeadBodys;
 using RetroMedieval.Events.Unturned;
 using RetroMedieval.Models.DeadBodys;
 using RetroMedieval.Modules.Attributes;
@@ -21,12 +22,18 @@ public class DeathModule : Module
     {
         DamageEventEventPublisher.DamageEventEvent += OnDamage;
         GestureEventEventPublisher.GestureEventEvent += OnGesture;
-    }
 
+        SpawnDeadBodyEventPublisher.SpawnDeadBodyEvent += SpawnBody;
+        RemoveDeadBodyEventPublisher.RemoveDeadBodyEvent += RemoveBody;
+    }
+    
     public override void Unload()
     {
         DamageEventEventPublisher.DamageEventEvent -= OnDamage;
         GestureEventEventPublisher.GestureEventEvent -= OnGesture;
+
+        SpawnDeadBodyEventPublisher.SpawnDeadBodyEvent -= SpawnBody;
+        RemoveDeadBodyEventPublisher.RemoveDeadBodyEvent -= RemoveBody;
     }
 
     protected override void OnTimerTick()
@@ -52,6 +59,17 @@ public class DeathModule : Module
         }
     }
 
+
+    private void RemoveBody(RemoveDeadBodyEventArgs e) =>
+        DeleteBody(e.Location);
+
+    private void SpawnBody(SpawnDeadBodyEventArgs e) => 
+        SendDeath(e.Player);
+
+    private void DeleteBody(Vector3 location)
+    {
+    }
+    
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
     {
         if (e.Gesture != EPlayerGesture.POINT)
@@ -217,6 +235,11 @@ public class DeathModule : Module
 
         SaveInventory(barricade_drop.model, player_items);
         Main.Instance.StartCoroutine(ClearInventoryCoroutine(player.SteamPlayer()));
+
+        if (player.Player.life.IsAlive)
+        {
+            player.Player.life.sendSuicide();
+        }
     }
 
     private static IEnumerator ClearInventoryCoroutine(SteamPlayer player)
