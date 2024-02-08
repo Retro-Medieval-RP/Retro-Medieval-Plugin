@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RetroMedieval.Models.Death;
+using RetroMedieval.Models.DeadBodys;
 using RetroMedieval.Savers;
 using UnityEngine;
 
-namespace RetroMedieval.Modules.Death;
+namespace RetroMedieval.Modules.DeadBodys;
 
 public class DeathsStorage : JsonSaver<List<Body>>
 {

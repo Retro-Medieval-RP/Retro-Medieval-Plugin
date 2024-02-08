@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using RetroMedieval.Events.Unturned;
-using RetroMedieval.Models.Death;
+using RetroMedieval.Models.DeadBodys;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Utils;
 using Rocket.Unturned.Player;
@@ -11,7 +10,7 @@ using SDG.Unturned;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace RetroMedieval.Modules.Death;
+namespace RetroMedieval.Modules.DeadBodys;
 
 [ModuleInformation("Deaths")]
 [ModuleConfiguration<DeathsConfiguration>("DeathsConfiguration")]

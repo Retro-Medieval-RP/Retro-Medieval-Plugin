@@ -1,6 +1,6 @@
 using Rocket.Unturned.Player;
 
-namespace RetroMedieval.Events.Unturned.Clothing;
+namespace RetroMedieval.Events.Unturned.ClothingEquip;
 
 public class VestEquippedEventArgs
 {

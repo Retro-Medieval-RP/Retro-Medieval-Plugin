@@ -1,4 +1,4 @@
-﻿namespace RetroMedieval.Models.Death;
+﻿namespace RetroMedieval.Models.DeadBodys;
 
 public class DeathItem
 {

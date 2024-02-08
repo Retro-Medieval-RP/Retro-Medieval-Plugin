@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RetroMedieval.Events.Unturned.CloathingDequip;
-using RetroMedieval.Events.Unturned.Clothing;
+using RetroMedieval.Events.Unturned.ClothingEquip;
 using RetroMedieval.Models.ArmorEquip;
 using RetroMedieval.Modules.Attributes;
 using Rocket.Core.Logging;

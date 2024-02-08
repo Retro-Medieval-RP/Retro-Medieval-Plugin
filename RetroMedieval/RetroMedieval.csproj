@@ -162,8 +162,8 @@
     <Compile Include="Main.cs" />
     <Compile Include="Models\ArmorEquip\ArmorItem.cs" />
     <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
-    <Compile Include="Models\Death\DeathItem.cs" />
-    <Compile Include="Models\Death\Body.cs" />
+    <Compile Include="Models\DeadBodys\DeathItem.cs" />
+    <Compile Include="Models\DeadBodys\Body.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
@@ -175,9 +175,9 @@
     <Compile Include="Models\Zones\Zone.cs" />
     <Compile Include="Modules\ArmorEquip\ArmorEquipConfiguration.cs" />
     <Compile Include="Modules\ArmorEquip\ArmorEquipModule.cs" />
-    <Compile Include="Modules\Death\DeathModule.cs" />
-    <Compile Include="Modules\Death\DeathsConfiguration.cs" />
-    <Compile Include="Modules\Death\DeathsStorage.cs" />
+    <Compile Include="Modules\DeadBodys\DeathModule.cs" />
+    <Compile Include="Modules\DeadBodys\DeathsConfiguration.cs" />
+    <Compile Include="Modules\DeadBodys\DeathsStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
@@ -207,6 +207,9 @@
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>RetroMedieval.Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Events\DeadBodys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

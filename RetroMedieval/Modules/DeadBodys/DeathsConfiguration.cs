@@ -1,6 +1,6 @@
 ﻿using RetroMedieval.Modules.Configuration;
 
-namespace RetroMedieval.Modules.Death;
+namespace RetroMedieval.Modules.DeadBodys;
 
 public class DeathsConfiguration : IConfig
 {
