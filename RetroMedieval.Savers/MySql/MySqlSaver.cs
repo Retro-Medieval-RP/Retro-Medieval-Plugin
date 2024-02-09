@@ -10,11 +10,10 @@ internal class MySqlSaver<T> : IStorage<T>
     
     public bool Load(string file_path)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public void Save()
     {
-        throw new System.NotImplementedException();
     }
 }

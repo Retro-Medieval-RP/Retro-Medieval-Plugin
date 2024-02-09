@@ -44,7 +44,13 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Json\JsonSaver.cs" />
+        <Compile Include="MySql\Attributes\DatabaseColumn.cs" />
+        <Compile Include="MySql\Attributes\DatabaseTable.cs" />
+        <Compile Include="MySql\Attributes\TableReference.cs" />
+        <Compile Include="MySql\Columns\TableColumn.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
+        <Compile Include="MySql\Tables\TableExecutor.cs" />
+        <Compile Include="MySql\Tables\TableGenerator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
