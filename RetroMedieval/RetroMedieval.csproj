@@ -186,7 +186,6 @@
     <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
-    <Compile Include="Patches\ClothingDequipPatch.cs" />
     <Compile Include="Patches\DamagePatch.cs" />
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
