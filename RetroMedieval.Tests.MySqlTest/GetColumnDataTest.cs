@@ -11,8 +11,7 @@ namespace RetroMedieval.Tests.MySqlTest
     {
         [Theory]
         [ClassData(typeof(TestData<TestModel>))]
-        public void Test1(TableColumn generated_column, TableColumn correct_column)
-        {
+        public void Test1(TableColumn generated_column, TableColumn correct_column) =>
             Assert.True(generated_column.Equals(correct_column), 
                 $@"Generated Column: 
     Name: {generated_column.Name}
@@ -26,8 +25,7 @@ Correct Column:
     Default: {correct_column.Default}
     Constraint: {correct_column.Constraint}
 ");
-        }
-        
+
         public class TestData<T> : IEnumerable<object[]>
         {
             private static readonly IEnumerable<object[]> TestObjects = new[]

@@ -10,10 +10,8 @@ namespace RetroMedieval.Tests.MySqlTest
     {
         [Theory]
         [ClassData(typeof(TestData<TestModel>))]
-        public void Test1(string generated_dll, string correct_ddl)
-        {
+        public void Test1(string generated_dll, string correct_ddl) => 
             Assert.True(generated_dll == correct_ddl, $"Generated DDL: {generated_dll} | Correct DDL: {correct_ddl}");
-        }
     }
 
     public class TestData<T> : IEnumerable<object[]>
