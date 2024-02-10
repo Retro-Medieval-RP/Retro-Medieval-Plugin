@@ -13,6 +13,7 @@
         <AssemblyName>RetroMedieval.Tests.MySqlTest</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +54,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ExecuteGenerationAndExecutionTests.cs" />
+        <Compile Include="ForeignTableTest.cs" />
         <Compile Include="GetColumnDataTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

@@ -3,5 +3,6 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::02E6655F-9A79-4F18-B31B-FA0391DAD4ED::.NETFramework,Version=v4.8::RetroMedieval.Tests.MySqlTest.GetColumnDataTest.Test1&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::02E6655F-9A79-4F18-B31B-FA0391DAD4ED::.NETFramework,Version=v4.8::RetroMedieval.Tests.MySqlTest.ExecuteGenerationAndExecutionTests.Test1&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::02E6655F-9A79-4F18-B31B-FA0391DAD4ED::.NETFramework,Version=v4.8::RetroMedieval.Tests.MySqlTest.ForeignTableTest.Test1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

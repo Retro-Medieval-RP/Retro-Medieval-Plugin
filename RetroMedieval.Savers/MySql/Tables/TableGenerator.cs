@@ -30,7 +30,7 @@ public class TableGenerator
         columns_and_contrains.AddRange(columns.Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
             .Select(r => r.Constraint));
 
-        var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});";
+        var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
 
         return ddl;
     }
@@ -52,25 +52,27 @@ public class TableGenerator
         if (IsColumnPrimaryKey(property))
         {
             column.Constraint = $"CONSTRAINT PK_{table_name} PRIMARY KEY ({column.Name})";
-            return column;
         }
 
-        if (!property.PropertyType.IsSubclassOf(typeof(IEnumerable<>)))
+        if (IsColumnForeignKey(property))
         {
-            return column;
-        }
+            var foreign_key = GetColumnForeignKey(property);
+            column.Constraint = $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {foreign_key.TableName}({foreign_key.ColumnName})";
 
-        var reference_data = GetColumnReferenceData(property);
-        if (!TypeToTable.ContainsValue(reference_data.TableName))
-        {
+            if (TypeToTable.ContainsValue(foreign_key.TableName))
+            {
+                return column;
+            }
+            
             var new_table_ddl = GenerateDDL(property.PropertyType);
             column.ReferenceTableDDL = new_table_ddl;
         }
-
-        column.Constraint =
-            $"CONSTRAINT FK_{table_name}_{column.Name} REFERENCES {reference_data.TableName}({reference_data.ColumnName})";
+        
         return column;
     }
+
+    private static TableReference GetColumnForeignKey(MemberInfo property) => 
+        property.GetCustomAttribute<TableReference>();
 
     private static DatabaseColumn GetColumnAttribute(MemberInfo property) =>
         property.GetCustomAttributes<DatabaseColumn>().Any()
@@ -79,6 +81,9 @@ public class TableGenerator
 
     private static bool IsColumnPrimaryKey(MemberInfo property) =>
         property.GetCustomAttributes<PrimaryKey>().Any();
+    
+    private static bool IsColumnForeignKey(MemberInfo property) =>
+        property.GetCustomAttributes<TableReference>().Any();
 
     private static bool GetTableAttribute(MemberInfo type, out DatabaseTable table)
     {

@@ -2,15 +2,9 @@ using System;
 
 namespace RetroMedieval.Savers.MySql.Attributes;
 
-public class TableReference<T> : TableReference where T : class
-{
-    public T TableType { get; set; }
-}
-
 [AttributeUsage(AttributeTargets.Property)]
-public abstract class TableReference : Attribute
+public class TableReference(string table_name, string column_name) : Attribute
 {
-    public string TableName { get; set; }
-    public string ColumnName { get; set; }
-    public Type TableType { get; set; }
+    public string TableName { get; set; } = table_name;
+    public string ColumnName { get; set; } = column_name;
 }
