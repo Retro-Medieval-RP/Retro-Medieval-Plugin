@@ -40,7 +40,7 @@ Correct Column:
                         Name = "TestID",
                         DataType = "INT(11)",
                         Default = "AUTO_INCREMENT",
-                        Constraint = null
+                        Constraint = "CONSTRAINT PK_Tests PRIMARY KEY (TestID)"
                     }
                 },
             };
@@ -54,6 +54,7 @@ Correct Column:
         public class TestModel
         {
             [DatabaseColumn("TestID", "INT(11)", "AUTO_INCREMENT")]
+            [PrimaryKey]
             public int TestID { get; set; }
         
             [DatabaseColumn("TestString", "VARCHAR(255)")]
