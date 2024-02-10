@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMedieval.Modules", "Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMedieval.Savers", "RetroMedieval.Savers\RetroMedieval.Savers.csproj", "{67E1116D-33CA-4D1C-AEB6-1BD5BDC68736}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8E0BEFC6-4EE7-4C94-B26D-BF111EAC6F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMedieval.Tests.MySqlTest", "RetroMedieval.Tests.MySqlTest\RetroMedieval.Tests.MySqlTest.csproj", "{02E6655F-9A79-4F18-B31B-FA0391DAD4ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,10 +36,15 @@ Global
 		{67E1116D-33CA-4D1C-AEB6-1BD5BDC68736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67E1116D-33CA-4D1C-AEB6-1BD5BDC68736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67E1116D-33CA-4D1C-AEB6-1BD5BDC68736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02E6655F-9A79-4F18-B31B-FA0391DAD4ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02E6655F-9A79-4F18-B31B-FA0391DAD4ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02E6655F-9A79-4F18-B31B-FA0391DAD4ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02E6655F-9A79-4F18-B31B-FA0391DAD4ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9642ECB9-9358-489E-AF91-35D6F517F354} = {EEDCB881-2C29-459D-89BE-EDD2870914FE}
 		{54452196-1E4E-4338-9FAE-1033161455D6} = {EEDCB881-2C29-459D-89BE-EDD2870914FE}
 		{67E1116D-33CA-4D1C-AEB6-1BD5BDC68736} = {EEDCB881-2C29-459D-89BE-EDD2870914FE}
+		{02E6655F-9A79-4F18-B31B-FA0391DAD4ED} = {8E0BEFC6-4EE7-4C94-B26D-BF111EAC6F65}
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,7 @@ using System;
 namespace RetroMedieval.Savers.MySql.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-internal class DatabaseTable : Attribute
+public class DatabaseTable(string name) : Attribute
 {
-    public string TableName { get; set; }
+    public string TableName { get; set; } = name;
 }

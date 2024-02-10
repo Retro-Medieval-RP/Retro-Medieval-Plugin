@@ -1,8 +1,9 @@
 using RetroMedieval.Modules.Storage;
+using RetroMedieval.Savers.MySql.Tables;
 
 namespace RetroMedieval.Savers.MySql;
 
-internal class MySqlSaver<T> : IStorage<T>
+public class MySqlSaver<T> : IStorage<T>
 {
     public string SavePath { get; }
     public StorageType StorageType => StorageType.Sql;
@@ -13,6 +14,12 @@ internal class MySqlSaver<T> : IStorage<T>
         return true;
     }
 
+    public string GetStorageDDL()
+    {
+        var ddl = TableGenerator.GenerateDDL(typeof(T));
+        return ddl;
+    }
+    
     public void Save()
     {
     }
