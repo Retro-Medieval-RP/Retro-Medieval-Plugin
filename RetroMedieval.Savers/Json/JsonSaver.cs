@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using RetroMedieval.Modules.Storage;
 
 namespace RetroMedieval.Savers.Json;
 
-public class JsonSaver<T> : IStorage<T> where T : new()
+public class JsonSaver<T> : IFileStorage<T> where T : new()
 {
     public string SavePath { get; private set; }
     public StorageType StorageType => StorageType.File;
