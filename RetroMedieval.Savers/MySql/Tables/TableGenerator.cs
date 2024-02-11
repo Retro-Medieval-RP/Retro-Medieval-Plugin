@@ -60,13 +60,11 @@ public class TableGenerator
             var foreign_key = GetColumnForeignKey(property);
             column.Constraint = $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {foreign_key.TableName}({foreign_key.ColumnName})";
 
-            if (TypeToTable.ContainsValue(foreign_key.TableName))
+            if (!TypeToTable.ContainsValue(foreign_key.TableName))
             {
-                return column;
+                var new_table_ddl = GenerateDDL(property.PropertyType);
+                column.ReferenceTableDDL = new_table_ddl;
             }
-            
-            var new_table_ddl = GenerateDDL(property.PropertyType);
-            column.ReferenceTableDDL = new_table_ddl;
         }
         
         return column;
