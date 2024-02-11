@@ -71,8 +71,8 @@ public class TableGenerator
         return column;
     }
 
-    private static TableReference GetColumnForeignKey(MemberInfo property) => 
-        property.GetCustomAttribute<TableReference>();
+    private static ForeignKey GetColumnForeignKey(MemberInfo property) => 
+        property.GetCustomAttribute<ForeignKey>();
 
     private static DatabaseColumn GetColumnAttribute(MemberInfo property) =>
         property.GetCustomAttributes<DatabaseColumn>().Any()
@@ -83,7 +83,7 @@ public class TableGenerator
         property.GetCustomAttributes<PrimaryKey>().Any();
     
     private static bool IsColumnForeignKey(MemberInfo property) =>
-        property.GetCustomAttributes<TableReference>().Any();
+        property.GetCustomAttributes<ForeignKey>().Any();
 
     private static bool GetTableAttribute(MemberInfo type, out DatabaseTable table)
     {
@@ -97,8 +97,8 @@ public class TableGenerator
         return true;
     }
 
-    private static TableReference GetColumnReferenceData(MemberInfo property) =>
-        property.GetCustomAttributes<TableReference>().Any()
-            ? property.GetCustomAttribute<TableReference>()
+    private static ForeignKey GetColumnReferenceData(MemberInfo property) =>
+        property.GetCustomAttributes<ForeignKey>().Any()
+            ? property.GetCustomAttribute<ForeignKey>()
             : null;
 }

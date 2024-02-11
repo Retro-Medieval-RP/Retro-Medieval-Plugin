@@ -41,7 +41,7 @@ namespace RetroMedieval.Tests.MySqlTest
             public string TestString { get; set; }
 
             [DatabaseColumn("Test2ID", "INT(11)")]
-            [TableReference("TestTable2", "TestID")]
+            [ForeignKey("TestTable2", "TestID")]
             public Test2Model Table2 { get; set; }
         }
 
