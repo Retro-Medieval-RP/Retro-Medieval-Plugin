@@ -32,6 +32,7 @@ public class TableGenerator
 
         var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
 
+        TypeToTable.Add(type, table.TableName);
         return ddl;
     }
 

@@ -28,7 +28,7 @@ public class MySqlSaver<T> : ISqlStorage<T>
         }
         catch (MySqlException ex)
         {
-            Logger.LogError("An error has occured while trying to execute ddl for: " + typeof(T).Name);
+            Logger.LogError("An error has occured while trying to execute or generate ddl for: " + typeof(T).Name);
             Logger.LogException(ex);
             return false;
         }
