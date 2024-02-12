@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
 using Rocket.Core.Logging;
 
-namespace RetroMedieval.Savers.MySql.Queries;
+namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
 public static class Statements
 {

@@ -4,7 +4,6 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage;
 using RetroMedieval.Modules.Storage.Sql;
-using RetroMedieval.Savers.MySql.Queries;
 using RetroMedieval.Savers.MySql.Tables;
 using Rocket.Core.Logging;
 

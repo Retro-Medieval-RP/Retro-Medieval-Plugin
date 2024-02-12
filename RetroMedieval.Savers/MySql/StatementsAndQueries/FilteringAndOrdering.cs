@@ -1,7 +1,7 @@
 using System.Linq;
 using RetroMedieval.Modules.Storage.Sql;
 
-namespace RetroMedieval.Savers.MySql.Queries;
+namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
 public static class FilteringAndOrdering
 {

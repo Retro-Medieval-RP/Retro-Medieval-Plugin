@@ -107,8 +107,8 @@
         <Compile Include="MySql\MySqlQuery.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
         <Compile Include="MySql\MySqlStatements.cs" />
-        <Compile Include="MySql\Queries\FilteringAndOrdering.cs" />
-        <Compile Include="MySql\Queries\Statements.cs" />
+        <Compile Include="MySql\StatementsAndQueries\FilteringAndOrdering.cs" />
+        <Compile Include="MySql\StatementsAndQueries\Statements.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseColumn.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseIgnore.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseTable.cs" />
