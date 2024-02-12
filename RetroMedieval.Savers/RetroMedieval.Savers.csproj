@@ -104,6 +104,7 @@
     <ItemGroup>
         <Compile Include="Json\JsonSaver.cs" />
         <Compile Include="MySql\Attributes\DatabaseColumn.cs" />
+        <Compile Include="MySql\Attributes\DatabaseIgnore.cs" />
         <Compile Include="MySql\Attributes\DatabaseTable.cs" />
         <Compile Include="MySql\Attributes\PrimaryKey.cs" />
         <Compile Include="MySql\Attributes\ForeignKey.cs" />

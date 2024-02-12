@@ -35,7 +35,7 @@ internal class LootChestModule : Module
         {
             _chestPicker.AddEntry(chest, chest.ChestSpawnChance);
         }
-
+        
         ZoneEnterEventPublisher.ZoneEnterEvent += OnZoneEntered;
         ZoneLeftEventPublisher.ZoneLeftEvent += OnZoneLeft;
         SpawnLootChestEventPublisher.SpawnLootChestEvent += ChestTo;

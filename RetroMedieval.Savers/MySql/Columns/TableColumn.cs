@@ -7,6 +7,8 @@ public class TableColumn
     public string Default { get; set; }
     public string Constraint { get; set; }
 
+    public bool IgnoreColumn { get; set; } = false;
+
     public string DDLColumn => $"{Name} {DataType}{(!string.IsNullOrEmpty(Default) ? $" DEFAULT {Default}" : "")}";
     public string ReferenceTableDDL { get; set; }
 

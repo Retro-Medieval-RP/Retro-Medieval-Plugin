@@ -26,8 +26,8 @@ public class TableGenerator
         var properties = type.GetProperties();
         var columns = properties.Select(property => GetColumnData(property, table.TableName)).ToList();
         var columns_and_contrains = new List<string>();
-        columns_and_contrains.AddRange(columns.Select(r => r.DDLColumn));
-        columns_and_contrains.AddRange(columns.Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
+        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn).Select(r => r.DDLColumn));
+        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn).Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
             .Select(r => r.Constraint));
 
         var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
@@ -45,6 +45,12 @@ public class TableGenerator
     {
         var column = new TableColumn();
 
+        if (IsIgnore(property))
+        {
+            column.IgnoreColumn = true;
+            return column;
+        }
+        
         var column_data = GetColumnAttribute(property);
         column.Name = column_data.ColumnName;
         column.DataType = column_data.ColumnDataType;
@@ -58,17 +64,21 @@ public class TableGenerator
         if (IsColumnForeignKey(property))
         {
             var foreign_key = GetColumnForeignKey(property);
-            column.Constraint = $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {foreign_key.TableName}({foreign_key.ColumnName})";
 
-            if (!TypeToTable.ContainsValue(foreign_key.TableName))
+            if (!TypeToTable.ContainsKey(foreign_key.ColumnReferenceType))
             {
-                var new_table_ddl = GenerateDDL(property.PropertyType);
+                var new_table_ddl = GenerateDDL(foreign_key.ColumnReferenceType);
                 column.ReferenceTableDDL = new_table_ddl;
             }
+            
+            column.Constraint = $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {TypeToTable[foreign_key.ColumnReferenceType]}({foreign_key.ColumnName})";
         }
         
         return column;
     }
+
+    private static bool IsIgnore(MemberInfo property) =>
+        property.GetCustomAttributes<DatabaseIgnore>().Any();
 
     private static ForeignKey GetColumnForeignKey(MemberInfo property) => 
         property.GetCustomAttribute<ForeignKey>();
@@ -80,9 +90,12 @@ public class TableGenerator
 
     private static bool IsColumnPrimaryKey(MemberInfo property) =>
         property.GetCustomAttributes<PrimaryKey>().Any();
-    
-    private static bool IsColumnForeignKey(MemberInfo property) =>
-        property.GetCustomAttributes<ForeignKey>().Any();
+
+    private static bool IsColumnForeignKey(MemberInfo property)
+    {
+        var attributes = property.GetCustomAttributes<ForeignKey>();
+        return attributes.Any();
+    }
 
     private static bool GetTableAttribute(MemberInfo type, out DatabaseTable table)
     {
