@@ -1,4 +1,4 @@
-namespace RetroMedieval.Savers.MySql.Columns;
+namespace RetroMedieval.Savers.MySql.Tables.Columns;
 
 public class TableColumn
 {

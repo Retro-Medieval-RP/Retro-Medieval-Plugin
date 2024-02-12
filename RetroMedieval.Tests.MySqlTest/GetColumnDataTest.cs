@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using RetroMedieval.Savers.MySql.Attributes;
-using RetroMedieval.Savers.MySql.Columns;
 using RetroMedieval.Savers.MySql.Tables;
+using RetroMedieval.Savers.MySql.Tables.Attributes;
+using RetroMedieval.Savers.MySql.Tables.Columns;
 using Xunit;
 
 namespace RetroMedieval.Tests.MySqlTest

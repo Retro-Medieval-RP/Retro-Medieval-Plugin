@@ -1,6 +1,6 @@
 using System;
-using RetroMedieval.Savers.MySql.Attributes;
 using RetroMedieval.Savers.MySql.Tables;
+using RetroMedieval.Savers.MySql.Tables.Attributes;
 using Xunit;
 
 namespace RetroMedieval.Tests.MySqlTest

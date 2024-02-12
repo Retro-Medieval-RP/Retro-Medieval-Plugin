@@ -1,6 +1,6 @@
 using System;
 
-namespace RetroMedieval.Savers.MySql.Attributes;
+namespace RetroMedieval.Savers.MySql.Tables.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class DatabaseTable(string name) : Attribute

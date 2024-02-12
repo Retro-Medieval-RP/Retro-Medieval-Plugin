@@ -1,6 +1,6 @@
 using System;
 
-namespace RetroMedieval.Savers.MySql.Attributes;
+namespace RetroMedieval.Savers.MySql.Tables.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class ForeignKey(Type type, string column_name) : Attribute

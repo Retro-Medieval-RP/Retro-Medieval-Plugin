@@ -103,13 +103,14 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Json\JsonSaver.cs" />
-        <Compile Include="MySql\Attributes\DatabaseColumn.cs" />
-        <Compile Include="MySql\Attributes\DatabaseIgnore.cs" />
-        <Compile Include="MySql\Attributes\DatabaseTable.cs" />
-        <Compile Include="MySql\Attributes\PrimaryKey.cs" />
-        <Compile Include="MySql\Attributes\ForeignKey.cs" />
-        <Compile Include="MySql\Columns\TableColumn.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
+        <Compile Include="MySql\Queries\MySqlQuery.cs" />
+        <Compile Include="MySql\Tables\Attributes\DatabaseColumn.cs" />
+        <Compile Include="MySql\Tables\Attributes\DatabaseIgnore.cs" />
+        <Compile Include="MySql\Tables\Attributes\DatabaseTable.cs" />
+        <Compile Include="MySql\Tables\Attributes\ForeignKey.cs" />
+        <Compile Include="MySql\Tables\Attributes\PrimaryKey.cs" />
+        <Compile Include="MySql\Tables\Columns\TableColumn.cs" />
         <Compile Include="MySql\Tables\TableGenerator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

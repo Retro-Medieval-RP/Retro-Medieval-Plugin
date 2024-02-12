@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using RetroMedieval.Savers.MySql.Attributes;
-using RetroMedieval.Savers.MySql.Columns;
+using RetroMedieval.Savers.MySql.Tables.Attributes;
+using RetroMedieval.Savers.MySql.Tables.Columns;
 
 namespace RetroMedieval.Savers.MySql.Tables;
 
