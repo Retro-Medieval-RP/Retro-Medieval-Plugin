@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage;
+using RetroMedieval.Modules.Storage.Sql;
+using RetroMedieval.Savers.MySql.Queries;
 using RetroMedieval.Savers.MySql.Tables;
 using Rocket.Core.Logging;
 
@@ -10,10 +12,12 @@ namespace RetroMedieval.Savers.MySql;
 
 public class MySqlSaver<T> : ISqlStorage<T>
 {
-    public string SavePath { get; private set; }
+    public string SavePath { get; private set; } = "";
     public StorageType StorageType => StorageType.Sql;
 
     private MySqlConnection Connection => new(SavePath);
+    
+    private string TableName { get; set; } = "";
 
     public bool Load(string file_path)
     {
@@ -22,7 +26,9 @@ public class MySqlSaver<T> : ISqlStorage<T>
 
         try
         {
-            var ddl = TableGenerator.GenerateDDL(typeof(T));
+            var ddl = TableGenerator.GenerateDDL(typeof(T), out var table_name);
+            TableName = table_name;
+            
             connection.Execute(ddl);
             return true;
         }
@@ -33,4 +39,7 @@ public class MySqlSaver<T> : ISqlStorage<T>
             return false;
         }
     }
+
+    public IQuery StartQuery() => 
+        new MySqlQuery(TableName, SavePath);
 }

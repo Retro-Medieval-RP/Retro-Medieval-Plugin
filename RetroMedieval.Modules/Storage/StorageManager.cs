@@ -18,7 +18,7 @@ internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage
     {
         if (!_items.Exists(condition))
         {
-            item = default;
+            item = default!;
             return false;
         }
         
@@ -30,10 +30,10 @@ internal sealed class StorageManager : Padlock<StorageManager>, IManager<Storage
     {
         if (!ConfigurationManager.Instance.Get((x => x.Config.GetType() == typeof(SavingConfiguration)), out var config))
         {
-            return default;
+            return default!;
         }
 
-        return config.Config as SavingConfiguration;
+        return (config.Config as SavingConfiguration)!;
     }
 
     public void Add(Storage item) => 

@@ -11,12 +11,15 @@ public class TableGenerator
 {
     private static Dictionary<Type, string> TypeToTable { get; set; } = [];
 
-    public static string GenerateDDL(Type type)
+    public static string GenerateDDL(Type type, out string table_name)
     {
         if (!GetTableAttribute(type, out var table))
         {
+            table_name = "";
             return "";
         }
+
+        table_name = table.TableName;
 
         if (TypeToTable.ContainsValue(table.TableName))
         {
@@ -27,10 +30,12 @@ public class TableGenerator
         var columns = properties.Select(property => GetColumnData(property, table.TableName)).ToList();
         var columns_and_contrains = new List<string>();
         columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn).Select(r => r.DDLColumn));
-        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn).Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
+        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn)
+            .Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
             .Select(r => r.Constraint));
 
-        var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
+        var ddl =
+            $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
 
         TypeToTable.Add(type, table.TableName);
         return ddl;
@@ -50,7 +55,7 @@ public class TableGenerator
             column.IgnoreColumn = true;
             return column;
         }
-        
+
         var column_data = GetColumnAttribute(property);
         column.Name = column_data.ColumnName;
         column.DataType = column_data.ColumnDataType;
@@ -67,20 +72,21 @@ public class TableGenerator
 
             if (!TypeToTable.ContainsKey(foreign_key.ColumnReferenceType))
             {
-                var new_table_ddl = GenerateDDL(foreign_key.ColumnReferenceType);
+                var new_table_ddl = GenerateDDL(foreign_key.ColumnReferenceType, out _);
                 column.ReferenceTableDDL = new_table_ddl;
             }
-            
-            column.Constraint = $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {TypeToTable[foreign_key.ColumnReferenceType]}({foreign_key.ColumnName})";
+
+            column.Constraint =
+                $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {TypeToTable[foreign_key.ColumnReferenceType]}({foreign_key.ColumnName})";
         }
-        
+
         return column;
     }
 
     private static bool IsIgnore(MemberInfo property) =>
         property.GetCustomAttributes<DatabaseIgnore>().Any();
 
-    private static ForeignKey GetColumnForeignKey(MemberInfo property) => 
+    private static ForeignKey GetColumnForeignKey(MemberInfo property) =>
         property.GetCustomAttribute<ForeignKey>();
 
     private static DatabaseColumn GetColumnAttribute(MemberInfo property) =>
@@ -109,7 +115,7 @@ public class TableGenerator
         return true;
     }
 
-    private static ForeignKey GetColumnReferenceData(MemberInfo property) =>
+    private static ForeignKey? GetColumnReferenceData(MemberInfo property) =>
         property.GetCustomAttributes<ForeignKey>().Any()
             ? property.GetCustomAttribute<ForeignKey>()
             : null;

@@ -13,6 +13,7 @@
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,8 +104,11 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Json\JsonSaver.cs" />
+        <Compile Include="MySql\MySqlQuery.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
-        <Compile Include="MySql\Queries\MySqlQuery.cs" />
+        <Compile Include="MySql\MySqlStatements.cs" />
+        <Compile Include="MySql\Queries\FilteringAndOrdering.cs" />
+        <Compile Include="MySql\Queries\Statements.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseColumn.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseIgnore.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseTable.cs" />

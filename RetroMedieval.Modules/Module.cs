@@ -72,11 +72,11 @@ public abstract class Module
     {
         if (Configurations.Any(x => x.IsConfigOfType(typeof(TConfiguration))))
         {
-            config = (Configurations.Find(x => x.IsConfigOfType(typeof(TConfiguration))) as ModuleConfiguration<TConfiguration>)?.Configuration;
+            config = (Configurations.Find(x => x.IsConfigOfType(typeof(TConfiguration))) as ModuleConfiguration<TConfiguration>)?.Configuration!;
             return true;
         }
 
-        config = default;
+        config = default!;
         return false;
     }
 
@@ -88,7 +88,7 @@ public abstract class Module
             return true;
         }
         
-        storage = default;
+        storage = default!;
         return false;
     }
 

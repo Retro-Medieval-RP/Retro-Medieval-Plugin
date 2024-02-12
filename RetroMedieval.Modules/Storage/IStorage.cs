@@ -4,7 +4,7 @@ namespace RetroMedieval.Modules.Storage;
 
 public interface IFileStorage<T> : IStorage
 {
-    public T StorageItem { get; }
+    public T? StorageItem { get; }
     void Save();
 }
 

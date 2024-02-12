@@ -7,9 +7,9 @@ namespace RetroMedieval.Savers.Json;
 
 public class JsonSaver<T> : IFileStorage<T> where T : new()
 {
-    public string SavePath { get; private set; }
+    public string SavePath { get; private set; } = "";
     public StorageType StorageType => StorageType.File;
-    public T StorageItem { get; protected set; }
+    public T? StorageItem { get; protected set; }
 
     public virtual bool Load(string file_path)
     {

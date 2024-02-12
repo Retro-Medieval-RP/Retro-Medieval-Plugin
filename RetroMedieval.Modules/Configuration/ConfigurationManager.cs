@@ -13,11 +13,11 @@ internal sealed class ConfigurationManager : Padlock<ConfigurationManager>, IMan
     {
         if (!_items.Exists(condition))
         {
-            item = default;
+            item = default!;
             return false;
         }
         
-        item = _items.Find(condition);
+        item = _items.Find(condition)!;
         return true;
     }
 

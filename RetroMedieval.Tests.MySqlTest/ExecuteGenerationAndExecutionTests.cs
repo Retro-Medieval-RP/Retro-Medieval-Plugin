@@ -20,13 +20,13 @@ namespace RetroMedieval.Tests.MySqlTest
         {
             new object[]
             {
-                TableGenerator.GenerateDDL(typeof(TestModel)),
+                TableGenerator.GenerateDDL(typeof(TestModel), out _),
                 "CREATE TABLE IF NOT EXISTS Tests (TestID INT(11) DEFAULT AUTO_INCREMENT,TestString VARCHAR(255),CONSTRAINT PK_Tests PRIMARY KEY (TestID));",
                 "TestModel"
             },
             new object[]
             {
-                TableGenerator.GenerateDDL(typeof(Test2Model)),
+                TableGenerator.GenerateDDL(typeof(Test2Model), out _),
                 "CREATE TABLE IF NOT EXISTS Tests2 (TestID INT(11) DEFAULT AUTO_INCREMENT,TestString VARCHAR(255),CONSTRAINT PK_Tests2 PRIMARY KEY (TestID));",
                 "Test2Model"
             },

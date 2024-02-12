@@ -13,6 +13,7 @@
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -59,6 +60,7 @@
         <Compile Include="Storage\IStorage.cs" />
         <Compile Include="Storage\SavingConfiguration.cs" />
         <Compile Include="Storage\Sql\IQuery.cs" />
+        <Compile Include="Storage\Sql\IStatement.cs" />
         <Compile Include="Storage\Storage.cs" />
         <Compile Include="Storage\StorageManager.cs" />
         <Compile Include="Storage\StorageType.cs" />

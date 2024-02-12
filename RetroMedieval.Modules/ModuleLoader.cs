@@ -11,19 +11,23 @@ namespace RetroMedieval.Modules;
 
 public sealed class ModuleLoader : Padlock<ModuleLoader>
 {
-    internal string ModuleDirectory { get; private set; }
+    internal string ModuleDirectory { get; private set; } = "";
 
     private List<Module> Modules { get; } = [];
     
-    private Timer Timer { get; set; }
+    private Timer? Timer { get; set; }
 
     ~ModuleLoader()
     {
-        Timer.Elapsed -= OnTimerElapsed;
+        if (Timer != null)
+        {
+            Timer.Elapsed -= OnTimerElapsed;
+        }
+        
         Timer = null;
     }
     
-    public bool GetModule<TModule>(out TModule module) where TModule : class
+    public bool GetModule<TModule>(out TModule? module) where TModule : class
     {
         if (Modules.All(x => x.GetType() != typeof(TModule)))
         {
@@ -46,8 +50,11 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         {
             var module = Activator.CreateInstance(m) as Module;
             module?.Load();
-            
-            Modules.Add(module);
+
+            if (module != null)
+            {
+                Modules.Add(module);
+            }
         }
     }
 
