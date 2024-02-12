@@ -60,21 +60,4 @@ public static class Statements
             Logger.LogException(ex);
         }
     }
-
-    public static void Insert(this IQuery query, params (string, object)[] columns)
-    {
-        query.CurrentQueryString = $"INSERT INTO {query.TableName} ({string.Join(", ", columns.Select(x => x.Item1))}) VALUES ({string.Join(", ", columns.Select(x => x.Item2))})";
-        
-        using var conn = new MySqlConnection(query.ConnectionString);
-        
-        try
-        {
-            conn.Execute(query.CurrentQueryString);
-        }
-        catch (MySqlException ex)
-        {
-            Logger.LogError($"Had an error when trying to execute: {query.CurrentQueryString} {query.FilterConditionString};");
-            Logger.LogException(ex);
-        }
-    }
 }
