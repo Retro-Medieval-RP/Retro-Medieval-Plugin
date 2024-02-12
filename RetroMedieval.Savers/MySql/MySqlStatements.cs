@@ -1,10 +1,8 @@
-using Dapper;
-using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
 
 namespace RetroMedieval.Savers.MySql;
 
-internal class MySqlStatements(
+public class MySqlStatements(
     string table_name,
     string current_query_string,
     string filter_condition_string,
