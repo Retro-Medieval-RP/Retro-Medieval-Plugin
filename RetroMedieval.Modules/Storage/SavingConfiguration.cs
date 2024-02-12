@@ -12,10 +12,9 @@ internal class SavingConfiguration : IConfig
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public int Port { get; set; }
-    public bool SSL { get; set; }
 
     [JsonIgnore]
-    public string ConnectionString => $"Server={Host};Port={Port};Database={Database};Uid={Username};Password={Password};SSL={SSL}";
+    public string ConnectionString => $"Server={Host};Port={Port};Database={Database};Uid={Username};Password={Password};";
     
     public void LoadDefaults()
     {
@@ -25,7 +24,6 @@ internal class SavingConfiguration : IConfig
         Username = "";
         Password = "";
         Port = 3306;
-        SSL = false;
     }
     
     internal static bool LoadedConfiguration(string data_path)

@@ -166,6 +166,8 @@
     <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
     <Compile Include="Models\DeadBodys\DeathItem.cs" />
     <Compile Include="Models\DeadBodys\Body.cs" />
+    <Compile Include="Models\Kits\Kit.cs" />
+    <Compile Include="Models\Kits\KitItem.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />
     <Compile Include="Models\LootChest\ChestLocation.cs" />
     <Compile Include="Models\LootChest\ChestRarity.cs" />
@@ -180,6 +182,9 @@
     <Compile Include="Modules\DeadBodys\DeathModule.cs" />
     <Compile Include="Modules\DeadBodys\DeathsConfiguration.cs" />
     <Compile Include="Modules\DeadBodys\DeathsStorage.cs" />
+    <Compile Include="Modules\Kits\KitItemsStorage.cs" />
+    <Compile Include="Modules\Kits\KitsModule.cs" />
+    <Compile Include="Modules\Kits\KitsStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
