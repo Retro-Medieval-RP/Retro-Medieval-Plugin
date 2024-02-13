@@ -129,6 +129,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Kits\Admin\CreateKitCommand.cs" />
+    <Compile Include="Commands\Kits\Admin\DeleteKitCommand.cs" />
+    <Compile Include="Commands\Kits\Admin\RenameKitCommand.cs" />
+    <Compile Include="Commands\Kits\User\KitCommand.cs" />
+    <Compile Include="Commands\Kits\User\KitsCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
