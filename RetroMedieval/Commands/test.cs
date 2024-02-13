@@ -38,8 +38,8 @@ public class Test : IRocketCommand
 
     public AllowedCaller AllowedCaller => AllowedCaller.Console;
     public string Name => "send";
-    public string Help => "send <kit name> <cooldown>";
-    public string Syntax => "";
+    public string Help => "";
+    public string Syntax => "send <kit name> <cooldown>";
     public List<string> Aliases => [];
     public List<string> Permissions => [];
 }
