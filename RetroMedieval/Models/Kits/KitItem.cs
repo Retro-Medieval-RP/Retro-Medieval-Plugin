@@ -19,6 +19,12 @@ internal class KitItem
     [DatabaseColumn("ItemState", "BLOB")]
     public byte[] ItemState { get; set; }
     
+    [DatabaseColumn("ItemQuality", "TINYINT UNSIGNED")]
+    public byte ItemQuality { get; set; }
+    
+    [DatabaseColumn("IsEquipped", "TINYINT(1)")]
+    public bool IsEquipped { get; set; }
+    
     [DatabaseColumn("KitID", "CHAR(36)")]
     [ForeignKey(typeof(Kit), "KitID")]
     public Guid KitID { get; set; }
