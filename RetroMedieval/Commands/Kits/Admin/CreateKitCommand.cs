@@ -70,10 +70,10 @@ internal class CreateKitCommand : IRocketCommand
                 kit_items.Add(new KitItem
                 {
                     IsEquipped = i is 0 or 1,
-                    ItemAmount = item.item.amount,
+                    Amount = item.item.amount,
                     ItemID = item.item.id,
-                    ItemState = item.item.state,
-                    ItemQuality = item.item.quality,
+                    State = item.item.state,
+                    Quality = item.item.quality,
                     KitItemID = Guid.NewGuid()
                 });
             }
@@ -83,60 +83,60 @@ internal class CreateKitCommand : IRocketCommand
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.backpack,
-                ItemState = player.Player.clothing.backpackState,
-                ItemQuality = player.Player.clothing.backpackQuality,
+                State = player.Player.clothing.backpackState,
+                Quality = player.Player.clothing.backpackQuality,
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.shirt != 0)
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.shirt,
-                ItemState = player.Player.clothing.shirtState,
-                ItemQuality = player.Player.clothing.shirtQuality,
+                State = player.Player.clothing.shirtState,
+                Quality = player.Player.clothing.shirtQuality,
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.pants != 0)
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.pants,
-                ItemState = player.Player.clothing.pantsState,
-                ItemQuality = player.Player.clothing.pantsQuality,
+                State = player.Player.clothing.pantsState,
+                Quality = player.Player.clothing.pantsQuality,
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.glasses != 0)
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.glasses,
-                ItemState = player.Player.clothing.glassesState,
-                ItemQuality = player.Player.clothing.glassesQuality,
+                State = player.Player.clothing.glassesState,
+                Quality = player.Player.clothing.glassesQuality,
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.vest != 0)
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.vest,
-                ItemState = player.Player.clothing.vestState,
-                ItemQuality = player.Player.clothing.vestQuality,
+                State = player.Player.clothing.vestState,
+                Quality = player.Player.clothing.vestQuality,
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.hat != 0)
             kit_items.Add(new KitItem
             {
                 IsEquipped = true,
-                ItemAmount = 1,
+                Amount = 1,
                 ItemID = player.Player.clothing.hat,
-                ItemState = player.Player.clothing.hatState,
-                ItemQuality = player.Player.clothing.hatQuality,
+                State = player.Player.clothing.hatState,
+                Quality = player.Player.clothing.hatQuality,
                 KitItemID = Guid.NewGuid()
             });
         

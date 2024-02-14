@@ -166,10 +166,9 @@
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Models\ArmorEquip\ArmorItem.cs" />
     <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
-    <Compile Include="Models\DeadBodys\DeathItem.cs" />
     <Compile Include="Models\DeadBodys\Body.cs" />
+    <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Kits\Kit.cs" />
     <Compile Include="Models\Kits\KitItem.cs" />
     <Compile Include="Models\LootChest\Chest.cs" />

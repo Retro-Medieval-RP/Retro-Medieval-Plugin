@@ -11,5 +11,5 @@ public class Body
     public float LocY { get; set; }
     public float LocZ { get; set; }
     
-    public List<DeathItem> Items { get; set; }
+    public List<Item> Items { get; set; }
 }

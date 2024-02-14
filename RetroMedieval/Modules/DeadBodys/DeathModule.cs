@@ -10,6 +10,7 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
+using Item = RetroMedieval.Models.Item;
 
 namespace RetroMedieval.Modules.DeadBodys;
 
@@ -49,7 +50,7 @@ public class DeathModule : Module
             return;
         }
         
-        for(var i = storage.StorageItem.Count - 1; i >= 0; i--)
+        for(var i = storage.StorageItem!.Count - 1; i >= 0; i--)
         {
             var body = storage.StorageItem[i];
             if ((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)
@@ -102,7 +103,7 @@ public class DeathModule : Module
 
         foreach (var item in inv.Items)
         {
-            inventory.tryAddItem(new Item(item.Item, item.Amount, item.Quality, item.State));
+            inventory.tryAddItem(new SDG.Unturned.Item(item.ItemID, item.Amount, item.Quality, item.State));
         }
 
         e.Player.Inventory.updateItems(7, inventory);
@@ -117,15 +118,15 @@ public class DeathModule : Module
         }
     }
 
-    private void SaveInventory(Transform model, List<DeathItem> player_items)
+    private void SaveInventory(Transform model, List<Item> player_items)
     {
         var inv = new Body
         {
             BodySpawnTime = DateTime.Now,
             Items = player_items,
-            LocX = model.position.x,
-            LocY = model.position.y,
-            LocZ = model.position.z
+            LocX = model!.position.x,
+            LocY = model!.position.y,
+            LocZ = model!.position.z
         };
 
         if (!GetStorage<DeathsStorage>(out var storage))
@@ -154,7 +155,7 @@ public class DeathModule : Module
 
     private void SendDeath(UnturnedPlayer player)
     {
-        var player_items = new List<DeathItem>();
+        var player_items = new List<Item>();
 
         for (byte i = 0; i < PlayerInventory.PAGES; i++)
         {
@@ -166,7 +167,7 @@ public class DeathModule : Module
             for (byte index = 0; index < count; index++)
             {
                 var item = player.Inventory.getItem(i, 0);
-                player_items.Add(new DeathItem(item.item.id, item.item.amount, item.item.quality, item.item.state));
+                player_items.Add(new Item(item.item.id, item.item.amount, item.item.quality, item.item.state));
                 player.Inventory.removeItem(i, 0);
             }
         }
@@ -253,28 +254,29 @@ public class DeathModule : Module
             }
         }
 
-        var remove_unequipped = () =>
+        player.player.clothing.askWearBackpack(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearGlasses(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearHat(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearPants(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearMask(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearShirt(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        player.player.clothing.askWearVest(0, 0, Array.Empty<byte>(), true);
+        RemoveUnequipped();
+        yield return null;
+        yield break;
+
+        void RemoveUnequipped()
         {
             for (byte i = 0; i < player.player.inventory.getItemCount(2); i++)
             {
                 player.player.inventory.removeItem(2, 0);
             }
-        };
-
-        player.player.clothing.askWearBackpack(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearGlasses(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearHat(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearPants(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearMask(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearShirt(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        player.player.clothing.askWearVest(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
-        yield return null;
+        }
     }
 }
