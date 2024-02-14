@@ -137,7 +137,6 @@
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
-    <Compile Include="Commands\test.cs" />
     <Compile Include="Commands\Zones\AddNodeCommand.cs" />
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
@@ -187,9 +186,7 @@
     <Compile Include="Modules\DeadBodys\DeathModule.cs" />
     <Compile Include="Modules\DeadBodys\DeathsConfiguration.cs" />
     <Compile Include="Modules\DeadBodys\DeathsStorage.cs" />
-    <Compile Include="Modules\Kits\KitItemsStorage.cs" />
     <Compile Include="Modules\Kits\KitsModule.cs" />
-    <Compile Include="Modules\Kits\KitsStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
