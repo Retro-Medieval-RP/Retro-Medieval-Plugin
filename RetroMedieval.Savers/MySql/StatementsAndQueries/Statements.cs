@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -8,7 +9,7 @@ namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
 public static class Statements
 {
-    public static TOutput? Select<TOutput>(this IStatement statement, params string[] columns) where TOutput : class
+    public static IEnumerable<TOutput>? SelectMultiple<TOutput>(this IStatement statement, params string[] columns) where TOutput : class
     {
         statement.CurrentQueryString = $"SELECT {string.Join(" AND ", columns)} FROM {statement.TableName}";
         
@@ -16,7 +17,26 @@ public static class Statements
         
         try
         {
-            return (TOutput)conn.Query<TOutput>(statement.CurrentQueryString + " " + statement.FilterConditionString + ";");
+            return conn.Query<TOutput>(statement.CurrentQueryString + " " + statement.FilterConditionString + ";");
+        }
+        catch (MySqlException ex)
+        {
+            Logger.LogError($"Had an error when trying to execute: {statement.CurrentQueryString} {statement.FilterConditionString};");
+            Logger.LogException(ex);
+        }
+
+        return null;
+    }
+
+    public static TOutput? SelectSingle<TOutput>(this IStatement statement, string column) where TOutput : class
+    {
+        statement.CurrentQueryString = $"SELECT {column} FROM {statement.TableName}";
+        
+        using var conn = new MySqlConnection(statement.ConnectionString);
+        
+        try
+        {
+            return conn.QuerySingle<TOutput>(statement.CurrentQueryString + " " + statement.FilterConditionString + ";");
         }
         catch (MySqlException ex)
         {
