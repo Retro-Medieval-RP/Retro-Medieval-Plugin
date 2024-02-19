@@ -69,20 +69,28 @@ public static class Queries
 
     public class DataParam(string name, object obj, DbType? type = null)
     {
-        public string ParamName { get; set; } = name;
-        public object ParamObject { get; set; } = obj;
-        public DbType? ParamDbType { get; set; } = type;
-        public Type ParamType { get; set; }
+        public string ParamName { get; } = name;
+        public object ParamObject { get; } = obj;
+        public DbType? ParamDbType { get; } = type;
+        public Type ParamType { get; set; } = null!;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj) =>
+            obj is DataParam param && Equals(param);
+
+        protected bool Equals(DataParam other) =>
+            ParamName == other.ParamName && ParamObject.Equals(other.ParamObject) && ParamDbType == other.ParamDbType &&
+            ParamType == other.ParamType;
+
+        public override int GetHashCode()
         {
-            if (obj is not DataParam param)
+            unchecked
             {
-                return false;
+                var hash_code = ParamName.GetHashCode();
+                hash_code = (hash_code * 397) ^ ParamObject.GetHashCode();
+                hash_code = (hash_code * 397) ^ ParamDbType.GetHashCode();
+                hash_code = (hash_code * 397) ^ ParamType.GetHashCode();
+                return hash_code;
             }
-
-            return ParamName.Equals(param.ParamName) && ParamObject.Equals(param.ParamObject) &&
-                   ParamDbType.Equals(param.ParamDbType) && ParamType == param.ParamType;
         }
     }
 }
