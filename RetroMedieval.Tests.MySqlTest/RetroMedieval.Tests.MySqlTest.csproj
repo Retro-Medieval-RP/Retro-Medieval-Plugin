@@ -53,9 +53,9 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ExecuteGenerationAndExecutionTests.cs" />
-        <Compile Include="ForeignTableTest.cs" />
-        <Compile Include="GetColumnDataTest.cs" />
+        <Compile Include="DDL Generation\ExecuteGenerationAndExecutionTests.cs" />
+        <Compile Include="DDL Generation\ForeignTableTest.cs" />
+        <Compile Include="DDL Generation\GetColumnDataTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>

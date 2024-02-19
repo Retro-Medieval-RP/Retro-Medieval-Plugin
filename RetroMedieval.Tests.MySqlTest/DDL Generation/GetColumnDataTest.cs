@@ -5,7 +5,7 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 using RetroMedieval.Savers.MySql.Tables.Columns;
 using Xunit;
 
-namespace RetroMedieval.Tests.MySqlTest
+namespace RetroMedieval.Tests.MySqlTest.DDL_Generation
 {
     public class GetColumnDataTest
     {

@@ -3,7 +3,7 @@ using RetroMedieval.Savers.MySql.Tables;
 using RetroMedieval.Savers.MySql.Tables.Attributes;
 using Xunit;
 
-namespace RetroMedieval.Tests.MySqlTest
+namespace RetroMedieval.Tests.MySqlTest.DDL_Generation
 {
     public class ForeignTableTest
     {
