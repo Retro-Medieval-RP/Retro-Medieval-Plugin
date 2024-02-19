@@ -43,7 +43,7 @@ public static class Queries
             foreach (var param in column_data.Select(data =>
                          ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)))
             {
-                data_params.Add(param.ParamName, param.ParamObject, param.ParamType);
+                data_params.Add(param.ParamName, param.ParamObject, param.ParamDbType);
             }
 
             conn.Execute(query.CurrentQueryString, data_params);
@@ -59,25 +59,30 @@ public static class Queries
     public static DataParam ConvertDataType(string property_name, object obj, Type prop_type)
     {
         if (prop_type == typeof(byte[]))
-            return new DataParam("@" + property_name, obj, DbType.Binary);
+            return new DataParam("@" + property_name, (byte[])obj, DbType.Binary) { ParamType = prop_type };
 
         if (prop_type == typeof(Guid))
-            return new DataParam("@" + property_name, obj.ToString());
+            return new DataParam("@" + property_name, ((Guid)obj).ToString()) { ParamType = prop_type };
 
-        return new DataParam("@" + property_name, obj);
+        return new DataParam("@" + property_name, obj) { ParamType = prop_type };
     }
 
-    public class DataParam
+    public class DataParam(string name, object obj, DbType? type = null)
     {
-        public string ParamName { get; set; }
-        public object ParamObject { get; set; }
-        public DbType? ParamType { get; set; }
+        public string ParamName { get; set; } = name;
+        public object ParamObject { get; set; } = obj;
+        public DbType? ParamDbType { get; set; } = type;
+        public Type ParamType { get; set; }
 
-        public DataParam(string name, object obj, DbType? type = null)
+        public override bool Equals(object obj)
         {
-            ParamName = name;
-            ParamObject = obj;
-            ParamType = type;
+            if (obj is not DataParam param)
+            {
+                return false;
+            }
+
+            return ParamName.Equals(param.ParamName) && ParamObject.Equals(param.ParamObject) &&
+                   ParamDbType.Equals(param.ParamDbType) && ParamType == param.ParamType;
         }
     }
 }
