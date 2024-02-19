@@ -40,9 +40,10 @@ public static class Queries
         {
             var data_params = new DynamicParameters();
 
-            foreach (var data in column_data)
+            foreach (var param in column_data.Select(data =>
+                         ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)))
             {
-                ConvertDataType(data.PropertyName, data.Value, data.ProprtyType, ref data_params);
+                data_params.Add(param.ParamName, param.ParamObject, param.ParamType);
             }
 
             conn.Execute(query.CurrentQueryString, data_params);
@@ -55,13 +56,28 @@ public static class Queries
         }
     }
 
-    private static void ConvertDataType(string property_name, object obj, Type prop_type, ref DynamicParameters data_params)
+    public static DataParam ConvertDataType(string property_name, object obj, Type prop_type)
     {
         if (prop_type == typeof(byte[]))
-            data_params.Add("@" + property_name, obj as byte[], DbType.Binary);
+            return new DataParam("@" + property_name, obj, DbType.Binary);
+
         if (prop_type == typeof(Guid))
-            data_params.Add("@" + property_name, obj.ToString());
-        else
-            data_params.Add("@" + property_name, obj);
+            return new DataParam("@" + property_name, obj.ToString());
+
+        return new DataParam("@" + property_name, obj);
+    }
+
+    public class DataParam
+    {
+        public string ParamName { get; set; }
+        public object ParamObject { get; set; }
+        public DbType? ParamType { get; set; }
+
+        public DataParam(string name, object obj, DbType? type = null)
+        {
+            ParamName = name;
+            ParamObject = obj;
+            ParamType = type;
+        }
     }
 }
