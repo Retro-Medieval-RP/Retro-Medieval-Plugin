@@ -12,7 +12,7 @@ namespace RetroMedieval.Tests.MySqlTest.DDL_Generation
         [Theory]
         [ClassData(typeof(TestData<TestModel>))]
         public void Test1(TableColumn generated_column, TableColumn correct_column) =>
-            Assert.True(generated_column.Equals(correct_column), 
+            Assert.True(generated_column.Equals(correct_column),
                 $@"Generated Column: 
     Name: {generated_column.Name}
     DataType: {generated_column.DataType}
@@ -47,14 +47,14 @@ Correct Column:
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
-    
+
         [DatabaseTable("Tests")]
         public class TestModel
         {
             [DatabaseColumn("TestID", "INT(11)", "AUTO_INCREMENT")]
             [PrimaryKey]
             public int TestID { get; set; }
-        
+
             [DatabaseColumn("TestString", "VARCHAR(255)")]
             public string TestString { get; set; }
         }
