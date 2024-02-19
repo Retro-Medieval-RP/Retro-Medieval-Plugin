@@ -13,7 +13,7 @@ public class InsertTests
     {
         var response = Savers.MySql.StatementsAndQueries.Queries.ConvertDataType(t_name, t_data, t);
         
-        Assert.True(response == param, $"Response does not equal param.\nResponse:\nName: {response.ParamName}\nObj: {response.ParamObject}\nDbType: {(response.ParamType != null ? response.ParamType : "NULL")}");
+        Assert.True(response.ParamName == param.ParamName && response.ParamType == param.ParamType && response.ParamObject == param.ParamObject, $"Response does not equal param.\nResponse:\nName: {response.ParamName}\nObj: {response.ParamObject}\nDbType: {(response.ParamType != null ? response.ParamType : "NULL")}");
     }
 
     private class TestData : IEnumerable<object[]>
