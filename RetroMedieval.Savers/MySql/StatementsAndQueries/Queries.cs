@@ -3,10 +3,8 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using Dapper;
-using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
 using RetroMedieval.Savers.MySql.Tables.Attributes;
-using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
@@ -16,11 +14,12 @@ public static class Queries
     {
         query.FilterConditionString =
             $"WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = " + x.Item2))}";
+        
         return new MySqlStatements(query.TableName, query.CurrentQueryString, query.FilterConditionString,
             query.ConnectionString);
     }
 
-    public static void Insert<T>(this IQuery query, T obj)
+    public static IExecutor Insert<T>(this IQuery query, T obj)
     {
         var columns = typeof(T).GetProperties()
             .Where(x => x.GetCustomAttributes<DatabaseColumn>().Any() && x.GetValue(obj) != null);
@@ -34,26 +33,15 @@ public static class Queries
         query.CurrentQueryString =
             $"INSERT INTO {query.TableName} ({string.Join(", ", column_data.Select(x => x.ColumnName))}) VALUES ({string.Join(", ", column_data.Select(x => "@" + x.PropertyName))})";
 
-        using var conn = new MySqlConnection(query.ConnectionString);
+        var data_params = new DynamicParameters();
 
-        try
+        foreach (var param in column_data.Select(data =>
+                     ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)))
         {
-            var data_params = new DynamicParameters();
-
-            foreach (var param in column_data.Select(data =>
-                         ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)))
-            {
-                data_params.Add(param.ParamName, param.ParamObject, param.ParamDbType);
-            }
-
-            conn.Execute(query.CurrentQueryString, data_params);
+            data_params.Add(param.ParamName, param.ParamObject, param.ParamDbType);
         }
-        catch (MySqlException ex)
-        {
-            Logger.LogError(
-                $"Had an error when trying to execute: {query.CurrentQueryString} {query.FilterConditionString};");
-            Logger.LogException(ex);
-        }
+
+        return new MySqlExecutor(query, data_params);
     }
 
     public static DataParam ConvertDataType(string property_name, object obj, Type prop_type)

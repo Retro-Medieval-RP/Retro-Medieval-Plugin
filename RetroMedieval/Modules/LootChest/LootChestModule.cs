@@ -6,7 +6,6 @@ using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.LootChest;
 using RetroMedieval.Models.Zones;
 using RetroMedieval.Modules.Attributes;
-using RetroMedieval.Modules.Storage;
 using RetroMedieval.Utils;
 using SDG.Unturned;
 using UnityEngine;

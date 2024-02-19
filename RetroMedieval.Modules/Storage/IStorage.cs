@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RetroMedieval.Modules.Storage;
+﻿namespace RetroMedieval.Modules.Storage;
 
 public interface IFileStorage<T> : IStorage
 {

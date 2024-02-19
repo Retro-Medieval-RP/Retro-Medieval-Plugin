@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using HarmonyLib;
 using RetroMedieval.Events.Unturned.CloathingDequip;
 using RetroMedieval.Events.Unturned.ClothingEquip;

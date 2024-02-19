@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RetroMedieval.Models.DeadBodys;
-using RetroMedieval.Savers;
 using RetroMedieval.Savers.Json;
 using UnityEngine;
 

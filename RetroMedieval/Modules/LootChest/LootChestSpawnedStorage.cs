@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using RetroMedieval.Models.LootChest;
-using RetroMedieval.Savers;
 using RetroMedieval.Savers.Json;
 
 namespace RetroMedieval.Modules.LootChest;

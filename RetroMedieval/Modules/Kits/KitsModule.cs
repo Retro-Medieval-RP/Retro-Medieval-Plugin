@@ -30,11 +30,11 @@ internal class KitsModule : Module
             return;
         }
         
-        kits_storage.StartQuery().Insert(kit);
+        kits_storage.StartQuery().Insert(kit).ExecuteSql();
         foreach (var item in kit_items)
         {
             item.KitID = kit.KitID;
-            kit_items_storage.StartQuery().Insert(item);
+            kit_items_storage.StartQuery().Insert(item).ExecuteSql();
         }
     }
     

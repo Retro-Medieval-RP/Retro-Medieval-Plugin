@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage;
