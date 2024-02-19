@@ -23,16 +23,16 @@ public class InsertTests
             new object[]
             {
                 typeof(Guid),
-                "@Test",
-                Guid.Parse(""),
-                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", Guid.Parse("").ToString())
+                "Test",
+                Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b"),
+                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b").ToString())
             },
             new object[]
             {
                 typeof(string),
-                "@Test",
-                "",
-                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", "")
+                "Test",
+                "Test String",
+                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", "Test String")
             }
         };
         
