@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Dapper;
 using RetroMedieval.Modules.Storage.Sql;
+using RetroMedieval.Savers.MySql.Exceptions;
 using RetroMedieval.Savers.MySql.Tables.Attributes;
 
 namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
@@ -12,7 +13,12 @@ public static class Queries
 {
     public static IExecutor Count(this IQuery query, params (string, object)[] condition_values)
     {
-        query.CurrentQueryString = $"SELECT COUNT() FROM {query.TableName} WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))}";
+        if (condition_values.Length < 1)
+        {
+            throw new NoConditionValues();
+        }
+        
+        query.CurrentQueryString = $"SELECT COUNT({condition_values.Select(x => x.Item1).ToArray()[0]}) FROM {query.TableName} WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))}";
         var data_params = new DynamicParameters();
         
         foreach (var param in condition_values.Select(data =>
