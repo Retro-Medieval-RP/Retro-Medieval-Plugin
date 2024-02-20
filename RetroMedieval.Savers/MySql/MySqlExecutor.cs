@@ -5,7 +5,7 @@ using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
 
-internal class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) : IExecutor
+public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) : IExecutor
 {
     public IQuery Query { get; set; } = query;
     private DynamicParameters? Parameters { get; set; } = parameters;
