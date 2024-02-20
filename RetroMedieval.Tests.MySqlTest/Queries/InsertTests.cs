@@ -34,12 +34,12 @@ public class InsertTests
             new object[]
             {
                 new MySqlQuery("Tests", "").Insert(new TestModel{TestString = "Testing String"}) as MySqlExecutor,
-                ""
+                "INSERT INTO Tests (TestString) VALUES (@TestString)"
             },
             new object[]
             {
                 new MySqlQuery("Tests", "").Insert(new TestModel {TestGuid = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b")}) as MySqlExecutor,
-                ""
+                "INSERT INTO Tests (TestGuid) VALUES (@TestGuid)"
             }
         };
 
@@ -52,13 +52,13 @@ public class InsertTests
         {
             [DatabaseColumn("TestID", "INT(11)", "AUTO_INCREMENT")]
             [PrimaryKey]
-            public int TestID { get; set; }
+            public int? TestID { get; set; } = null;
 
             [DatabaseColumn("TestString", "VARCHAR(255)")]
             public string TestString { get; set; }
 
             [DatabaseColumn("TestGuid", "CHAR(16)")]
-            public Guid TestGuid { get; set; }
+            public Guid? TestGuid { get; set; }
         }
     }
     
