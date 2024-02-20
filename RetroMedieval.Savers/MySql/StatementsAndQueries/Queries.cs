@@ -10,15 +10,20 @@ namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
 public static class Queries
 {
-    public static IStatement Where(this IQuery query, params (string, object)[] condition_values)
+    public static IExecutor Count(this IQuery query, params (string, object)[] condition_values)
     {
-        query.FilterConditionString =
-            $"WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = " + x.Item2))}";
+        query.CurrentQueryString = $"SELECT COUNT() FROM {query.TableName} WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))}";
+        var data_params = new DynamicParameters();
         
-        return new MySqlStatements(query.TableName, query.CurrentQueryString, query.FilterConditionString,
-            query.ConnectionString);
-    }
+        foreach (var param in condition_values.Select(data =>
+                     ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())))
+        {
+            data_params.Add(param.ParamName, param.ParamObject, param.ParamDbType);
+        }
 
+        return new MySqlExecutor(query, data_params);
+    }
+    
     public static IExecutor Insert<T>(this IQuery query, T obj)
     {
         var columns = typeof(T).GetProperties()

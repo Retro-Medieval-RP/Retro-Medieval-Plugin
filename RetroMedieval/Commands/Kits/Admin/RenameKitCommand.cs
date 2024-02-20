@@ -1,5 +1,10 @@
 using System.Collections.Generic;
+using RetroMedieval.Modules;
+using RetroMedieval.Modules.Kits;
 using Rocket.API;
+using Rocket.Unturned.Chat;
+using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace RetroMedieval.Commands.Kits.Admin;
 
@@ -7,6 +12,27 @@ internal class RenameKitCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
+        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kits_module))
+        {
+            Logger.LogError("Could not find module [KitsModule]!");
+            return;   
+        }
+        
+        if (command.Length < 2)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
+            return;
+        }
+
+        if (!kits_module.DoesKitExist(command[0]))
+        {
+            UnturnedChat.Say(caller, $"A kit with the name ({command[0]}) inputted does not exist!", Color.red);
+            return;
+        }
+
+        kits_module.RenameKit(command[0], command[1]);
+        UnturnedChat.Say(caller, $"Renamed kit from {command[0]} to {command[1]}");
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

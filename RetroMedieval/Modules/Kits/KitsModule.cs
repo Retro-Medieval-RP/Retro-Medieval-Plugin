@@ -15,6 +15,10 @@ internal class KitsModule : Module
     public override void Load()
     {
     }
+    
+    public override void Unload()
+    {
+    }
 
     public void CreateKit(Kit kit, IEnumerable<KitItem> kit_items)
     {
@@ -39,7 +43,24 @@ internal class KitsModule : Module
         }
     }
     
-    public override void Unload()
+    public bool DoesKitExist(string kit_name)
     {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return false;
+        }
+
+        var count = kits_storage.StartQuery().Count(("KitName", kit_name)).QuerySql<int>();
+        return count > 0;
+    }
+
+    public void RenameKit(string original_name, string new_name)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return;
+        }
     }
 }

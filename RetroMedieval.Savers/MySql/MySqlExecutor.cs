@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
@@ -36,14 +38,27 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
     {
         using var conn = new MySqlConnection(Query.ConnectionString);
 
-        try
+        if (typeof(T).GetInterfaces().Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
         {
-            if (Parameters == null)
+            try
             {
-                return (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";");
+                return Parameters == null
+                    ? (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";")
+                    : (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
+            }
+            catch (MySqlException ex)
+            {
+                Logger.LogError(
+                    $"Had an error when trying to execute: {Query.CurrentQueryString} {Query.FilterConditionString};");
+                Logger.LogException(ex);
             }
 
-            return (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
+            return default;
+        }
+        
+        try
+        {
+            return Parameters == null ? conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";") : conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
         }
         catch (MySqlException ex)
         {
@@ -53,5 +68,6 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
         }
 
         return default;
+        
     }
 }
