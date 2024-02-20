@@ -141,6 +141,7 @@ internal class CreateKitCommand : IRocketCommand
             });
         
         kits_module?.CreateKit(kit, kit_items);
+        UnturnedChat.Say(caller, $"Created kit: {kit.KitName}");
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Player;

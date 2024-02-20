@@ -31,6 +31,7 @@ internal class KitsModule : Module
         }
         
         kits_storage.StartQuery().Insert(kit).ExecuteSql();
+        
         foreach (var item in kit_items)
         {
             item.KitID = kit.KitID;
