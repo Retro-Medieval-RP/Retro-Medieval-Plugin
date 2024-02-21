@@ -3,14 +3,15 @@ using System.Linq;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
+using RetroMedieval.Savers.MySql.Exceptions;
 using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) : IExecutor
+public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : IExecutor
 {
     public IQuery Query { get; set; } = query;
-    private DynamicParameters? Parameters { get; set; } = parameters;
+    public List<DataParam>? DataParams { get; set; } = parameters;
 
     public void ExecuteSql()
     {
@@ -18,13 +19,20 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
 
         try
         {
-            if (Parameters == null)
+            if (DataParams == null)
             {
                 conn.Execute(query.CurrentQueryString + " " + query.FilterConditionString + ";");
                 return;
             }
 
-            conn.Execute(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
+            if (DataParams.Count > 0)
+            {
+                conn.Execute(query.CurrentQueryString + " " + query.FilterConditionString + ";", ConvertParams());
+            }
+            else
+            {
+                throw new NoDataParamsGiven();
+            }
         }
         catch (MySqlException ex)
         {
@@ -38,13 +46,15 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
     {
         using var conn = new MySqlConnection(Query.ConnectionString);
 
-        if (typeof(T).GetInterfaces().Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+        if (typeof(T).GetInterfaces()
+            .Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
         {
             try
             {
-                return Parameters == null
+                return DataParams == null
                     ? (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";")
-                    : (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
+                    : (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";",
+                        ConvertParams());
             }
             catch (MySqlException ex)
             {
@@ -55,10 +65,13 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
 
             return default;
         }
-        
+
         try
         {
-            return Parameters == null ? conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";") : conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";", Parameters);
+            return DataParams == null
+                ? conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";")
+                : conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";",
+                    ConvertParams());
         }
         catch (MySqlException ex)
         {
@@ -68,6 +81,22 @@ public class MySqlExecutor(IQuery query, DynamicParameters? parameters = null) :
         }
 
         return default;
-        
+    }
+
+    private DynamicParameters ConvertParams()
+    {
+        var params_out = new DynamicParameters();
+
+        if (DataParams == null)
+        {
+            return params_out;
+        }
+
+        foreach (var param in DataParams)
+        {
+            params_out.Add(param.ParamName, param.ParamObject, param.ParamDbType);
+        }
+
+        return params_out;
     }
 }

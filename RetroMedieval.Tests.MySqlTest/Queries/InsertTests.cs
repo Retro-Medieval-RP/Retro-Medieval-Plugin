@@ -13,8 +13,7 @@ public class InsertTests
 {
     [Theory]
     [ClassData(typeof(ConvertingTestData))]
-    public void ConvertTypeIntoParam(Type t, string t_name, object t_data,
-        Savers.MySql.StatementsAndQueries.Queries.DataParam param)
+    public void ConvertTypeIntoParam(Type t, string t_name, object t_data, DataParam param)
     {
         var response = Savers.MySql.StatementsAndQueries.Queries.ConvertDataType(t_name, t_data, t);
 
@@ -24,8 +23,9 @@ public class InsertTests
 
     [Theory]
     [ClassData(typeof(InsertQueryTestData))]
-    public void InsertQueryTest(MySqlExecutor test_executor, string query_string) => 
-        Assert.True(test_executor.Query.CurrentQueryString == query_string, $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.Query.CurrentQueryString}\nQuery String: {query_string}");
+    public void InsertQueryTest(MySqlExecutor test_executor, string query_string) =>
+        Assert.True(test_executor.Query.CurrentQueryString == query_string,
+            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.Query.CurrentQueryString}\nQuery String: {query_string}");
 
     private class InsertQueryTestData : IEnumerable<object[]>
     {
@@ -33,20 +33,21 @@ public class InsertTests
         {
             new object[]
             {
-                new MySqlQuery("Tests", "").Insert(new TestModel{TestString = "Testing String"}) as MySqlExecutor,
-                "INSERT INTO Tests (TestString) VALUES (@TestString)"
+                new MySqlQuery("Tests", "").Insert(new TestModel { TestString = "Testing String" }) as MySqlExecutor,
+                "INSERT INTO Tests (TestString) VALUES (@TestString);"
             },
             new object[]
             {
-                new MySqlQuery("Tests", "").Insert(new TestModel {TestGuid = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b")}) as MySqlExecutor,
-                "INSERT INTO Tests (TestGuid) VALUES (@TestGuid)"
+                new MySqlQuery("Tests", "").Insert(new TestModel
+                    { TestGuid = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b") }) as MySqlExecutor,
+                "INSERT INTO Tests (TestGuid) VALUES (@TestGuid);"
             }
         };
 
         public IEnumerator<object[]> GetEnumerator() => TestObjects.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
+
         [DatabaseTable("Tests")]
         public class TestModel
         {
@@ -61,7 +62,7 @@ public class InsertTests
             public Guid? TestGuid { get; set; }
         }
     }
-    
+
     private class ConvertingTestData : IEnumerable<object[]>
     {
         private static Guid GuidVal = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b");
@@ -73,16 +74,14 @@ public class InsertTests
                 typeof(Guid),
                 "Test",
                 GuidVal,
-                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", GuidVal.ToString())
-                    { ParamType = typeof(Guid) }
+                new DataParam("@Test", GuidVal.ToString()) { ParamType = typeof(Guid) }
             },
             new object[]
             {
                 typeof(string),
                 "Test",
                 "Test String",
-                new Savers.MySql.StatementsAndQueries.Queries.DataParam("@Test", "Test String")
-                    { ParamType = typeof(string) }
+                new DataParam("@Test", "Test String") { ParamType = typeof(string) }
             }
         };
 
