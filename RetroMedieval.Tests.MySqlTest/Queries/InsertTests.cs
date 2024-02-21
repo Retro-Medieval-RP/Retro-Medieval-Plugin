@@ -25,7 +25,7 @@ public class InsertTests
     [Theory]
     [ClassData(typeof(InsertQueryTestData))]
     public void InsertQueryTest(MySqlExecutor test_executor, string query_string) => 
-        Assert.True(test_executor.Query.CurrentQueryString == query_string, $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.Query.CurrentQueryString}\nQuery Strnig: {query_string}");
+        Assert.True(test_executor.Query.CurrentQueryString == query_string, $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.Query.CurrentQueryString}\nQuery String: {query_string}");
 
     private class InsertQueryTestData : IEnumerable<object[]>
     {
