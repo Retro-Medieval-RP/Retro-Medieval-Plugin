@@ -11,7 +11,7 @@ public static class Statements
     {
         statement.CurrentQueryString = $"SELECT {string.Join(" AND ", columns)} FROM {statement.TableName}";
         
-        return new MySqlExecutor(statement);
+        return new MySqlExecutor(statement, []);
     }
     
     public static IExecutor Update(this IStatement statement, params (string, object)[] columns)
@@ -25,7 +25,7 @@ public static class Statements
     public static IExecutor Delete(this IStatement statement, params (string, object)[] columns)
     {
         statement.CurrentQueryString = $"DELETE FROM {statement.TableName}";
-        return new MySqlExecutor(statement);
+        return new MySqlExecutor(statement, []);
     }
     
     public static DataParam ConvertDataType(string property_name, object obj, Type prop_type)

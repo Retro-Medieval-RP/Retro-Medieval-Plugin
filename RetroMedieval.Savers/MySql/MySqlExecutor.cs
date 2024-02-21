@@ -8,10 +8,10 @@ using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : IExecutor
+public class MySqlExecutor(IQuery query, List<DataParam> parameters) : IExecutor
 {
     public IQuery Query { get; set; } = query;
-    public List<DataParam>? DataParams { get; set; } = parameters;
+    public List<DataParam> DataParams { get; set; } = [];
 
     public void ExecuteSql()
     {
@@ -19,20 +19,13 @@ public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : I
 
         try
         {
-            if (DataParams == null)
+            if (DataParams.Count < 1)
             {
-                conn.Execute(query.CurrentQueryString + " " + query.FilterConditionString + ";");
+                conn.Execute(Query.CurrentQueryString + " " + Query.FilterConditionString + ";");
                 return;
             }
 
-            if (DataParams.Count > 0)
-            {
-                conn.Execute(query.CurrentQueryString + " " + query.FilterConditionString + ";", ConvertParams());
-            }
-            else
-            {
-                throw new NoDataParamsGiven();
-            }
+            conn.Execute(Query.CurrentQueryString + " " + Query.FilterConditionString + ";", ConvertParams());
         }
         catch (MySqlException ex)
         {
@@ -51,9 +44,9 @@ public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : I
         {
             try
             {
-                return DataParams == null
-                    ? (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";")
-                    : (T)conn.Query<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";",
+                return DataParams.Count < 1
+                    ? (T)conn.Query<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";")
+                    : (T)conn.Query<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";",
                         ConvertParams());
             }
             catch (MySqlException ex)
@@ -68,9 +61,9 @@ public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : I
 
         try
         {
-            return DataParams == null
-                ? conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";")
-                : conn.QuerySingle<T>(query.CurrentQueryString + " " + query.FilterConditionString + ";",
+            return DataParams.Count < 1
+                ? conn.QuerySingle<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";")
+                : conn.QuerySingle<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";",
                     ConvertParams());
         }
         catch (MySqlException ex)
@@ -86,12 +79,7 @@ public class MySqlExecutor(IQuery query, List<DataParam>? parameters = null) : I
     private DynamicParameters ConvertParams()
     {
         var params_out = new DynamicParameters();
-
-        if (DataParams == null)
-        {
-            return params_out;
-        }
-
+        
         foreach (var param in DataParams)
         {
             params_out.Add(param.ParamName, param.ParamObject, param.ParamDbType);
