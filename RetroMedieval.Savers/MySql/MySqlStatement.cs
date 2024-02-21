@@ -10,6 +10,10 @@ public class MySqlStatement(
     string connection_string)
     : IStatement
 {
+    public MySqlStatement(IQuery query) : this(query.TableName, query.CurrentQueryString, query.FilterConditionString, query.ConnectionString)
+    {
+    }
+
     public string TableName { get; set; } = table_name;
     public string CurrentQueryString { get; set; } = current_query_string;
     public string FilterConditionString { get; set; } = filter_condition_string;

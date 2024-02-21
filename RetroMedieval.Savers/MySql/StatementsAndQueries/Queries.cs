@@ -21,7 +21,7 @@ public static class Queries
             $"WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))};";
 
         var data_params = condition_values.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())).ToList();
-        return new MySqlStatement(query.TableName, query.CurrentQueryString, query.FilterConditionString, query.ConnectionString) { Parameters = data_params};
+        return new MySqlStatement(query) { Parameters = data_params};
     }
     
     public static IExecutor Count(this IQuery query, params (string, object)[] condition_values)
