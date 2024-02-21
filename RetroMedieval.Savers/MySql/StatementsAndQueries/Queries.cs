@@ -18,7 +18,7 @@ public static class Queries
             throw new NoConditionValues();
         }
         
-        query.CurrentQueryString = $"SELECT COUNT({condition_values.Select(x => x.Item1).ToArray()[0]}) FROM {query.TableName} WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))}";
+        query.CurrentQueryString = $"SELECT COUNT({condition_values.Select(x => x.Item1).ToArray()[0]}) FROM {query.TableName} WHERE {string.Join(" AND ", condition_values.Select(x => x.Item1 + " = @" + x.Item1))};";
         var data_params = new DynamicParameters();
         
         foreach (var param in condition_values.Select(data =>
