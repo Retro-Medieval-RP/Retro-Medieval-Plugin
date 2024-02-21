@@ -3,7 +3,7 @@ using RetroMedieval.Modules.Storage.Sql;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlStatements(
+public class MySqlStatement(
     string table_name,
     string current_query_string,
     string filter_condition_string,
