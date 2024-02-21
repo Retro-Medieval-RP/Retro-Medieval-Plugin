@@ -10,6 +10,13 @@ namespace RetroMedieval.Savers.MySql.StatementsAndQueries;
 
 public static class Queries
 {
+    public static IExecutor Select(this IQuery query, params string[] columns)
+    {
+        query.CurrentQueryString = $"SELECT {string.Join(", ", columns)} FROM {query.TableName}";
+        
+        return new MySqlExecutor(query, []);
+    }
+    
     public static IStatement Where(this IQuery query, params (string, object)[] condition_values)
     {
         if (condition_values.Length < 1)

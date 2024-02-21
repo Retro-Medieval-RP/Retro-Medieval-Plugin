@@ -27,15 +27,15 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         Timer = null;
     }
     
-    public bool GetModule<TModule>(out TModule? module) where TModule : class
+    public bool GetModule<TModule>(out TModule module) where TModule : class
     {
         if (Modules.All(x => x.GetType() != typeof(TModule)))
         {
-            module = default;
+            module = default!;
             return false;
         }
 
-        module = Modules.Find(x => x.GetType() == typeof(TModule)) as TModule;
+        module = (Modules.Find(x => x.GetType() == typeof(TModule)) as TModule)!;
         return true;
     }
     
