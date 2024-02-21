@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RetroMedieval.Models.Kits;
 using RetroMedieval.Modules.Attributes;
@@ -62,5 +63,8 @@ internal class KitsModule : Module
             Logger.LogError("Could not gather storage [KitsStorage]");
             return;
         }
+
+        var kit_id = kits_storage.StartQuery().Where(("KitName", original_name)).Select("KitID").QuerySql<Guid>();
+        kits_storage.StartQuery().Where(("KitID", kit_id)).Update(("KitName", new_name)).ExecuteSql();
     }
 }
