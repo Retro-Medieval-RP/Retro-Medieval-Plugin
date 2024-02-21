@@ -9,7 +9,7 @@ public static class Statements
 {
     public static IExecutor Select(this IStatement statement, params string[] columns)
     {
-        statement.CurrentQueryString = $"SELECT {string.Join(" AND ", columns)} FROM {statement.TableName}";
+        statement.CurrentQueryString = $"SELECT {string.Join(", ", columns)} FROM {statement.TableName}";
         
         return new MySqlExecutor(statement, []);
     }
