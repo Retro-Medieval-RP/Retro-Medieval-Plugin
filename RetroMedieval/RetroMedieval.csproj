@@ -137,6 +137,10 @@
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
+    <Compile Include="Commands\Warps\Admin\CreateWarpCommand.cs" />
+    <Compile Include="Commands\Warps\Admin\DeleteWarpCommand.cs" />
+    <Compile Include="Commands\Warps\User\WarpCommand.cs" />
+    <Compile Include="Commands\Warps\User\WarpsCommand.cs" />
     <Compile Include="Commands\Zones\AddNodeCommand.cs" />
     <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
     <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
@@ -178,6 +182,7 @@
     <Compile Include="Models\LootChest\LootChestFlags.cs" />
     <Compile Include="Models\LootChest\LootItem.cs" />
     <Compile Include="Models\LootChest\SpawnedChest.cs" />
+    <Compile Include="Models\Warps\Warp.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
     <Compile Include="Modules\ArmorEquip\ArmorEquipConfiguration.cs" />
@@ -190,6 +195,8 @@
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
+    <Compile Include="Modules\Warps\WarpsModule.cs" />
+    <Compile Include="Modules\Warps\WarpsStorage.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
     <Compile Include="Modules\Zones\ZonesStorage.cs" />
     <Compile Include="Patches\DamagePatch.cs" />

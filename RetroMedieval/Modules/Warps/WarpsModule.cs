@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using JetBrains.Annotations;
 using RetroMedieval.Models.Warps;
 using RetroMedieval.Modules.Attributes;
+using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using UnityEngine;
@@ -87,5 +89,18 @@ internal class WarpsModule : Module
         var warp = warps_storage.GetWarp(warp_name);
         player.Teleport(new Vector3(warp.LocationX, warp.LocationY, warp.LocationZ), warp.Rotation);
         UnturnedChat.Say(player, "Warped to: " + warp.WarpName);
+    }
+
+    public void SendWarps(IRocketPlayer caller)
+    {
+        if (!GetStorage<WarpsStorage>(out var warps_storage))
+        {
+            Logger.LogError("Could not gather storage [WarpsStorage]");
+            return;
+        }
+
+        var warps = warps_storage.StorageItem;
+        UnturnedChat.Say(caller, "Warps:");
+        UnturnedChat.Say(string.Join(", ", warps.Select(x => x.WarpName).Where(x => caller.HasPermission($"warp.{x}"))));
     }
 }
