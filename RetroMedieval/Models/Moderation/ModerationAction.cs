@@ -14,6 +14,9 @@ internal class ModerationAction
 
     [DatabaseColumn("TargetID", "")] 
     public ulong TargetID { get; set; }
+    
+    [DatabaseColumn("PunishmentGiven", "DATETIME", "")]
+    public DateTime PunishmentGiven { get; set; }
 
     [DatabaseColumn("Reason", "VARCHAR(255)", "No Reason Specified")]
     public string Reason { get; set; }
