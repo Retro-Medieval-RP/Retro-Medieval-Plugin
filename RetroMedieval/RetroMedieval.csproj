@@ -182,6 +182,11 @@
     <Compile Include="Models\LootChest\LootChestFlags.cs" />
     <Compile Include="Models\LootChest\LootItem.cs" />
     <Compile Include="Models\LootChest\SpawnedChest.cs" />
+    <Compile Include="Models\Moderation\Ban.cs" />
+    <Compile Include="Models\Moderation\Kick.cs" />
+    <Compile Include="Models\Moderation\ModerationAction.cs" />
+    <Compile Include="Models\Moderation\Mute.cs" />
+    <Compile Include="Models\Moderation\Warn.cs" />
     <Compile Include="Models\Warps\Warp.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
@@ -195,6 +200,7 @@
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
+    <Compile Include="Modules\Moderation\ModerationModule.cs" />
     <Compile Include="Modules\Warps\WarpsModule.cs" />
     <Compile Include="Modules\Warps\WarpsStorage.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
@@ -221,10 +227,6 @@
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
       <Name>RetroMedieval.Utils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Moderation\" />
-    <Folder Include="Modules\Moderation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
