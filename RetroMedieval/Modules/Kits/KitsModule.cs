@@ -5,7 +5,9 @@ using RetroMedieval.Models.Kits;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
 using RetroMedieval.Savers.MySql.StatementsAndQueries;
+using Rocket.API;
 using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -128,5 +130,12 @@ internal class KitsModule : Module
                 ItemManager.dropItem(new Item(item.ItemID, item.Amount, item.Quality, item.State), target_player.Position, false, true, true);
             }
         }
+    }
+
+    public void SendKits(IRocketPlayer caller)
+    {
+        var kits = GetKits();
+        UnturnedChat.Say(caller, "Kits:");
+        UnturnedChat.Say(caller, string.Join(", ", kits.Select(x => x.KitName).Where(x => caller.HasPermission($"kit.{x}"))));
     }
 }

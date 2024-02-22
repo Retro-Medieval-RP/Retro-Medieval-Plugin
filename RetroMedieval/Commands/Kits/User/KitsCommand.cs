@@ -18,9 +18,7 @@ internal class KitsCommand : IRocketCommand
             return;   
         }
 
-        var kits = kits_module.GetKits();
-        UnturnedChat.Say(caller, "Kits:");
-        UnturnedChat.Say(caller, string.Join(", ", kits.Select(x => x.KitName).Where(x => caller.HasPermission("kit." + x))));
+        kits_module.SendKits(caller);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;
