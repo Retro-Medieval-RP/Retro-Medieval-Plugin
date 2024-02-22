@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using RetroMedieval.Modules.Storage.Sql;
 using RetroMedieval.Savers.MySql;
-using RetroMedieval.Savers.MySql.StatementsAndQueries;
 using RetroMedieval.Savers.MySql.Tables.Attributes;
 using Xunit;
 
@@ -12,20 +11,10 @@ namespace RetroMedieval.Tests.MySqlTest.Queries;
 public class InsertTests
 {
     [Theory]
-    [ClassData(typeof(ConvertingTestData))]
-    public void ConvertTypeIntoParam(Type t, string t_name, object t_data, DataParam param)
-    {
-        var response = Savers.MySql.StatementsAndQueries.Queries.ConvertDataType(t_name, t_data, t);
-
-        Assert.True(param.Equals(response),
-            $"Response does not equal param.\nResponse:\nName: {response.ParamName}\nObj: {response.ParamObject}\nDbType: {(response.ParamDbType != null ? response.ParamDbType : "NULL")}\nType: {param.ParamType.Name}\n\nParam:\nName: {param.ParamName}\nObj: {param.ParamObject}\nDbType: {(param.ParamDbType != null ? param.ParamDbType : "NULL")}\nType: {param.ParamType.Name}");
-    }
-
-    [Theory]
     [ClassData(typeof(InsertQueryTestData))]
     public void InsertQueryTest(MySqlExecutor test_executor, string query_string) =>
-        Assert.True(test_executor.Query.CurrentQueryString == query_string,
-            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.Query.CurrentQueryString}\nQuery String: {query_string}");
+        Assert.True(test_executor.SqlString == query_string,
+            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.SqlString}\nQuery String: {query_string}");
 
     private class InsertQueryTestData : IEnumerable<object[]>
     {
@@ -33,12 +22,13 @@ public class InsertTests
         {
             new object[]
             {
-                new MySqlQuery("Tests", "").Insert(new TestModel { TestString = "Testing String" }) as MySqlExecutor,
+                new MySqlStatement("Tests", "").Insert(new TestModel
+                    { TestString = "Testing String" }) as MySqlExecutor,
                 "INSERT INTO Tests (TestString) VALUES (@TestString);"
             },
             new object[]
             {
-                new MySqlQuery("Tests", "").Insert(new TestModel
+                new MySqlStatement("Tests", "").Insert(new TestModel
                     { TestGuid = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b") }) as MySqlExecutor,
                 "INSERT INTO Tests (TestGuid) VALUES (@TestGuid);"
             }

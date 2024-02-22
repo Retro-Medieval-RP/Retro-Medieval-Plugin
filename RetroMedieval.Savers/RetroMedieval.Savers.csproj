@@ -124,12 +124,10 @@
         <Compile Include="Json\JsonSaver.cs" />
         <Compile Include="MySql\Exceptions\NoConditionValues.cs" />
         <Compile Include="MySql\Exceptions\NoDataParamsGiven.cs" />
+        <Compile Include="MySql\MySqlCondition.cs" />
         <Compile Include="MySql\MySqlExecutor.cs" />
-        <Compile Include="MySql\MySqlQuery.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
         <Compile Include="MySql\MySqlStatement.cs" />
-        <Compile Include="MySql\StatementsAndQueries\Queries.cs" />
-        <Compile Include="MySql\StatementsAndQueries\Statements.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseColumn.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseIgnore.cs" />
         <Compile Include="MySql\Tables\Attributes\DatabaseTable.cs" />

@@ -37,6 +37,6 @@ public class MySqlSaver<T> : ISqlStorage<T>
         }
     }
 
-    public IQuery StartQuery() => 
-        new MySqlQuery(TableName, SavePath);
+    public IStatement StartQuery() => 
+        new MySqlStatement(TableName, SavePath);
 }
