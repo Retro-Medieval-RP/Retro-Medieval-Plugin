@@ -49,7 +49,7 @@ internal class CreateWarpCommand : IRocketCommand
         }
 
         var player = caller as UnturnedPlayer;
-        warps_module.AddWarp(command[0], player!.Position, 0, player);
+        warps_module.AddWarp(command[0], player!.Position, player.Rotation, player);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

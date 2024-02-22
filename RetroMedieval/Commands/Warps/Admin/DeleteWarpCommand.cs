@@ -28,7 +28,7 @@ internal class DeleteWarpCommand : IRocketCommand
         
         warps_module.RemoveWarp(command[0], caller is ConsolePlayer ? null : caller as UnturnedPlayer);
     }
-
+  
     public AllowedCaller AllowedCaller => AllowedCaller.Both;
     public string Name => "deletewarp";
     public string Help => "Deletes a warp from the server.";
