@@ -106,6 +106,11 @@ public class MySqlCondition(IStatement statement) : ICondition
 
     public ICondition OrderBy(params (string, OrderBy)[] columns)
     {
+        if (FilterConditions.ContainsKey("ORDER BY"))
+        {
+            throw new OrderBySortAlreadyGiven();
+        }
+        
         FilterConditions.Add("ORDER BY",
             new(
                 $"ORDER BY {string.Join(", ", columns.Select(x => $"{x.Item1} {(x.Item2 == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}"))}",
@@ -115,6 +120,11 @@ public class MySqlCondition(IStatement statement) : ICondition
 
     public ICondition OrderBy(OrderBy order = Modules.Storage.Sql.OrderBy.Ascending, params string[] columns)
     {
+        if (FilterConditions.ContainsKey("ORDER BY"))
+        {
+            throw new OrderBySortAlreadyGiven();
+        }
+        
         FilterConditions.Add("ORDER BY",
             new(
                 $"ORDER BY {string.Join(", ", columns)} {(order == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}",

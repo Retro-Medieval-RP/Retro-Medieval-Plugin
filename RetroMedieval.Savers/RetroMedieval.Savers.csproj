@@ -124,6 +124,7 @@
         <Compile Include="Json\JsonSaver.cs" />
         <Compile Include="MySql\Exceptions\NoConditionValues.cs" />
         <Compile Include="MySql\Exceptions\NoDataParamsGiven.cs" />
+        <Compile Include="MySql\Exceptions\OrderBySortAlreadyGiven.cs" />
         <Compile Include="MySql\MySqlCondition.cs" />
         <Compile Include="MySql\MySqlExecutor.cs" />
         <Compile Include="MySql\MySqlSaver.cs" />
