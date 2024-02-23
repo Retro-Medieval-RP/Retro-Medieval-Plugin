@@ -7,17 +7,17 @@ using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlExecutor(IDatabaseInfo info, List<DataParam> parameters, List<(string, int)> filter_conditions) : IExecutor
+public class MySqlExecutor(IDatabaseInfo info, List<DataParam> parameters, Dictionary<string, (string, int)> filter_conditions) : IExecutor
 {
-    public IDatabaseInfo DatabaseConditions { get; set; } = info;
-    public List<(string, int)> FilterConditions { get; set; } = filter_conditions;
+    public IDatabaseInfo DatabaseInfo { get; set; } = info;
+    public Dictionary<string, (string, int)> FilterConditions { get; set; } = filter_conditions;
     public List<DataParam> DataParams { get; set; } = parameters;
-    public string FilterConditionString => string.Join(" ", FilterConditions.OrderByDescending(x => x.Item2).Select(x => x.Item1));
-    public string SqlString => DatabaseConditions.CurrentQueryString + (FilterConditions.Count > 0 ? " " + FilterConditionString : "") + ";";
+    public string FilterConditionString => string.Join(" ", FilterConditions.Select(x => x.Value).OrderByDescending(x => x.Item2).Select(x => x.Item1));
+    public string SqlString => DatabaseInfo.CurrentQueryString + (FilterConditions.Count > 0 ? " " + FilterConditionString : "") + ";";
 
     public void ExecuteSql()
     {
-        using var conn = new MySqlConnection(DatabaseConditions.ConnectionString);
+        using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
 
         try
         {
@@ -39,7 +39,7 @@ public class MySqlExecutor(IDatabaseInfo info, List<DataParam> parameters, List<
 
     public T? QuerySql<T>()
     {
-        using var conn = new MySqlConnection(DatabaseConditions.ConnectionString);
+        using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
 
         if (typeof(T).GetInterfaces()
             .Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)))

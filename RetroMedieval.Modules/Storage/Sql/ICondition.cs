@@ -5,10 +5,11 @@ namespace RetroMedieval.Modules.Storage.Sql;
 public interface ICondition : IDatabaseInfo
 {
     /// <summary>
+    /// String -> Condition Name
     /// String -> Filter String
     /// Int -> Filter Priority
     /// </summary>
-    public List<(string, int)> FilterConditions { get; set; }
+    public Dictionary<string, (string, int)> FilterConditions { get; set; }
     public List<DataParam> Parameters { get; set; }
 
     public ICondition Where(params (string, object)[] conditions);

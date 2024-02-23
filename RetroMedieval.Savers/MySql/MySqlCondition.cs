@@ -12,7 +12,7 @@ public class MySqlCondition(IStatement statement) : ICondition
     public string TableName { get; set; } = statement.TableName;
     public string CurrentQueryString { get; set; } = statement.CurrentQueryString;
     public string ConnectionString { get; set; } = statement.ConnectionString;
-    public List<(string, int)> FilterConditions { get; set; } = [];
+    public Dictionary<string, (string, int)> FilterConditions { get; set; } = [];
     public List<DataParam> Parameters { get; set; } = statement.Parameters;
 
     public ICondition Where(params (string, object)[] conditions)
@@ -22,22 +22,103 @@ public class MySqlCondition(IStatement statement) : ICondition
             throw new NoConditionValues();
         }
 
-        FilterConditions.Add(new ($"WHERE {string.Join(" AND ", conditions.Select(x => x.Item1 + " = @" + x.Item1))}", 10));
+        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        {
+            stored_where.Item1 += $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = @" + x.Item1))}";
 
-        Parameters.AddRange(conditions.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
+            Parameters.AddRange(
+                conditions.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
+        }
+        else
+        {
+            FilterConditions.Add("WHERE",
+                new($"WHERE {string.Join(" AND ", conditions.Select(x => x.Item1 + " = @" + x.Item1))}", 10));
+
+            Parameters.AddRange(
+                conditions.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
+        }
+
+        return this;
+    }
+
+    public ICondition WhereStartsWith(params (string, string)[] conditions)
+    {
+        if (conditions.Length < 1)
+        {
+            throw new NoConditionValues();
+        }
+
+        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        {
+            stored_where.Item1 +=
+                $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = " + x.Item2 + "%"))}";
+        }
+        else
+        {
+            FilterConditions.Add("WHERE",
+                new($"WHERE {string.Join(" AND ", conditions.Select(x => x.Item1 + " = " + x.Item2 + "%"))}", 10));
+        }
+
+        return this;
+    }
+
+    public ICondition WhereEndsWith(params (string, string)[] conditions)
+    {
+        if (conditions.Length < 1)
+        {
+            throw new NoConditionValues();
+        }
+
+        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        {
+            stored_where.Item1 +=
+                $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2))}";
+        }
+        else
+        {
+            FilterConditions.Add("WHERE",
+                new($"WHERE {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2))}", 10));
+        }
+
+        return this;
+    }
+
+    public ICondition WhereContains(params (string, string)[] conditions)
+    {
+        if (conditions.Length < 1)
+        {
+            throw new NoConditionValues();
+        }
+
+        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        {
+            stored_where.Item1 +=
+                $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2 + "%"))}";
+        }
+        else
+        {
+            FilterConditions.Add("WHERE",
+                new($"WHERE {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2 + "%"))}", 10));
+        }
 
         return this;
     }
 
     public ICondition OrderBy(params (string, OrderBy)[] columns)
     {
-        FilterConditions.Add(new ($"ORDER BY {string.Join(", ", columns.Select(x => $"{x.Item1} {(x.Item2 == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}"))}", 1));
+        FilterConditions.Add("ORDER BY",
+            new(
+                $"ORDER BY {string.Join(", ", columns.Select(x => $"{x.Item1} {(x.Item2 == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}"))}",
+                1));
         return this;
     }
 
     public ICondition OrderBy(OrderBy order = Modules.Storage.Sql.OrderBy.Ascending, params string[] columns)
     {
-        FilterConditions.Add(new ($"ORDER BY {string.Join(", ", columns)} {(order == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}", 1));
+        FilterConditions.Add("ORDER BY",
+            new(
+                $"ORDER BY {string.Join(", ", columns)} {(order == Modules.Storage.Sql.OrderBy.Ascending ? "ASC" : "DESC")}",
+                1));
         return this;
     }
 
