@@ -15,12 +15,11 @@ internal class Mute : ModerationAction
     [DatabaseIgnore]
     public bool IsExpired 
     {
-        get 
+        get
         {
             if (MuteLength != -1)
                 return DateTime.Now > PunishmentGiven.AddSeconds(MuteLength);
-            else
-                return false;
+            return false;
         }
     }
 

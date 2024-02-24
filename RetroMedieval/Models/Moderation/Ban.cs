@@ -15,12 +15,11 @@ internal class Ban : ModerationAction
     [DatabaseIgnore]
     public bool IsExpired 
     {
-        get 
+        get
         {
             if (BanLength != -1)
                 return DateTime.Now > PunishmentGiven.AddSeconds(BanLength);
-            else
-                return false;
+            return false;
         }
     }
 
