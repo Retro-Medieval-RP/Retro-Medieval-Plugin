@@ -8,7 +8,7 @@ public interface IExecutor
     public Dictionary<string, (string, int)> FilterConditions { get; set; }
     public List<DataParam> DataParams { get; set; }
     
-    void ExecuteSql();
+    bool ExecuteSql();
 
     T? QuerySql<T>();
 }
