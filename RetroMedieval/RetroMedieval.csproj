@@ -136,6 +136,13 @@
     <Compile Include="Commands\Kits\User\KitsCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
+    <Compile Include="Commands\Moderation\BanCommand.cs" />
+    <Compile Include="Commands\Moderation\KickCommand.cs" />
+    <Compile Include="Commands\Moderation\MuteCommand.cs" />
+    <Compile Include="Commands\Moderation\RemoveWarnCommand.cs" />
+    <Compile Include="Commands\Moderation\UnbanCommand.cs" />
+    <Compile Include="Commands\Moderation\UnmuteCommand.cs" />
+    <Compile Include="Commands\Moderation\WarnCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
     <Compile Include="Commands\Warps\Admin\CreateWarpCommand.cs" />
     <Compile Include="Commands\Warps\Admin\DeleteWarpCommand.cs" />
