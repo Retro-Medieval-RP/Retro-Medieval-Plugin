@@ -4,7 +4,7 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 namespace RetroMedieval.Models.Moderation;
 
 [DatabaseTable("ModerationBans")]
-internal class Ban : ModerationAction
+internal class Ban() : ModerationAction(ModerationActionType.Ban)
 {
     [DatabaseColumn("BanLength", "INT", "-1")]
     public int BanLength { get; set; } = -1;

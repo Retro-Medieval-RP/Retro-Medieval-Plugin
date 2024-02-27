@@ -1,10 +1,12 @@
 using RetroMedieval.Models.Moderation;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
-using Rocket.Core.Logging;
+using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using Steamworks;
+using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace RetroMedieval.Modules.Moderation;
 
@@ -147,6 +149,78 @@ internal class ModerationModule : Module
         {
             UnturnedChat.Say(UnturnedPlayer.FromCSteamID(new CSteamID(warn.PunisherID)),
                 $"Warned {UnturnedPlayer.FromCSteamID(new CSteamID(warn.TargetID)).DisplayName} for reason {warn.Reason}");
+        }
+    }
+
+    public void RemoveWarn(IRocketPlayer caller, string warn_id)
+    {
+        if (!GetStorage<MySqlSaver<Warn>>(out var warns_storage))
+        {
+            Logger.LogError("Could not gather storage [WarnsStorage]");
+            return;
+        }
+
+        if (warns_storage.StartQuery().Count().Where(("PunishmentID", warn_id), ("WarnRemoved", false)).Finalise().QuerySql<int>() > 0)
+        {
+            if (!warns_storage.StartQuery().Update(("WarnRemoved", true)).Finalise().ExecuteSql())
+            {
+                Logger.LogError($"Could not update warn in [WarnsStorage] for warn id: {warn_id}");
+                return;
+            }
+            
+            UnturnedChat.Say(caller, $"Warn ({warn_id}) has been removed.");
+        }
+        else
+        {
+            UnturnedChat.Say(caller, $"Could not find an active warn or a warn with the id: {warn_id}", Color.red);
+        }
+    }
+
+    public void Unmute(IRocketPlayer caller, string mute_id)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }
+
+        if (mutes_storage.StartQuery().Count().Where(("PunishmentID", mute_id), ("MuteOver", false)).Finalise().QuerySql<int>() > 0)
+        {
+            if (!mutes_storage.StartQuery().Update(("MuteOver", true)).Finalise().ExecuteSql())
+            {
+                Logger.LogError($"Could not update mute in [MutesStorage] for mute id: {mute_id}");
+                return;
+            }
+            
+            UnturnedChat.Say(caller, $"Mute ({mute_id}) has been undone.");
+        }
+        else
+        {
+            UnturnedChat.Say(caller, $"Could not find an active mute or a mute with the id: {mute_id}", Color.red);
+        }
+    }
+
+    public void Unban(IRocketPlayer caller, string ban_id)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var bans_storage))
+        {
+            Logger.LogError("Could not gather storage [BansStorage]");
+            return;
+        }
+
+        if (bans_storage.StartQuery().Count().Where(("PunishmentID", ban_id), ("BanOver", false)).Finalise().QuerySql<int>() > 0)
+        {
+            if (!bans_storage.StartQuery().Update(("BanOver", true)).Finalise().ExecuteSql())
+            {
+                Logger.LogError($"Could not update ban in [BansStorage] for ban id: {ban_id}");
+                return;
+            }
+            
+            UnturnedChat.Say(caller, $"Ban ({ban_id}) has been removed.");
+        }
+        else
+        {
+            UnturnedChat.Say(caller, $"Could not find an active ban or a ban with the id: {ban_id}", Color.red);
         }
     }
 }

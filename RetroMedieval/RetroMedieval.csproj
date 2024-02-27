@@ -192,6 +192,7 @@
     <Compile Include="Models\Moderation\Ban.cs" />
     <Compile Include="Models\Moderation\Kick.cs" />
     <Compile Include="Models\Moderation\ModerationAction.cs" />
+    <Compile Include="Models\Moderation\ModerationActionType.cs" />
     <Compile Include="Models\Moderation\Mute.cs" />
     <Compile Include="Models\Moderation\Warn.cs" />
     <Compile Include="Models\Warps\Warp.cs" />

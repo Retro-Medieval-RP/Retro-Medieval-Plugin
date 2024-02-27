@@ -5,8 +5,11 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 
 namespace RetroMedieval.Models.Moderation;
 
-internal class ModerationAction
+internal class ModerationAction(ModerationActionType action_type)
 {
+    [DatabaseIgnore] 
+    public ModerationActionType ModerationActionType { get; set; } = action_type;
+    
     [DatabaseColumn("PunishmentID", "CHAR(36)")]
     [PrimaryKey]
     public Guid PunishmentID { get; set; }
