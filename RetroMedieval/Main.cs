@@ -2,8 +2,6 @@
 using HarmonyLib;
 using RetroMedieval.Modules;
 using Rocket.Core.Plugins;
-using SDG.NetTransport.SteamNetworking;
-using SDG.Unturned;
 
 namespace RetroMedieval;
 

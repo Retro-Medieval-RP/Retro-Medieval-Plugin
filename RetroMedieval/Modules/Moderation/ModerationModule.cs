@@ -1,9 +1,12 @@
+using RetroMedieval.Events.Unturned;
 using RetroMedieval.Models.Moderation;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
 using Rocket.API;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
+using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
@@ -19,12 +22,52 @@ internal class ModerationModule : Module
 {
     public override void Load()
     {
+        PlayerJoinEventEventPublisher.PlayerJoinEventEvent += OnPlayerJoined;
+        PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent += OnVoice;
     }
 
     public override void Unload()
     {
+        PlayerJoinEventEventPublisher.PlayerJoinEventEvent -= OnPlayerJoined;
+        PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent -= OnVoice;
     }
 
+    protected override void OnTimerTick()
+    {
+        
+    }
+
+    private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }
+        
+        if (mutes_storage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false)).Finalise().QuerySql<int>() > 0)
+        {
+            allow = false;
+        }
+    }
+    
+    private void OnPlayerJoined(PlayerJoinEventEventArgs e, ref bool allow)
+    {
+        if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
+        {
+            Logger.LogError("Could not gather storage [BansStorage]");
+            return;
+        }
+        
+        if (bans_storage.StartQuery().Count().Where(("TargetID", e.Player.CSteamID.m_SteamID), ("BanOver", false)).Finalise().QuerySql<int>() > 0)
+        {
+            var ban = bans_storage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven").Where(("TargetID", e.Player.CSteamID.m_SteamID)).Finalise().QuerySql<Ban>();
+            
+            Provider.kick(e.Player.CSteamID,
+                $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
+        }
+    }
+    
     public void Ban(Ban ban, bool user_online = true)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
@@ -44,8 +87,7 @@ internal class ModerationModule : Module
             SDG.Unturned.Provider.kick(new CSteamID(ban.TargetID),
                 $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
-
-
+        
         if (ban.PunisherID == 0)
         {
             Logger.Log(
