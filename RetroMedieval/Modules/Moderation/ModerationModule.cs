@@ -4,7 +4,6 @@ using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
 using Rocket.API;
 using Rocket.Unturned.Chat;
-using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
