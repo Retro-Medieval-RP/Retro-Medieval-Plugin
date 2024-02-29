@@ -59,10 +59,12 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Storage\IStorage.cs" />
         <Compile Include="Storage\SavingConfiguration.cs" />
+        <Compile Include="Storage\Sql\IDatabaseInfo.cs" />
         <Compile Include="Storage\Sql\DataParam.cs" />
         <Compile Include="Storage\Sql\IExecutor.cs" />
-        <Compile Include="Storage\Sql\IQuery.cs" />
+        <Compile Include="Storage\Sql\ICondition.cs" />
         <Compile Include="Storage\Sql\IStatement.cs" />
+        <Compile Include="Storage\Sql\OrderBy.cs" />
         <Compile Include="Storage\Storage.cs" />
         <Compile Include="Storage\StorageManager.cs" />
         <Compile Include="Storage\StorageType.cs" />

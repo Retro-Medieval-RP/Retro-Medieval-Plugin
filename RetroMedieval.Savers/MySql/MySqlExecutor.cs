@@ -3,41 +3,52 @@ using System.Linq;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
-using RetroMedieval.Savers.MySql.Exceptions;
 using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlExecutor(IQuery query, List<DataParam> parameters) : IExecutor
+public class MySqlExecutor(
+    IDatabaseInfo info,
+    List<DataParam> parameters,
+    Dictionary<string, (string, int)> filter_conditions) : IExecutor
 {
-    public IQuery Query { get; set; } = query;
+    public IDatabaseInfo DatabaseInfo { get; set; } = info;
+    public Dictionary<string, (string, int)> FilterConditions { get; set; } = filter_conditions;
     public List<DataParam> DataParams { get; set; } = parameters;
 
-    public void ExecuteSql()
+    public string FilterConditionString => string.Join(" ",
+        FilterConditions.Select(x => x.Value).OrderByDescending(x => x.Item2).Select(x => x.Item1));
+
+    public string SqlString => DatabaseInfo.CurrentQueryString +
+                               (FilterConditions.Count > 0 ? " " + FilterConditionString : "") + ";";
+
+    public bool ExecuteSql()
     {
-        using var conn = new MySqlConnection(Query.ConnectionString);
+        using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
 
         try
         {
             if (DataParams.Count < 1)
             {
-                conn.Execute(Query.CurrentQueryString + " " + Query.FilterConditionString + ";");
-                return;
+                conn.Execute(SqlString);
+                return true;
             }
 
-            conn.Execute(Query.CurrentQueryString + " " + Query.FilterConditionString + ";", ConvertParams());
+            conn.Execute(SqlString, ConvertParams());
+            return true;
         }
         catch (MySqlException ex)
         {
             Logger.LogError(
-                $"Had an error when trying to execute: {Query.CurrentQueryString} {Query.FilterConditionString};");
+                $"Had an error when trying to execute: {SqlString}");
             Logger.LogException(ex);
+            return false;
         }
     }
 
     public T? QuerySql<T>()
     {
-        using var conn = new MySqlConnection(Query.ConnectionString);
+        using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
 
         if (typeof(T).GetInterfaces()
             .Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
@@ -45,14 +56,14 @@ public class MySqlExecutor(IQuery query, List<DataParam> parameters) : IExecutor
             try
             {
                 return DataParams.Count < 1
-                    ? (T)conn.Query<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";")
-                    : (T)conn.Query<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";",
+                    ? (T)conn.Query<T>(SqlString)
+                    : (T)conn.Query<T>(SqlString,
                         ConvertParams());
             }
             catch (MySqlException ex)
             {
                 Logger.LogError(
-                    $"Had an error when trying to execute: {Query.CurrentQueryString} {Query.FilterConditionString};");
+                    $"Had an error when trying to execute: {SqlString}");
                 Logger.LogException(ex);
             }
 
@@ -62,14 +73,14 @@ public class MySqlExecutor(IQuery query, List<DataParam> parameters) : IExecutor
         try
         {
             return DataParams.Count < 1
-                ? conn.QuerySingle<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";")
-                : conn.QuerySingle<T>(Query.CurrentQueryString + " " + Query.FilterConditionString + ";",
+                ? conn.QuerySingle<T>(SqlString)
+                : conn.QuerySingle<T>(SqlString,
                     ConvertParams());
         }
         catch (MySqlException ex)
         {
             Logger.LogError(
-                $"Had an error when trying to execute: {Query.CurrentQueryString} {Query.FilterConditionString};");
+                $"Had an error when trying to execute: {SqlString}");
             Logger.LogException(ex);
         }
 
@@ -79,7 +90,7 @@ public class MySqlExecutor(IQuery query, List<DataParam> parameters) : IExecutor
     private DynamicParameters ConvertParams()
     {
         var params_out = new DynamicParameters();
-        
+
         foreach (var param in DataParams)
         {
             params_out.Add(param.ParamName, param.ParamObject, param.ParamDbType);

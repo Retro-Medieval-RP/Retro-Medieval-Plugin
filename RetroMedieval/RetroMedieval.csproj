@@ -136,6 +136,13 @@
     <Compile Include="Commands\Kits\User\KitsCommand.cs" />
     <Compile Include="Commands\LootChest\AddChestCommand.cs" />
     <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
+    <Compile Include="Commands\Moderation\BanCommand.cs" />
+    <Compile Include="Commands\Moderation\KickCommand.cs" />
+    <Compile Include="Commands\Moderation\MuteCommand.cs" />
+    <Compile Include="Commands\Moderation\RemoveWarnCommand.cs" />
+    <Compile Include="Commands\Moderation\UnbanCommand.cs" />
+    <Compile Include="Commands\Moderation\UnmuteCommand.cs" />
+    <Compile Include="Commands\Moderation\WarnCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
     <Compile Include="Commands\Warps\Admin\CreateWarpCommand.cs" />
     <Compile Include="Commands\Warps\Admin\DeleteWarpCommand.cs" />
@@ -167,6 +174,8 @@
     <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
     <Compile Include="Events\Unturned\DamageEvent.cs" />
     <Compile Include="Events\Unturned\GestureEvent.cs" />
+    <Compile Include="Events\Unturned\PlayerJoinEvent.cs" />
+    <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
     <Compile Include="Events\Zones\ZoneEnter.cs" />
     <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
@@ -182,6 +191,12 @@
     <Compile Include="Models\LootChest\LootChestFlags.cs" />
     <Compile Include="Models\LootChest\LootItem.cs" />
     <Compile Include="Models\LootChest\SpawnedChest.cs" />
+    <Compile Include="Models\Moderation\Ban.cs" />
+    <Compile Include="Models\Moderation\Kick.cs" />
+    <Compile Include="Models\Moderation\ModerationAction.cs" />
+    <Compile Include="Models\Moderation\ModerationActionType.cs" />
+    <Compile Include="Models\Moderation\Mute.cs" />
+    <Compile Include="Models\Moderation\Warn.cs" />
     <Compile Include="Models\Warps\Warp.cs" />
     <Compile Include="Models\Zones\Node.cs" />
     <Compile Include="Models\Zones\Zone.cs" />
@@ -195,6 +210,7 @@
     <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
     <Compile Include="Modules\LootChest\LootChestModule.cs" />
     <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
+    <Compile Include="Modules\Moderation\ModerationModule.cs" />
     <Compile Include="Modules\Warps\WarpsModule.cs" />
     <Compile Include="Modules\Warps\WarpsStorage.cs" />
     <Compile Include="Modules\Zones\ZonesModule.cs" />
@@ -202,6 +218,8 @@
     <Compile Include="Patches\DamagePatch.cs" />
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
+    <Compile Include="Patches\PlayerJoinPatch.cs" />
+    <Compile Include="Patches\PlayerVoicePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,10 +4,11 @@ namespace RetroMedieval.Modules.Storage.Sql;
 
 public interface IExecutor
 {
-    public IQuery Query { get; set; }
+    public IDatabaseInfo DatabaseInfo { get; set; }
+    public Dictionary<string, (string, int)> FilterConditions { get; set; }
     public List<DataParam> DataParams { get; set; }
     
-    void ExecuteSql();
+    bool ExecuteSql();
 
     T? QuerySql<T>();
 }
