@@ -74,10 +74,6 @@
         <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
         <Name>RetroMedieval.Utils</Name>
       </ProjectReference>
-      <ProjectReference Include="..\TheLostLand.Utils\TheLostLand.Utils.csproj">
-        <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
-        <Name>TheLostLand.Utils</Name>
-      </ProjectReference>
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />

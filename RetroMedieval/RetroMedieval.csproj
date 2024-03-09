@@ -156,6 +156,7 @@
     <Compile Include="Events\DeadBodys\SpawnDeadBody.cs" />
     <Compile Include="Events\LootChests\RemoveLootChest.cs" />
     <Compile Include="Events\LootChests\SpawnLootChest.cs" />
+    <Compile Include="Events\Unturned\ChatEvent.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
     <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Patches\DamagePatch.cs" />
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
+    <Compile Include="Patches\PlayerChatPatch.cs" />
     <Compile Include="Patches\PlayerJoinPatch.cs" />
     <Compile Include="Patches\PlayerVoicePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

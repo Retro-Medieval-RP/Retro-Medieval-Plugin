@@ -1,10 +1,10 @@
+using System.Collections.Generic;
 using RetroMedieval.Events.Unturned;
 using RetroMedieval.Models.Moderation;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
 using Rocket.API;
 using Rocket.Unturned.Chat;
-using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -24,17 +24,88 @@ internal class ModerationModule : Module
     {
         PlayerJoinEventEventPublisher.PlayerJoinEventEvent += OnPlayerJoined;
         PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent += OnVoice;
+        ChatEventEventPublisher.ChatEventEvent += OnUserMessage;
+    }
+
+    private void OnUserMessage(ChatEventEventArgs e, ref bool allow)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }   
+        
+        if (mutes_storage
+                .StartQuery()
+                .Count()
+                .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
+                .Finalise()
+                .QuerySql<int>() > 0)
+        {
+            allow = false;
+        }
     }
 
     public override void Unload()
     {
         PlayerJoinEventEventPublisher.PlayerJoinEventEvent -= OnPlayerJoined;
         PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent -= OnVoice;
+        ChatEventEventPublisher.ChatEventEvent -= OnUserMessage;
     }
 
     protected override void OnTimerTick()
     {
-        
+        if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
+        {
+            Logger.LogError("Could not gather storage [BansStorage]");
+            return;
+        }
+
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }
+
+        var bans = bans_storage
+            .StartQuery()
+            .Select()
+            .Where(("BanOver", false))
+            .Finalise()
+            .QuerySql<IEnumerable<Ban>>();
+
+        var mutes = mutes_storage
+            .StartQuery()
+            .Select()
+            .Where(("MuteOver", false))
+            .Finalise()
+            .QuerySql<IEnumerable<Mute>>();
+
+        foreach (var ban in bans)
+        {
+            if (ban.IsExpired)
+            {
+                bans_storage
+                    .StartQuery()
+                    .Update(("BanOver", true))
+                    .Where(("PunishmentID", ban.PunishmentID))
+                    .Finalise()
+                    .ExecuteSql();
+            }
+        }
+
+        foreach (var mute in mutes)
+        {
+            if (mute.IsExpired)
+            {
+                mutes_storage
+                    .StartQuery()
+                    .Update(("MuteOver", true))
+                    .Where(("PunishmentID", mute.PunishmentID))
+                    .Finalise()
+                    .ExecuteSql();
+            }
+        }
     }
 
     private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow)
@@ -44,13 +115,14 @@ internal class ModerationModule : Module
             Logger.LogError("Could not gather storage [MutesStorage]");
             return;
         }
-        
-        if (mutes_storage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false)).Finalise().QuerySql<int>() > 0)
+
+        if (mutes_storage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
+                .Finalise().QuerySql<int>() > 0)
         {
             allow = false;
         }
     }
-    
+
     private void OnPlayerJoined(PlayerJoinEventEventArgs e, ref bool allow)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
@@ -58,16 +130,18 @@ internal class ModerationModule : Module
             Logger.LogError("Could not gather storage [BansStorage]");
             return;
         }
-        
-        if (bans_storage.StartQuery().Count().Where(("TargetID", e.Player.CSteamID.m_SteamID), ("BanOver", false)).Finalise().QuerySql<int>() > 0)
+
+        if (bans_storage.StartQuery().Count().Where(("TargetID", e.Player.CSteamID.m_SteamID), ("BanOver", false))
+                .Finalise().QuerySql<int>() > 0)
         {
-            var ban = bans_storage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven").Where(("TargetID", e.Player.CSteamID.m_SteamID)).Finalise().QuerySql<Ban>();
-            
+            var ban = bans_storage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven")
+                .Where(("TargetID", e.Player.CSteamID.m_SteamID)).Finalise().QuerySql<Ban>();
+
             Provider.kick(e.Player.CSteamID,
                 $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
     }
-    
+
     public void Ban(Ban ban, bool user_online = true)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
@@ -87,7 +161,7 @@ internal class ModerationModule : Module
             SDG.Unturned.Provider.kick(new CSteamID(ban.TargetID),
                 $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
-        
+
         if (ban.PunisherID == 0)
         {
             Logger.Log(
@@ -202,14 +276,15 @@ internal class ModerationModule : Module
             return;
         }
 
-        if (warns_storage.StartQuery().Count().Where(("PunishmentID", warn_id), ("WarnRemoved", false)).Finalise().QuerySql<int>() > 0)
+        if (warns_storage.StartQuery().Count().Where(("PunishmentID", warn_id), ("WarnRemoved", false)).Finalise()
+                .QuerySql<int>() > 0)
         {
             if (!warns_storage.StartQuery().Update(("WarnRemoved", true)).Finalise().ExecuteSql())
             {
                 Logger.LogError($"Could not update warn in [WarnsStorage] for warn id: {warn_id}");
                 return;
             }
-            
+
             UnturnedChat.Say(caller, $"Warn ({warn_id}) has been removed.");
         }
         else
@@ -226,14 +301,15 @@ internal class ModerationModule : Module
             return;
         }
 
-        if (mutes_storage.StartQuery().Count().Where(("PunishmentID", mute_id), ("MuteOver", false)).Finalise().QuerySql<int>() > 0)
+        if (mutes_storage.StartQuery().Count().Where(("PunishmentID", mute_id), ("MuteOver", false)).Finalise()
+                .QuerySql<int>() > 0)
         {
             if (!mutes_storage.StartQuery().Update(("MuteOver", true)).Finalise().ExecuteSql())
             {
                 Logger.LogError($"Could not update mute in [MutesStorage] for mute id: {mute_id}");
                 return;
             }
-            
+
             UnturnedChat.Say(caller, $"Mute ({mute_id}) has been undone.");
         }
         else
@@ -250,14 +326,15 @@ internal class ModerationModule : Module
             return;
         }
 
-        if (bans_storage.StartQuery().Count().Where(("PunishmentID", ban_id), ("BanOver", false)).Finalise().QuerySql<int>() > 0)
+        if (bans_storage.StartQuery().Count().Where(("PunishmentID", ban_id), ("BanOver", false)).Finalise()
+                .QuerySql<int>() > 0)
         {
             if (!bans_storage.StartQuery().Update(("BanOver", true)).Finalise().ExecuteSql())
             {
                 Logger.LogError($"Could not update ban in [BansStorage] for ban id: {ban_id}");
                 return;
             }
-            
+
             UnturnedChat.Say(caller, $"Ban ({ban_id}) has been removed.");
         }
         else
