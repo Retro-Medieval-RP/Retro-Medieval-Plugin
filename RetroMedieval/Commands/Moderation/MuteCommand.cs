@@ -30,7 +30,10 @@ internal class MuteCommand : IRocketCommand
             return;
         }
 
-        var mute = new Mute();
+        var mute = new Mute
+        {
+            PunishmentID = Guid.NewGuid()
+        };;
 
         var target_player = UnturnedPlayer.FromName(command[0]);
         if (target_player == null)
