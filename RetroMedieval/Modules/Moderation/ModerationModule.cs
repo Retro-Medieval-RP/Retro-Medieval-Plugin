@@ -27,25 +27,6 @@ internal class ModerationModule : Module
         ChatEventEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
-    private void OnUserMessage(ChatEventEventArgs e, ref bool allow)
-    {
-        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
-        {
-            Logger.LogError("Could not gather storage [MutesStorage]");
-            return;
-        }   
-        
-        if (mutes_storage
-                .StartQuery()
-                .Count()
-                .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
-                .Finalise()
-                .QuerySql<int>() > 0)
-        {
-            allow = false;
-        }
-    }
-
     public override void Unload()
     {
         PlayerJoinEventEventPublisher.PlayerJoinEventEvent -= OnPlayerJoined;
@@ -107,7 +88,26 @@ internal class ModerationModule : Module
             }
         }
     }
-
+    
+    private void OnUserMessage(ChatEventEventArgs e, ref bool allow)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }   
+        
+        if (mutes_storage
+                .StartQuery()
+                .Count()
+                .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
+                .Finalise()
+                .QuerySql<int>() > 0)
+        {
+            allow = false;
+        }
+    }
+    
     private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
