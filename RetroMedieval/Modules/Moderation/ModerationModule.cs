@@ -50,14 +50,14 @@ internal class ModerationModule : Module
 
         var bans = bans_storage
             .StartQuery()
-            .Select()
+            .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
             .Where(("BanOver", false))
             .Finalise()
             .QuerySql<IEnumerable<Ban>>();
 
         var mutes = mutes_storage
             .StartQuery()
-            .Select()
+            .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
             .Where(("MuteOver", false))
             .Finalise()
             .QuerySql<IEnumerable<Mute>>();
@@ -88,15 +88,15 @@ internal class ModerationModule : Module
             }
         }
     }
-    
+
     private void OnUserMessage(ChatEventEventArgs e, ref bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
         {
             Logger.LogError("Could not gather storage [MutesStorage]");
             return;
-        }   
-        
+        }
+
         if (mutes_storage
                 .StartQuery()
                 .Count()
@@ -107,7 +107,7 @@ internal class ModerationModule : Module
             allow = false;
         }
     }
-    
+
     private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
@@ -156,12 +156,6 @@ internal class ModerationModule : Module
             return;
         }
 
-        if (user_online)
-        {
-            SDG.Unturned.Provider.kick(new CSteamID(ban.TargetID),
-                $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
-        }
-
         if (ban.PunisherID == 0)
         {
             Logger.Log(
@@ -171,6 +165,12 @@ internal class ModerationModule : Module
         {
             UnturnedChat.Say(UnturnedPlayer.FromCSteamID(new CSteamID(ban.PunisherID)),
                 $"Banned {UnturnedPlayer.FromCSteamID(new CSteamID(ban.TargetID)).DisplayName} for reason {ban.Reason} with time length: {ban.TimeLeftString}");
+        }
+
+        if (user_online)
+        {
+            SDG.Unturned.Provider.kick(new CSteamID(ban.TargetID),
+                $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
     }
 
@@ -187,12 +187,6 @@ internal class ModerationModule : Module
             Logger.LogError("Could not enter kick into [KicksStorage]");
             return;
         }
-
-        if (user_online)
-        {
-            SDG.Unturned.Provider.kick(new CSteamID(kick.TargetID), $"[KICK] Reason: {kick.Reason}");
-        }
-
         if (kick.PunisherID == 0)
         {
             Logger.Log(
@@ -202,6 +196,11 @@ internal class ModerationModule : Module
         {
             UnturnedChat.Say(UnturnedPlayer.FromCSteamID(new CSteamID(kick.PunisherID)),
                 $"Kicked {UnturnedPlayer.FromCSteamID(new CSteamID(kick.TargetID)).DisplayName} for reason {kick.Reason}");
+        }
+
+        if (user_online)
+        {
+            SDG.Unturned.Provider.kick(new CSteamID(kick.TargetID), $"[KICK] Reason: {kick.Reason}");
         }
     }
 
@@ -320,7 +319,7 @@ internal class ModerationModule : Module
 
     public void Unban(IRocketPlayer caller, string ban_id)
     {
-        if (!GetStorage<MySqlSaver<Mute>>(out var bans_storage))
+        if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
         {
             Logger.LogError("Could not gather storage [BansStorage]");
             return;
