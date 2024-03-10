@@ -187,6 +187,7 @@ internal class ModerationModule : Module
             Logger.LogError("Could not enter kick into [KicksStorage]");
             return;
         }
+
         if (kick.PunisherID == 0)
         {
             Logger.Log(
@@ -339,6 +340,72 @@ internal class ModerationModule : Module
         else
         {
             UnturnedChat.Say(caller, $"Could not find an active ban or a ban with the id: {ban_id}", Color.red);
+        }
+    }
+
+    public void Bans(IRocketPlayer caller, ulong targets_id)
+    {
+        if (!GetStorage<MySqlSaver<Ban>>(out var bans_storage))
+        {
+            Logger.LogError("Could not gather storage [BansStorage]");
+            return;
+        }
+
+        var bans = bans_storage
+            .StartQuery()
+            .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
+            .Where(("BanOver", false), ("TargetID", targets_id))
+            .Finalise()
+            .QuerySql<IEnumerable<Ban>>();
+        
+        UnturnedChat.Say(caller, "Bans:");
+        foreach (var ban in bans)
+        {
+            UnturnedChat.Say(caller, $"BanID: {ban.PunishmentID} | Ban Reason: {ban.Reason} | Ban Expire Time: {ban.TimeLeftString} | Ban Given: {ban.PunishmentGiven}");
+        }
+    }
+
+    public void Warns(IRocketPlayer caller, ulong targets_id)
+    {
+        if (!GetStorage<MySqlSaver<Warn>>(out var warns_storage))
+        {
+            Logger.LogError("Could not gather storage [WarnsStorage]");
+            return;
+        }
+        
+        var warns = warns_storage
+            .StartQuery()
+            .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "WarnRemoved")
+            .Where(("WarnRemoved", false), ("TargetID", targets_id))
+            .Finalise()
+            .QuerySql<IEnumerable<Warn>>();
+        
+        UnturnedChat.Say(caller, "Warns:");
+        foreach (var warn in warns)
+        {
+            UnturnedChat.Say(caller, $"WarnID: {warn.PunishmentID} | Warn Reason: {warn.Reason} | Warn Given: {warn.PunishmentGiven}");
+        }
+    }
+
+    public void Mutes(IRocketPlayer caller, ulong targets_id)
+    {
+        if (!GetStorage<MySqlSaver<Mute>>(out var mutes_storage))
+        {
+            Logger.LogError("Could not gather storage [MutesStorage]");
+            return;
+        }
+        
+        var mutes = mutes_storage
+            .StartQuery()
+            .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
+            .Where(("MuteOver", false), ("TargetID", targets_id))
+            .Finalise()
+            .QuerySql<IEnumerable<Mute>>();
+        
+        UnturnedChat.Say(caller, "Mutes:");
+        foreach (var mute in mutes)
+        {
+            UnturnedChat.Say(caller, $"MuteID: {mute.PunishmentID} | Mute Reason: {mute.Reason} | Mute Expire Time: {mute.TimeLeftString} | Mute Given: {mute.PunishmentGiven}");
         }
     }
 }
