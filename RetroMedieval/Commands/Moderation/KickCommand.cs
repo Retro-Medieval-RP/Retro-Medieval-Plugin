@@ -33,7 +33,7 @@ internal class KickCommand : IRocketCommand
         var kick = new Kick
         {
             PunishmentID = Guid.NewGuid()
-        };;
+        };
         
         var target_player = UnturnedPlayer.FromName(command[0]);
         if (target_player == null)

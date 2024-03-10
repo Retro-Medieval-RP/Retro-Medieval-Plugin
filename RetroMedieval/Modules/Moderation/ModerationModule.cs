@@ -169,7 +169,7 @@ internal class ModerationModule : Module
 
         if (user_online)
         {
-            SDG.Unturned.Provider.kick(new CSteamID(ban.TargetID),
+            Provider.kick(new CSteamID(ban.TargetID),
                 $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
     }
@@ -201,7 +201,7 @@ internal class ModerationModule : Module
 
         if (user_online)
         {
-            SDG.Unturned.Provider.kick(new CSteamID(kick.TargetID), $"[KICK] Reason: {kick.Reason}");
+            Provider.kick(new CSteamID(kick.TargetID), $"[KICK] Reason: {kick.Reason}");
         }
     }
 

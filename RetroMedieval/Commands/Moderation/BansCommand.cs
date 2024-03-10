@@ -19,7 +19,7 @@ internal class BansCommand : IRocketCommand
             return;
         }
 
-        ulong targets_id = 0;
+        ulong targets_id;
         var target_player = UnturnedPlayer.FromName(command[0]);
         if (target_player == null)
         {
