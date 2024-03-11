@@ -7,6 +7,7 @@ using RetroMedieval.Modules.Moderation;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
+using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
@@ -30,19 +31,16 @@ internal class WarnCommand : IRocketCommand
             return;
         }
 
-        var warn = new Warn();
+        var warn = new Warn
+        {
+            PunishmentID = Guid.NewGuid()
+        };
         
         var target_player = UnturnedPlayer.FromName(command[0]);
         if (target_player == null)
         {
             if (ulong.TryParse(command[0], out var warn_target_id))
             {
-                if (UnturnedPlayer.FromCSteamID(new CSteamID(warn_target_id)) == null)
-                {
-                    UnturnedChat.Say(caller, "Target could not be found.", Color.red);
-                    return;
-                }
-                
                 warn.TargetID = warn_target_id;
             }
             else
@@ -60,7 +58,7 @@ internal class WarnCommand : IRocketCommand
         warn.Reason = command.ElementAtOrDefault(1);
         warn.PunishmentGiven = DateTime.Now;
         
-        moderation_module.Warn(warn);
+        moderation_module.Warn(warn, Provider.clients.Any(x => x.playerID.steamID.m_SteamID == warn.TargetID));
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

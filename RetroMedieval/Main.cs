@@ -17,7 +17,7 @@ internal class Main : RocketPlugin
         ModuleLoader.Instance.LoadModules(Assembly);
         ModuleLoader.Instance.SetUpdateTimer(new Timer(10000));
         
-        var harmony = new Harmony("com.thelostland.patch");
+        var harmony = new Harmony("com.retromedieval.patch");
         harmony.PatchAll();
     }
 

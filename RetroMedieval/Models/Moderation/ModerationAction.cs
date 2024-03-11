@@ -14,17 +14,17 @@ internal class ModerationAction(ModerationActionType action_type)
     [PrimaryKey]
     public Guid PunishmentID { get; set; }
 
-    [DatabaseColumn("PunisherID", "")] 
+    [DatabaseColumn("PunisherID", "BIGINT")] 
     public ulong PunisherID { get; set; }
 
-    [DatabaseColumn("TargetID", "")] 
+    [DatabaseColumn("TargetID", "BIGINT")] 
     public ulong TargetID { get; set; }
     
     [DatabaseColumn("PunishmentGiven", "DATETIME", "")]
     public DateTime PunishmentGiven { get; set; }
 
-    [DatabaseColumn("Reason", "VARCHAR(255)", "No Reason Specified")]
-    public string Reason { get; set; }
+    [DatabaseColumn("Reason", "VARCHAR(255)")]
+    public string Reason { get; set; } = "No Reason Specified";
     
     public static int? ConvertToBanDuration(IEnumerable<string> args)
     {

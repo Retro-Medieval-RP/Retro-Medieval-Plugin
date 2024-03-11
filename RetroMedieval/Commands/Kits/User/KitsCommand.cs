@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Kits;
 using Rocket.API;
 using Rocket.Core.Logging;
-using Rocket.Unturned.Chat;
 
 namespace RetroMedieval.Commands.Kits.User;
 

@@ -30,7 +30,10 @@ internal class BanCommand : IRocketCommand
             return;
         }
 
-        var ban = new Ban();
+        var ban = new Ban
+        {
+            PunishmentID = Guid.NewGuid()
+        };
 
         var target_player = UnturnedPlayer.FromName(command[0]);
         if (target_player == null)
