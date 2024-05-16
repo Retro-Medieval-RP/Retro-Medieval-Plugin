@@ -81,7 +81,10 @@ internal class KitsModule : Module
         }
 
         var kit_id = kits_storage.StartQuery().Select("KitID").Where(("KitName", kit_name)).Finalise().QuerySql<Guid>();
-        kits_storage.StartQuery().Delete().Where(("KitID", kit_id)).Finalise().ExecuteSql();
+        if (kits_storage.StartQuery().Delete().Where(("KitID", kit_id)).Finalise().ExecuteSql())
+        {
+            Logger.LogError("Could not delete kit with id: " + kit_id);
+        }
     }
 
     private IEnumerable<Kit> GetKits()

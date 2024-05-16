@@ -1,6 +1,23 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005C0Harmony_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CAssembly_002DCSharp_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CAstarPathfindingProject_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005Ccom_002Erlabrecque_002Esteamworks_002Enet_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CRocket_002EAPI_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CRocket_002ECore_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CRocket_002EUnturned_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CSDG_002ENetTransport_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUniTask_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUniTask_002ELinq_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUnityEngine_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUnityEngine_002EPhysicsModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CNew_0020Source_005Crepos_005CRetro_002DMedieval_002DPlugin_005CPlugin_0020Libs_005CUnityEx_002Edll/@EntryIndexedValue">True</s:Boolean>
+	
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">INFO</s:String>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\jack\AppData\Local\Temp\JetBrains\Rider\vAny\CoverageData\_RetroMedieval.-20418927\Snapshot\snapshot.utdcvr</s:String>
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=263c9d44_002Dc6f2_002D4ec3_002D84b1_002D0bc8d262b47c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
