@@ -14,9 +14,12 @@ public abstract class Module
     private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
     private List<ModuleConfiguration> Configurations { get; }
     private List<ModuleStorage> Storages { get; }
+    
+    protected string ModuleDir { get; set; }
 
-    protected Module()
+    protected Module(string directory)
     {
+        ModuleDir = Path.Combine(directory, Information.ModuleName);
         Configurations = [];
         Storages = [];
         

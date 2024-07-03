@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RetroMedieval.Models.Kits;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
@@ -15,7 +16,7 @@ namespace RetroMedieval.Modules.Kits;
 [ModuleInformation("Kits")]
 [ModuleStorage<MySqlSaver<Kit>>("KitsStorage")]
 [ModuleStorage<MySqlSaver<KitItem>>("KitItemsStorage")]
-internal class KitsModule : Module
+internal class KitsModule([NotNull] string directory) : Module(directory)
 {
     public override void Load()
     {

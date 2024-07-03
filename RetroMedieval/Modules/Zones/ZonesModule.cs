@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.Zones;
 using RetroMedieval.Modules.Attributes;
@@ -11,7 +12,7 @@ namespace RetroMedieval.Modules.Zones;
 
 [ModuleInformation("Zones")]
 [ModuleStorage<ZonesStorage>("ZonesList")]
-public class ZonesModule : Module
+public class ZonesModule([NotNull] string directory) : Module(directory)
 {
     private Dictionary<UnturnedPlayer, Zone> PlayersInZones { get; } = [];
 

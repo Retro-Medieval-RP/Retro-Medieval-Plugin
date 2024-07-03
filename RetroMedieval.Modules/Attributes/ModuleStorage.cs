@@ -20,8 +20,7 @@ public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TS
         {
             return false;
         }
-
-
+        
         var store = new TStorage();
         StorageManager.Instance.Add(new Storage.Storage(Name, store));
         

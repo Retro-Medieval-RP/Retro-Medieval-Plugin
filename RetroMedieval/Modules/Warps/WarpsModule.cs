@@ -12,7 +12,7 @@ namespace RetroMedieval.Modules.Warps;
 
 [ModuleInformation("Warps")]
 [ModuleStorage<WarpsStorage>("Warps")]
-internal class WarpsModule : Module
+internal class WarpsModule([NotNull] string directory) : Module(directory)
 {
     public override void Load()
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using RetroMedieval.Events.DeadBodys;
 using RetroMedieval.Events.Unturned;
 using RetroMedieval.Models.DeadBodys;
@@ -17,7 +18,7 @@ namespace RetroMedieval.Modules.DeadBodys;
 [ModuleInformation("Deaths")]
 [ModuleConfiguration<DeathsConfiguration>("DeathsConfiguration")]
 [ModuleStorage<DeathsStorage>("DeathsStorage")]
-public class DeathModule : Module
+public class DeathModule([NotNull] string directory) : Module(directory)
 {
     public override void Load()
     {

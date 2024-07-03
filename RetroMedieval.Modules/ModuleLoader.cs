@@ -48,7 +48,7 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
 
         foreach (var m in modules)
         {
-            var module = Activator.CreateInstance(m) as Module;
+            var module = Activator.CreateInstance(m, ModuleDirectory) as Module;
             module?.Load();
 
             if (module != null)

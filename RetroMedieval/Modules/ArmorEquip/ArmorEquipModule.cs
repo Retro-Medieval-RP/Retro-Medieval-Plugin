@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RetroMedieval.Events.Unturned.CloathingDequip;
 using RetroMedieval.Events.Unturned.ClothingEquip;
 using RetroMedieval.Models.ArmorEquip;
@@ -14,7 +15,7 @@ namespace RetroMedieval.Modules.ArmorEquip;
 
 [ModuleInformation("ArmorEquip")]
 [ModuleConfiguration<ArmorEquipConfiguration>("Armors")]
-internal class ArmorEquipModule : Module
+internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
 {
     private List<CSteamID> IgnoredPlayers { get; set; } = [];
     private Dictionary<CSteamID, ArmorSet> PlayerSets { get; set; } = [];

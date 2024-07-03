@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using RetroMedieval.Events.Unturned;
 using RetroMedieval.Models.Moderation;
 using RetroMedieval.Modules.Attributes;
@@ -17,7 +18,7 @@ namespace RetroMedieval.Modules.Moderation;
 [ModuleStorage<MySqlSaver<Mute>>("Mutes")]
 [ModuleStorage<MySqlSaver<Kick>>("Kicks")]
 [ModuleStorage<MySqlSaver<Ban>>("Bans")]
-internal class ModerationModule : Module
+internal class ModerationModule([NotNull] string directory) : Module(directory)
 {
     public override void Load()
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RetroMedieval.Events.LootChests;
 using RetroMedieval.Events.Zones;
 using RetroMedieval.Models.LootChest;
@@ -17,7 +18,7 @@ namespace RetroMedieval.Modules.LootChest;
 [ModuleConfiguration<LootChestConfiguration>("LootChestConfig")]
 [ModuleStorage<LootChestLocationStorage>("LocationsStorage")]
 [ModuleStorage<LootChestSpawnedStorage>("SpawnedLootChests")]
-internal class LootChestModule : Module
+internal class LootChestModule([NotNull] string directory) : Module(directory)
 {
     private readonly Picker<Chest> _chestPicker = new();
     private readonly Dictionary<Zone, List<Transform>> _lootChest = [];
