@@ -36,10 +36,10 @@ public class ZonesModule : Module
 
             var zone = GetZone(position);
 
-            var allow_activation = true;
-            ZoneEnterEventPublisher.RaiseEvent(ref player, ref zone, ref allow_activation);
+            var allowActivation = true;
+            ZoneEnterEventPublisher.RaiseEvent(ref player, ref zone, ref allowActivation);
 
-            if (allow_activation)
+            if (allowActivation)
             {
                 PlayersInZones.Add(player, zone);
             }
@@ -67,29 +67,29 @@ public class ZonesModule : Module
     public Zone GetZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;
 
-    public bool CreateZone(string zone_name)
+    public bool CreateZone(string zoneName)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
             return false;
         }
 
-        storage.AddZone(zone_name);
+        storage.AddZone(zoneName);
         return true;
     }
 
-    public bool DeleteZone(string zone_name)
+    public bool DeleteZone(string zoneName)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
             return false;
         }
 
-        storage.RemoveZone(zone_name);
+        storage.RemoveZone(zoneName);
         return true;
     }
 
-    public bool AddNode(string zone_name, Vector3 point, out int id)
+    public bool AddNode(string zoneName, Vector3 point, out int id)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
@@ -97,36 +97,36 @@ public class ZonesModule : Module
             return false;
         }
 
-        storage.AddNode(zone_name, new Node(point));
+        storage.AddNode(zoneName, new Node(point));
 
-        var zone = storage.GetZone(zone_name);
+        var zone = storage.GetZone(zoneName);
         id = zone.Nodes.Count - 1;
 
         return true;
     }
 
-    public bool RemoveNode(string zone_name, int id)
+    public bool RemoveNode(string zoneName, int id)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
             return false;
         }
 
-        storage.RemoveNode(zone_name, id);
+        storage.RemoveNode(zoneName, id);
         return true;
     }
 
-    public bool Exists(string zone_name)
+    public bool Exists(string zoneName)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
             return false;
         }
 
-        return storage.Exists(zone_name);
+        return storage.Exists(zoneName);
     }
 
-    public bool GetZone(string zone_name, out Zone zone)
+    public bool GetZone(string zoneName, out Zone zone)
     {
         if (!GetStorage<ZonesStorage>(out var storage))
         {
@@ -134,7 +134,7 @@ public class ZonesModule : Module
             return false;
         }
 
-        zone = storage.GetZone(zone_name);
+        zone = storage.GetZone(zoneName);
         return true;
     }
 }

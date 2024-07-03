@@ -5,10 +5,10 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 
 namespace RetroMedieval.Models.Moderation;
 
-internal class ModerationAction(ModerationActionType action_type)
+internal class ModerationAction(ModerationActionType actionType)
 {
     [DatabaseIgnore] 
-    public ModerationActionType ModerationActionType { get; set; } = action_type;
+    public ModerationActionType ModerationActionType { get; set; } = actionType;
     
     [DatabaseColumn("PunishmentID", "CHAR(36)")]
     [PrimaryKey]
@@ -36,7 +36,7 @@ internal class ModerationAction(ModerationActionType action_type)
             return seconds == 0 ? null : seconds;
         }
         
-        var time_periods = new Dictionary<char, int>()
+        var timePeriods = new Dictionary<char, int>()
         {
             { 'd', 86400 },
             { 'h', 3600 },
@@ -47,7 +47,7 @@ internal class ModerationAction(ModerationActionType action_type)
 
         foreach (var arg in enumerable)
         {
-            foreach (var pair in time_periods.Where(pair => arg.Contains(pair.Key)))
+            foreach (var pair in timePeriods.Where(pair => arg.Contains(pair.Key)))
             {
                 if (int.TryParse(arg.Trim(pair.Key), out var result))
                 {

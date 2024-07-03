@@ -9,9 +9,9 @@ internal class ChestLocation
     {
     }
     
-    public ChestLocation(string zone_name, params Location[] locations)
+    public ChestLocation(string zoneName, params Location[] locations)
     {
-        ZoneName = zone_name;
+        ZoneName = zoneName;
         Locations = locations.ToList();
     }
 

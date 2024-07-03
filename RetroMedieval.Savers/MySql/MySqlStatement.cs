@@ -8,11 +8,11 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 
 namespace RetroMedieval.Savers.MySql;
 
-public class MySqlStatement(string table_name, string connection_string) : IStatement
+public class MySqlStatement(string tableName, string connectionString) : IStatement
 {
-    public string TableName { get; set; } = table_name;
+    public string TableName { get; set; } = tableName;
     public string CurrentQueryString { get; set; } = "";
-    public string ConnectionString { get; set; } = connection_string;
+    public string ConnectionString { get; set; } = connectionString;
 
     public List<DataParam> Parameters { get; set; } = [];
 
@@ -20,7 +20,7 @@ public class MySqlStatement(string table_name, string connection_string) : IStat
     {
         var columns = typeof(T).GetProperties()
             .Where(x => x.GetValue(obj) != null && !x.GetCustomAttributes<DatabaseIgnore>().Any());
-        var column_data = columns.Select(x =>
+        var columnData = columns.Select(x =>
         {
             if (x.GetCustomAttributes<DatabaseColumn>().Any())
             {
@@ -39,9 +39,9 @@ public class MySqlStatement(string table_name, string connection_string) : IStat
         }).ToList();
 
         CurrentQueryString =
-            $"INSERT INTO {TableName} ({string.Join(", ", column_data.Select(x => x.ColumnName))}) VALUES ({string.Join(", ", column_data.Select(x => "@" + x.PropertyName))})";
+            $"INSERT INTO {TableName} ({string.Join(", ", columnData.Select(x => x.ColumnName))}) VALUES ({string.Join(", ", columnData.Select(x => "@" + x.PropertyName))})";
         Parameters.AddRange(
-            column_data.Select(data => ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)));
+            columnData.Select(data => ConvertDataType(data.PropertyName, data.Value, data.ProprtyType)));
         
         return new MySqlExecutor(this, Parameters, []);
     }
@@ -58,11 +58,11 @@ public class MySqlStatement(string table_name, string connection_string) : IStat
         return new MySqlCondition(this);
     }
 
-    public ICondition Update(params (string, object)[] column_data)
+    public ICondition Update(params (string, object)[] columnData)
     {
         CurrentQueryString =
-            $"UPDATE {TableName} SET {string.Join(" AND ", column_data.Select(x => x.Item1 + " = @" + x.Item1))}";
-        Parameters.AddRange(column_data.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
+            $"UPDATE {TableName} SET {string.Join(" AND ", columnData.Select(x => x.Item1 + " = @" + x.Item1))}";
+        Parameters.AddRange(columnData.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
 
         return new MySqlCondition(this);
     }
@@ -74,19 +74,19 @@ public class MySqlStatement(string table_name, string connection_string) : IStat
         return new MySqlCondition(this);
     }
 
-    private DataParam ConvertDataType(string property_name, object obj, Type prop_type)
+    private DataParam ConvertDataType(string propertyName, object obj, Type propType)
     {
-        if (Parameters.Any(x => x.ParamName == "@" + property_name))
+        if (Parameters.Any(x => x.ParamName == "@" + propertyName))
         {
-            property_name += Parameters.Count(x => x.ParamName == "@" + property_name);
+            propertyName += Parameters.Count(x => x.ParamName == "@" + propertyName);
         }
 
-        if (prop_type == typeof(byte[]))
-            return new DataParam("@" + property_name, (byte[])obj, DbType.Binary) { ParamType = prop_type };
+        if (propType == typeof(byte[]))
+            return new DataParam("@" + propertyName, (byte[])obj, DbType.Binary) { ParamType = propType };
 
-        if (prop_type == typeof(Guid))
-            return new DataParam("@" + property_name, ((Guid)obj).ToString()) { ParamType = prop_type };
+        if (propType == typeof(Guid))
+            return new DataParam("@" + propertyName, ((Guid)obj).ToString()) { ParamType = propType };
 
-        return new DataParam("@" + property_name, obj) { ParamType = prop_type };
+        return new DataParam("@" + propertyName, obj) { ParamType = propType };
     }
 }

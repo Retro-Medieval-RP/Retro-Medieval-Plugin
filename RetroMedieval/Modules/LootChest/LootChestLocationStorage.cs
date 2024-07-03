@@ -8,10 +8,10 @@ namespace RetroMedieval.Modules.LootChest;
 
 internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
 {
-    public ChestLocation GetLocations(string zone_name) => 
-        StorageItem.First(x => x.ZoneName == zone_name);
+    public ChestLocation GetLocations(string zoneName) => 
+        StorageItem.First(x => x.ZoneName == zoneName);
 
-    public void AddLocation(string zone_name, Vector3 position, Quaternion rotation, List<LootChestFlags> flags_list)
+    public void AddLocation(string zoneName, Vector3 position, Quaternion rotation, List<LootChestFlags> flagsList)
     {
         var location = new Location
         {
@@ -24,25 +24,25 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
             RotW = rotation.w
         };
         
-        if (StorageItem.Exists(x => x.ZoneName == zone_name))
+        if (StorageItem.Exists(x => x.ZoneName == zoneName))
         {
-            var loc = GetLocations(zone_name);
+            var loc = GetLocations(zoneName);
             loc.Locations.Add(location);
             
             Save();
             return;
         }
         
-        StorageItem.Add(new ChestLocation(zone_name, location)
+        StorageItem.Add(new ChestLocation(zoneName, location)
         {
-            Flags = flags_list
+            Flags = flagsList
         });
         Save();
     }
 
-    public bool RemoveLocation(string zone_name, int id)
+    public bool RemoveLocation(string zoneName, int id)
     {
-        var locations = GetLocations(zone_name);
+        var locations = GetLocations(zoneName);
 
         if (locations.Locations.Count == 0)
         {
@@ -50,15 +50,15 @@ internal class LootChestLocationStorage : JsonSaver<List<ChestLocation>>
         }
         
         locations.Locations.RemoveAt(id);
-        RemoveLootZone(zone_name);
+        RemoveLootZone(zoneName);
         
         Save();
         return true;
     }
 
-    private void RemoveLootZone(string zone_name)
+    private void RemoveLootZone(string zoneName)
     {
-        var locations = GetLocations(zone_name);
+        var locations = GetLocations(zoneName);
         
         if (locations.Locations.Count == 0)
         {

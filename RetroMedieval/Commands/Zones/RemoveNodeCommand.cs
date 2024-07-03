@@ -26,20 +26,20 @@ internal class RemoveNodeCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;
         }
         
-        if (!zones_module.Exists(command[0]))
+        if (!zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does already exist!", Color.red);
             return;
         }
         
-        if (zones_module.RemoveNode(command[0], id))
+        if (zonesModule.RemoveNode(command[0], id))
         {
             UnturnedChat.Say(caller, $"Removed node ({id}) for zone: " + command[0]);
             return;

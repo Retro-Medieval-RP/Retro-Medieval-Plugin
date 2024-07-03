@@ -25,99 +25,100 @@ internal class KitsModule : Module
     {
     }
 
-    public void CreateKit(Kit kit, IEnumerable<KitItem> kit_items)
+    public void CreateKit(Kit kit, IEnumerable<KitItem> kitItems)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
             Logger.LogError("Could not gather storage [KitsStorage]");
             return;
         }
 
-        if (!GetStorage<MySqlSaver<KitItem>>(out var kit_items_storage))
+        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
         {
             Logger.LogError("Could not gather storage [KitItemsStorage]");
             return;
         }
 
-        kits_storage.StartQuery().Insert(kit).ExecuteSql();
+        kitsStorage.StartQuery().Insert(kit).ExecuteSql();
 
-        foreach (var item in kit_items)
+        foreach (var item in kitItems)
         {
             item.KitID = kit.KitID;
-            kit_items_storage.StartQuery().Insert(item).ExecuteSql();
+            kitItemsStorage.StartQuery().Insert(item).ExecuteSql();
         }
     }
 
-    public bool DoesKitExist(string kit_name)
+    public bool DoesKitExist(string kitName)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
             Logger.LogError("Could not gather storage [KitsStorage]");
             return false;
         }
 
-        var count = kits_storage.StartQuery().Count().Where(("KitName", kit_name)).Finalise().QuerySql<int>();
+        var count = kitsStorage.StartQuery().Count().Where(("KitName", kitName)).Finalise().QuerySingle<int>();
         return count > 0;
     }
 
-    public void RenameKit(string original_name, string new_name)
+    public void RenameKit(string originalName, string newName)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
             Logger.LogError("Could not gather storage [KitsStorage]");
             return;
         }
 
-        var kit_id = kits_storage.StartQuery().Select("KitID").Where(("KitName", original_name)).Finalise().QuerySql<Guid>();
-        kits_storage.StartQuery().Update(("KitName", new_name)).Where(("KitID", kit_id)).Finalise().ExecuteSql();
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", originalName)).Finalise().QuerySingle<Guid>();
+        kitsStorage.StartQuery().Update(("KitName", newName)).Where(("KitID", kitID)).Finalise().ExecuteSql();
     }
 
-    public void DeleteKit(string kit_name)
+    public void DeleteKit(string kitName)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
             Logger.LogError("Could not gather storage [KitsStorage]");
             return;
         }
 
-        var kit_id = kits_storage.StartQuery().Select("KitID").Where(("KitName", kit_name)).Finalise().QuerySql<Guid>();
-        if (kits_storage.StartQuery().Delete().Where(("KitID", kit_id)).Finalise().ExecuteSql())
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        if (kitsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
         {
-            Logger.LogError("Could not delete kit with id: " + kit_id);
+            Logger.LogError("Could not delete kit with id: " + kitID);
         }
     }
 
     private IEnumerable<Kit> GetKits()
     {
-        if (GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
-            return kits_storage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().QuerySql<IEnumerable<Kit>>();
+            return kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().Query<Kit>();
         }
 
         Logger.LogError("Could not gather storage [KitsStorage]");
         return new List<Kit>();
     }
 
-    public void SpawnKit(UnturnedPlayer target_player, string kit_name)
+    public void SpawnKit(UnturnedPlayer targetPlayer, string kitName)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kits_storage))
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
             Logger.LogError("Could not gather storage [KitsStorage]");
             return;
         }
 
-        if (!GetStorage<MySqlSaver<KitItem>>(out var kit_items_storage))
+        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
         {
             Logger.LogError("Could not gather storage [KitItemsStorage]");
             return;
         }
 
-        var kit = kits_storage.StartQuery()
+        var kit = kitsStorage.StartQuery()
             .Select("KitID", "KitName", "KitCooldown")
-            .Where(("KitName", kit_name))
+            .Where(("KitName", kitName))
             .Finalise()
-            .QuerySql<Kit>();
-        var kit_items = kit_items_storage.StartQuery()
+            .QuerySingle<Kit>();
+        
+        var kitItems = kitItemsStorage.StartQuery()
             .Select(
                 "KitItemID",
                 "IsEquipped",
@@ -129,15 +130,15 @@ internal class KitsModule : Module
             )
             .Where(("KitID", kit.KitID))
             .Finalise()
-            .QuerySql<IEnumerable<KitItem>>();
+            .Query<KitItem>();
 
-        foreach (var item in kit_items.OrderByDescending(x => x.IsEquipped))
+        foreach (var item in kitItems.OrderByDescending(x => x.IsEquipped))
         {
-            if (!target_player.Inventory.tryAddItem(new Item(item.ItemID, item.Amount, item.Quality, item.State), true,
+            if (!targetPlayer.Inventory.tryAddItem(new Item(item.ItemID, item.Amount, item.Quality, item.State), true,
                     true))
             {
                 ItemManager.dropItem(new Item(item.ItemID, item.Amount, item.Quality, item.State),
-                    target_player.Position, false, true, true);
+                    targetPlayer.Position, false, true, true);
             }
         }
     }

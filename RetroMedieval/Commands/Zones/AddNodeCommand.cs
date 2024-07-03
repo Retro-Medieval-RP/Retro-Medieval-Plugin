@@ -20,22 +20,22 @@ internal class AddNodeCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;
         }
 
-        if (!zones_module.Exists(command[0]))
+        if (!zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
         
-        if (zones_module.AddNode(command[0], ((UnturnedPlayer)caller).Position, out var node_id))
+        if (zonesModule.AddNode(command[0], ((UnturnedPlayer)caller).Position, out var nodeID))
         {
-            UnturnedChat.Say(caller, $"Added node to {command[0]} with id: " + node_id);
+            UnturnedChat.Say(caller, $"Added node to {command[0]} with id: " + nodeID);
             return;
         }
         

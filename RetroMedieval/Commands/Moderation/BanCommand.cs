@@ -24,7 +24,7 @@ internal class BanCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
@@ -35,12 +35,12 @@ internal class BanCommand : IRocketCommand
             PunishmentID = Guid.NewGuid()
         };
 
-        var target_player = UnturnedPlayer.FromName(command[0]);
-        if (target_player == null)
+        var targetPlayer = UnturnedPlayer.FromName(command[0]);
+        if (targetPlayer == null)
         {
-            if (ulong.TryParse(command[0], out var ban_target_id))
+            if (ulong.TryParse(command[0], out var banTargetID))
             {
-                ban.TargetID = ban_target_id;
+                ban.TargetID = banTargetID;
             }
             else
             {
@@ -50,7 +50,7 @@ internal class BanCommand : IRocketCommand
         }
         else
         {
-            ban.TargetID = target_player.CSteamID.m_SteamID;
+            ban.TargetID = targetPlayer.CSteamID.m_SteamID;
         }
 
         ban.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
@@ -59,7 +59,7 @@ internal class BanCommand : IRocketCommand
         ban.BanLength = length ?? -1;
         ban.PunishmentGiven = DateTime.Now;
         
-        moderation_module.Ban(ban, Provider.clients.Any(x => x.playerID.steamID.m_SteamID == ban.TargetID));
+        moderationModule.Ban(ban, Provider.clients.Any(x => x.playerID.steamID.m_SteamID == ban.TargetID));
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

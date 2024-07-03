@@ -12,9 +12,9 @@ public class InsertTests
 {
     [Theory]
     [ClassData(typeof(InsertQueryTestData))]
-    public void InsertQueryTest(MySqlExecutor test_executor, string query_string) =>
-        Assert.True(test_executor.SqlString == query_string,
-            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.SqlString}\nQuery String: {query_string}");
+    public void InsertQueryTest(MySqlExecutor testExecutor, string queryString) =>
+        Assert.True(testExecutor.SqlString == queryString,
+            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {testExecutor.SqlString}\nQuery String: {queryString}");
 
     private class InsertQueryTestData : IEnumerable<object[]>
     {
@@ -55,16 +55,16 @@ public class InsertTests
 
     private class ConvertingTestData : IEnumerable<object[]>
     {
-        private static Guid GuidVal = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b");
+        private static Guid _guidVal = Guid.Parse("f633a6b2-85e0-4fcf-806a-b73f397aca4b");
 
-        private static readonly IEnumerable<object[]> _TestObjects = new[]
+        private static readonly IEnumerable<object[]> TestObjects = new[]
         {
             new object[]
             {
                 typeof(Guid),
                 "Test",
-                GuidVal,
-                new DataParam("@Test", GuidVal.ToString()) { ParamType = typeof(Guid) }
+                _guidVal,
+                new DataParam("@Test", _guidVal.ToString()) { ParamType = typeof(Guid) }
             },
             new object[]
             {
@@ -75,7 +75,7 @@ public class InsertTests
             }
         };
 
-        public IEnumerator<object[]> GetEnumerator() => _TestObjects.GetEnumerator();
+        public IEnumerator<object[]> GetEnumerator() => TestObjects.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

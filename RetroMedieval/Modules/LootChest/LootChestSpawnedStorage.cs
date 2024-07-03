@@ -37,16 +37,16 @@ internal class LootChestSpawnedStorage : JsonSaver<List<SpawnedChest>>
         }
     }
 
-    public IEnumerable<SpawnedChest> GetExpiredChests(int despawn_time) =>
-        StorageItem.Where(chest => (DateTime.Now - chest.SpawnedDateTime).Milliseconds >= despawn_time);
+    public IEnumerable<SpawnedChest> GetExpiredChests(int despawnTime) =>
+        StorageItem.Where(chest => (DateTime.Now - chest.SpawnedDateTime).Milliseconds >= despawnTime);
 
-    public void RemoveChest(float position_x, float position_y, float position_z)
+    public void RemoveChest(float positionX, float positionY, float positionZ)
     {
-        var pos_vector = new Vector3(position_x, position_y, position_z);
+        var posVector = new Vector3(positionX, positionY, positionZ);
 
-        if (StorageItem.Any(x => new Vector3(x.LocX, x.LocY, x.LocZ).Equals(pos_vector)))
+        if (StorageItem.Any(x => new Vector3(x.LocX, x.LocY, x.LocZ).Equals(posVector)))
         {
-            StorageItem.RemoveAll(x => new Vector3(x.LocX, x.LocY, x.LocZ).Equals(pos_vector));
+            StorageItem.RemoveAll(x => new Vector3(x.LocX, x.LocY, x.LocZ).Equals(posVector));
         }
     }
 }

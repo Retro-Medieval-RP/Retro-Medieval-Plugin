@@ -6,10 +6,10 @@ internal class LootItem
     {
     }
     
-    public LootItem(ushort item_id, double spawn_chance)
+    public LootItem(ushort itemID, double spawnChance)
     {
-        SpawnChance = spawn_chance;
-        LootItemID = item_id;
+        SpawnChance = spawnChance;
+        LootItemID = itemID;
     }
 
     public double SpawnChance { get; set; }

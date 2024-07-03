@@ -24,7 +24,7 @@ internal class KickCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
@@ -35,18 +35,18 @@ internal class KickCommand : IRocketCommand
             PunishmentID = Guid.NewGuid()
         };
         
-        var target_player = UnturnedPlayer.FromName(command[0]);
-        if (target_player == null)
+        var targetPlayer = UnturnedPlayer.FromName(command[0]);
+        if (targetPlayer == null)
         {
-            if (ulong.TryParse(command[0], out var kick_target_id))
+            if (ulong.TryParse(command[0], out var kickTargetID))
             {
-                if (UnturnedPlayer.FromCSteamID(new CSteamID(kick_target_id)) == null)
+                if (UnturnedPlayer.FromCSteamID(new CSteamID(kickTargetID)) == null)
                 {
                     UnturnedChat.Say(caller, "Target could not be found.", Color.red);
                     return;
                 }
                 
-                kick.TargetID = kick_target_id;
+                kick.TargetID = kickTargetID;
             }
             else
             {
@@ -56,14 +56,14 @@ internal class KickCommand : IRocketCommand
         }
         else
         {
-            kick.TargetID = target_player.CSteamID.m_SteamID;
+            kick.TargetID = targetPlayer.CSteamID.m_SteamID;
         }
         
         kick.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
         kick.Reason = command.ElementAtOrDefault(1);
         kick.PunishmentGiven = DateTime.Now;
         
-        moderation_module.Kick(kick);
+        moderationModule.Kick(kick);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

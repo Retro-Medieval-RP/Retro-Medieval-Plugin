@@ -10,19 +10,19 @@ public class JsonSaver<T> : IFileStorage<T> where T : new()
     public StorageType StorageType => StorageType.File;
     public T? StorageItem { get; protected set; }
 
-    public virtual bool Load(string file_path)
+    public virtual bool Load(string filePath)
     {
-        SavePath = file_path;
+        SavePath = filePath;
 
         if (File.Exists(SavePath))
         {
-            string data_text;
+            string dataText;
             using (var stream = File.OpenText(SavePath))
             {
-                data_text = stream.ReadToEnd();
+                dataText = stream.ReadToEnd();
             }
 
-            StorageItem = JsonConvert.DeserializeObject<T>(data_text);
+            StorageItem = JsonConvert.DeserializeObject<T>(dataText);
             return true;
         }
 
@@ -34,9 +34,9 @@ public class JsonSaver<T> : IFileStorage<T> where T : new()
 
     public virtual void Save()
     {
-        var obj_data = JsonConvert.SerializeObject(StorageItem, Formatting.Indented);
+        var objData = JsonConvert.SerializeObject(StorageItem, Formatting.Indented);
 
         using var stream = new StreamWriter(SavePath, false);
-        stream.Write(obj_data);
+        stream.Write(objData);
     }
 }

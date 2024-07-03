@@ -19,20 +19,20 @@ internal class DeleteZoneCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;
         }
 
-        if (!zones_module.Exists(command[0]))
+        if (!zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
         
-        if (zones_module.DeleteZone(command[0]))
+        if (zonesModule.DeleteZone(command[0]))
         {
             UnturnedChat.Say(caller, "Deleted zone: " + command[0]);
             return;

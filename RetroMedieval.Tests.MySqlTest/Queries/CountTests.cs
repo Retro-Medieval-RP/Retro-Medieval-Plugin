@@ -9,9 +9,9 @@ public class CountTests
 {
     [Theory]
     [ClassData(typeof(CountQueryTestData))]
-    public void CountQueryTest(MySqlExecutor test_executor, string query_string) =>
-        Assert.True(test_executor.SqlString == query_string,
-            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {test_executor.SqlString}\nQuery String: {query_string}");
+    public void CountQueryTest(MySqlExecutor testExecutor, string queryString) =>
+        Assert.True(testExecutor.SqlString == queryString,
+            $"Test Executor Query String does not equal correct query string.\n\nTest Executor: {testExecutor.SqlString}\nQuery String: {queryString}");
 
     private class CountQueryTestData : IEnumerable<object[]>
     {

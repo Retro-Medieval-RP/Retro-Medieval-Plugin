@@ -27,26 +27,26 @@ internal class RemoveChestCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;   
         }
         
-        if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
+        if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var lootChest))
         {
             Logger.LogError("Could not find module [LootChestModule]!");
             return;
         }
         
-        if (!zones_module.Exists(command[0]))
+        if (!zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
             return;
         }
         
-        if (loot_chest.RemoveChest(command[0], id))
+        if (lootChest.RemoveChest(command[0], id))
         {
             UnturnedChat.Say(caller, $"Removed chest ({id}) form zone: " + command[0]);
             return;

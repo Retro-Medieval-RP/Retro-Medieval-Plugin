@@ -24,7 +24,7 @@ internal class MuteCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
@@ -35,18 +35,18 @@ internal class MuteCommand : IRocketCommand
             PunishmentID = Guid.NewGuid()
         };
 
-        var target_player = UnturnedPlayer.FromName(command[0]);
-        if (target_player == null)
+        var targetPlayer = UnturnedPlayer.FromName(command[0]);
+        if (targetPlayer == null)
         {
-            if (ulong.TryParse(command[0], out var mute_target_id))
+            if (ulong.TryParse(command[0], out var muteTargetID))
             {
-                if (UnturnedPlayer.FromCSteamID(new CSteamID(mute_target_id)) == null)
+                if (UnturnedPlayer.FromCSteamID(new CSteamID(muteTargetID)) == null)
                 {
                     UnturnedChat.Say(caller, "Target could not be found.", Color.red);
                     return;
                 }
                 
-                mute.TargetID = mute_target_id;
+                mute.TargetID = muteTargetID;
             }
             else
             {
@@ -56,7 +56,7 @@ internal class MuteCommand : IRocketCommand
         }
         else
         {
-            mute.TargetID = target_player.CSteamID.m_SteamID;
+            mute.TargetID = targetPlayer.CSteamID.m_SteamID;
         }
 
         mute.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
@@ -65,7 +65,7 @@ internal class MuteCommand : IRocketCommand
         mute.MuteLength = length ?? -1;
         mute.PunishmentGiven = DateTime.Now;
         
-        moderation_module.Mute(mute);
+        moderationModule.Mute(mute);
 
     }
 

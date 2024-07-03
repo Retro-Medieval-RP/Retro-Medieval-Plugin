@@ -1,4 +1,3 @@
-using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage;
 using RetroMedieval.Modules.Storage.Sql;
@@ -16,17 +15,20 @@ public class MySqlSaver<T> : ISqlStorage<T>
     
     private string TableName { get; set; } = "";
 
-    public bool Load(string file_path)
+    public bool Load(string filePath)
     {
-        SavePath = file_path;
+        SavePath = filePath;
         using var connection = Connection;
 
         try
         {
-            var ddl = TableGenerator.GenerateDDL(typeof(T), out var table_name);
-            TableName = table_name;
-            
-            connection.Execute(ddl);
+            var ddl = TableGenerator.GenerateDdl(typeof(T), out var tableName);
+            TableName = tableName;
+
+            var command = new MySqlCommand(ddl, connection);
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
             return true;
         }
         catch (MySqlException ex)

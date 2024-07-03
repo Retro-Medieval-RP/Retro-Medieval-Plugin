@@ -92,6 +92,6 @@ public abstract class Module
         return false;
     }
 
-    internal bool NameIs(string module_name) => 
-        Information.ModuleName == module_name;
+    internal bool NameIs(string moduleName) => 
+        Information.ModuleName == moduleName;
 }

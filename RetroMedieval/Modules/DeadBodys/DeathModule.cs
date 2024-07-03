@@ -118,12 +118,12 @@ public class DeathModule : Module
         }
     }
 
-    private void SaveInventory(Transform model, List<Item> player_items)
+    private void SaveInventory(Transform model, List<Item> playerItems)
     {
         var inv = new Body
         {
             BodySpawnTime = DateTime.Now,
-            Items = player_items,
+            Items = playerItems,
             LocX = model!.position.x,
             LocY = model!.position.y,
             LocZ = model!.position.z
@@ -145,17 +145,17 @@ public class DeathModule : Module
             return null;
         }
 
-        var barri_angle = new Quaternion(0f, 0f, 0f, 0f);
+        var barriAngle = new Quaternion(0f, 0f, 0f, 0f);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, config.ManID));
-        var transform = BarricadeManager.dropNonPlantedBarricade(barricade, player.Position, barri_angle, 0, 0);
+        var transform = BarricadeManager.dropNonPlantedBarricade(barricade, player.Position, barriAngle, 0, 0);
 
-        var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
-        return barricade_drop;
+        var barricadeDrop = BarricadeManager.FindBarricadeByRootTransform(transform);
+        return barricadeDrop;
     }
 
     private void SendDeath(UnturnedPlayer player)
     {
-        var player_items = new List<Item>();
+        var playerItems = new List<Item>();
 
         for (byte i = 0; i < PlayerInventory.PAGES; i++)
         {
@@ -167,21 +167,21 @@ public class DeathModule : Module
             for (byte index = 0; index < count; index++)
             {
                 var item = player.Inventory.getItem(i, 0);
-                player_items.Add(new Item(item.item.id, item.item.amount, item.item.quality, item.item.state));
+                playerItems.Add(new Item(item.item.id, item.item.amount, item.item.quality, item.item.state));
                 player.Inventory.removeItem(i, 0);
             }
         }
 
-        var barricade_drop = PlaceBarricade(player);
+        var barricadeDrop = PlaceBarricade(player);
 
-        if (barricade_drop.interactable as InteractableMannequin == null)
+        if (barricadeDrop.interactable as InteractableMannequin == null)
         {
-            BarricadeManager.tryGetRegion(barricade_drop.model, out var x, out var y, out var plant, out _);
-            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            BarricadeManager.tryGetRegion(barricadeDrop.model, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(barricadeDrop, x, y, plant);
             return;
         }
 
-        var man = barricade_drop.interactable as InteractableMannequin;
+        var man = barricadeDrop.interactable as InteractableMannequin;
 
         if (man == null)
         {
@@ -234,7 +234,7 @@ public class DeathModule : Module
         block.writeByte(man.pose_comp);
         BarricadeManager.updateReplicatedState(man.transform, block.getBytes(out var size), size);
 
-        SaveInventory(barricade_drop.model, player_items);
+        SaveInventory(barricadeDrop.model, playerItems);
         Main.Instance.StartCoroutine(ClearInventoryCoroutine(player.SteamPlayer()));
 
         if (player.Player.life.IsAlive)

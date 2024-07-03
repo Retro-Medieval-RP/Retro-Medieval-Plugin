@@ -16,30 +16,30 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
         return (TConfiguration)config.Config;
     }
     
-    internal override bool LoadedConfiguration(string data_path, string file_name)
+    internal override bool LoadedConfiguration(string dataPath, string fileName)
     {
         if (ConfigurationManager.Instance.Has(Name))
         {
             return false;
         }
 
-        if (!Directory.Exists(data_path))
+        if (!Directory.Exists(dataPath))
         {
-            Directory.CreateDirectory(data_path);
+            Directory.CreateDirectory(dataPath);
         }
 
-        var file_path = Path.Combine(data_path, file_name);
+        var filePath = Path.Combine(dataPath, fileName);
 
-        if (File.Exists(file_path))
+        if (File.Exists(filePath))
         {
-            string data_text;
-            using (var stream = File.OpenText(file_path))
+            string dataText;
+            using (var stream = File.OpenText(filePath))
             {
-                data_text = stream.ReadToEnd();
+                dataText = stream.ReadToEnd();
             }
 
             ConfigurationManager.Instance.Add(
-                new Configuration.Configuration(Name, JsonConvert.DeserializeObject<TConfiguration>(data_text)!));
+                new Configuration.Configuration(Name, JsonConvert.DeserializeObject<TConfiguration>(dataText)!));
             return true;
         }
         
@@ -47,10 +47,10 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
             var config = new TConfiguration();
             config.LoadDefaults();
 
-            var obj_data = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var objData = JsonConvert.SerializeObject(config, Formatting.Indented);
 
-            using var stream = new StreamWriter(file_path, false);
-            stream.Write(obj_data);
+            using var stream = new StreamWriter(filePath, false);
+            stream.Write(objData);
 
             ConfigurationManager.Instance.Add(new Configuration.Configuration(Name, config));
             
@@ -66,6 +66,6 @@ public abstract class ModuleConfiguration(string name) : Attribute
 {
     internal string Name { get; } = name;
 
-    internal abstract bool LoadedConfiguration(string data_path, string file_name);
+    internal abstract bool LoadedConfiguration(string dataPath, string fileName);
     internal abstract bool IsConfigOfType(Type t);
 }

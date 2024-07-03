@@ -14,15 +14,15 @@ internal class WarpsStorage : JsonSaver<List<Warp>>
         Save();
     }
 
-    public void RemoveWarp(string warp_name)
+    public void RemoveWarp(string warpName)
     {
-        StorageItem.RemoveAll(x => string.Equals(x.WarpName, warp_name, StringComparison.CurrentCultureIgnoreCase));
+        StorageItem.RemoveAll(x => string.Equals(x.WarpName, warpName, StringComparison.CurrentCultureIgnoreCase));
         Save();
     }
 
-    public bool ContainsWarp(string warp_name) => 
-        StorageItem.Any(x => string.Equals(x.WarpName, warp_name, StringComparison.CurrentCultureIgnoreCase));
+    public bool ContainsWarp(string warpName) => 
+        StorageItem.Any(x => string.Equals(x.WarpName, warpName, StringComparison.CurrentCultureIgnoreCase));
 
-    public Warp GetWarp(string warp_name) => 
-        StorageItem.Find(x => string.Equals(x.WarpName, warp_name, StringComparison.CurrentCultureIgnoreCase));
+    public Warp GetWarp(string warpName) => 
+        StorageItem.Find(x => string.Equals(x.WarpName, warpName, StringComparison.CurrentCultureIgnoreCase));
 }

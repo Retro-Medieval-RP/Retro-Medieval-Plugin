@@ -11,15 +11,15 @@ public class TableGenerator
 {
     private static Dictionary<Type, string> TypeToTable { get; set; } = [];
 
-    public static string GenerateDDL(Type type, out string table_name)
+    public static string GenerateDdl(Type type, out string tableName)
     {
         if (!GetTableAttribute(type, out var table))
         {
-            table_name = "";
+            tableName = "";
             return "";
         }
 
-        table_name = table.TableName;
+        tableName = table.TableName;
 
         if (TypeToTable.ContainsValue(table.TableName))
         {
@@ -28,25 +28,25 @@ public class TableGenerator
 
         var properties = type.GetProperties();
         var columns = properties.Select(property => GetColumnData(property, table.TableName)).ToList();
-        var columns_and_contrains = new List<string>();
-        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn).Select(r => r.DDLColumn));
-        columns_and_contrains.AddRange(columns.Where(r => !r.IgnoreColumn)
+        var columnsAndContrains = new List<string>();
+        columnsAndContrains.AddRange(columns.Where(r => !r.IgnoreColumn).Select(r => r.DdlColumn));
+        columnsAndContrains.AddRange(columns.Where(r => !r.IgnoreColumn)
             .Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
             .Select(r => r.Constraint));
 
         var ddl =
-            $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columns_and_contrains)});{string.Join("", columns.Select(x => x.ReferenceTableDDL))}";
+            $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columnsAndContrains)});{string.Join("", columns.Select(x => x.ReferenceTableDdl))}";
 
         TypeToTable.Add(type, table.TableName);
         return ddl;
     }
 
-    public static TableColumn GetColumnDataTest(PropertyInfo property, string table_name)
+    public static TableColumn GetColumnDataTest(PropertyInfo property, string tableName)
     {
-        return GetColumnData(property, table_name);
+        return GetColumnData(property, tableName);
     }
 
-    private static TableColumn GetColumnData(PropertyInfo property, string table_name)
+    private static TableColumn GetColumnData(PropertyInfo property, string tableName)
     {
         var column = new TableColumn();
 
@@ -56,28 +56,28 @@ public class TableGenerator
             return column;
         }
 
-        var column_data = GetColumnAttribute(property);
-        column.Name = column_data.ColumnName;
-        column.DataType = column_data.ColumnDataType;
-        column.Default = column_data.ColumnDefault;
+        var columnData = GetColumnAttribute(property);
+        column.Name = columnData.ColumnName;
+        column.DataType = columnData.ColumnDataType;
+        column.Default = columnData.ColumnDefault;
 
         if (IsColumnPrimaryKey(property))
         {
-            column.Constraint = $"CONSTRAINT PK_{table_name} PRIMARY KEY ({column.Name})";
+            column.Constraint = $"CONSTRAINT PK_{tableName} PRIMARY KEY ({column.Name})";
         }
 
         if (IsColumnForeignKey(property))
         {
-            var foreign_key = GetColumnForeignKey(property);
+            var foreignKey = GetColumnForeignKey(property);
 
-            if (!TypeToTable.ContainsKey(foreign_key.ColumnReferenceType))
+            if (!TypeToTable.ContainsKey(foreignKey.ColumnReferenceType))
             {
-                var new_table_ddl = GenerateDDL(foreign_key.ColumnReferenceType, out _);
-                column.ReferenceTableDDL = new_table_ddl;
+                var newTableDdl = GenerateDdl(foreignKey.ColumnReferenceType, out _);
+                column.ReferenceTableDdl = newTableDdl;
             }
 
             column.Constraint =
-                $"CONSTRAINT FK_{table_name}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {TypeToTable[foreign_key.ColumnReferenceType]}({foreign_key.ColumnName})";
+                $"CONSTRAINT FK_{tableName}_{column.Name} FOREIGN KEY ({column.Name}) REFERENCES {TypeToTable[foreignKey.ColumnReferenceType]}({foreignKey.ColumnName})";
         }
 
         return column;

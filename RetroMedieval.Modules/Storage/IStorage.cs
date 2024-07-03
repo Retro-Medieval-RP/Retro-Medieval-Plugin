@@ -14,5 +14,5 @@ public interface IStorage
 {
     public string SavePath { get; }
     public StorageType StorageType { get; }
-    bool Load(string file_path);
+    bool Load(string filePath);
 }

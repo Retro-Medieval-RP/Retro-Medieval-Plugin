@@ -9,13 +9,13 @@ internal class Chest
     {
     }
 
-    public Chest(double spawn_chance, ChestRarity rarity, ushort chest_id, int amount_to_pick, params LootItem[] spawn_table)
+    public Chest(double spawnChance, ChestRarity rarity, ushort chestID, int amountToPick, params LootItem[] spawnTable)
     {
-        ChestSpawnChance = spawn_chance;
+        ChestSpawnChance = spawnChance;
         Rarity = rarity;
-        ChestBarricade = chest_id;
-        AmountToPick = amount_to_pick;
-        SpawnTable = spawn_table.ToList();
+        ChestBarricade = chestID;
+        AmountToPick = amountToPick;
+        SpawnTable = spawnTable.ToList();
     }
 
     public double ChestSpawnChance { get; set; }

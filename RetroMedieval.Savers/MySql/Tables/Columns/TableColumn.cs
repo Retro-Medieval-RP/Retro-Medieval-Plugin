@@ -9,10 +9,10 @@ public class TableColumn
 
     public bool IgnoreColumn { get; set; } = false;
 
-    public string DDLColumn => $"{Name} {DataType}{(!string.IsNullOrEmpty(Default) ? $" DEFAULT {Default}" : "")}";
-    public string ReferenceTableDDL { get; set; } = "";
+    public string DdlColumn => $"{Name} {DataType}{(!string.IsNullOrEmpty(Default) ? $" DEFAULT {Default}" : "")}";
+    public string ReferenceTableDdl { get; set; } = "";
 
     public bool Equals(TableColumn obj) =>
         Name == obj.Name && DataType == obj.DataType && Default == obj.Default && Constraint == obj.Constraint &&
-        ReferenceTableDDL == obj.ReferenceTableDDL;
+        ReferenceTableDdl == obj.ReferenceTableDdl;
 }

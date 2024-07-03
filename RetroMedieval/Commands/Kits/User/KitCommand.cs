@@ -14,7 +14,7 @@ internal class KitCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kits_module))
+        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
             Logger.LogError("Could not find module [KitsModule]!");
             return;
@@ -32,39 +32,39 @@ internal class KitCommand : IRocketCommand
             return;
         }
 
-        var target_player = caller as UnturnedPlayer;
-        var kit_name = command[0];
+        var targetPlayer = caller as UnturnedPlayer;
+        var kitName = command[0];
         if (command.Length >= 2)
         {
-            kit_name = command[1];
-            target_player = ulong.TryParse(command[0], out var num)
+            kitName = command[1];
+            targetPlayer = ulong.TryParse(command[0], out var num)
                 ? UnturnedPlayer.FromCSteamID(new CSteamID(num))
                 : UnturnedPlayer.FromName(command[0]);
 
-            if (target_player == null)
+            if (targetPlayer == null)
             {
                 UnturnedChat.Say(caller, "Could not find any users specified.", Color.red);
                 return;
             }
         }
 
-        if (!kits_module.DoesKitExist(kit_name))
+        if (!kitsModule.DoesKitExist(kitName))
         {
-            UnturnedChat.Say(caller, "Could not find kit with name: " + kit_name, Color.red);
+            UnturnedChat.Say(caller, "Could not find kit with name: " + kitName, Color.red);
             return;
         }
 
-        if (!caller.IsAdmin || caller is not ConsolePlayer || !target_player.HasPermission($"kit.{kit_name}"))
+        if (!caller.IsAdmin || caller is not ConsolePlayer || !targetPlayer.HasPermission($"kit.{kitName}"))
         {
             UnturnedChat.Say(caller,
-                $"{(target_player != null && target_player.Equals((UnturnedPlayer)caller) ? "You do " : target_player?.DisplayName + " does ")} not have permission for kit: {kit_name}", Color.red);
+                $"{(targetPlayer != null && targetPlayer.Equals((UnturnedPlayer)caller) ? "You do " : targetPlayer?.DisplayName + " does ")} not have permission for kit: {kitName}", Color.red);
             return;
         }
 
-        kits_module.SpawnKit(target_player, kit_name);
+        kitsModule.SpawnKit(targetPlayer, kitName);
         UnturnedChat.Say(caller,
-            "Spawned kit " + kit_name +
-            $"{(target_player != null && !target_player.Equals((UnturnedPlayer)caller) ? " for " + target_player.DisplayName : "")}");
+            "Spawned kit " + kitName +
+            $"{(targetPlayer != null && !targetPlayer.Equals((UnturnedPlayer)caller) ? " for " + targetPlayer.DisplayName : "")}");
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

@@ -73,8 +73,8 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         LoadModules(plugin);
     }
 
-    public bool Exists(string module_name) => 
-        Modules.Any(x => x.NameIs(module_name));
+    public bool Exists(string moduleName) => 
+        Modules.Any(x => x.NameIs(moduleName));
 
     public void SetUpdateTimer(Timer timer)
     {

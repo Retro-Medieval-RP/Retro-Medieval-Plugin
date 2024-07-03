@@ -12,7 +12,7 @@ internal class RenameKitCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kits_module))
+        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
             Logger.LogError("Could not find module [KitsModule]!");
             return;   
@@ -25,13 +25,13 @@ internal class RenameKitCommand : IRocketCommand
             return;
         }
 
-        if (!kits_module.DoesKitExist(command[0]))
+        if (!kitsModule.DoesKitExist(command[0]))
         {
             UnturnedChat.Say(caller, $"A kit with the name ({command[0]}) inputted does not exist!", Color.red);
             return;
         }
 
-        kits_module.RenameKit(command[0], command[1]);
+        kitsModule.RenameKit(command[0], command[1]);
         UnturnedChat.Say(caller, $"Renamed kit from {command[0]} to {command[1]}");
     }
 

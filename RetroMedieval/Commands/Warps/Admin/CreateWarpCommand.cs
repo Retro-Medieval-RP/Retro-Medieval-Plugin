@@ -13,7 +13,7 @@ internal class CreateWarpCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<WarpsModule>(out var warps_module))
+        if (!ModuleLoader.Instance.GetModule<WarpsModule>(out var warpsModule))
         {
             Logger.LogError("Could not find module [WarpsModule]!");
             return;   
@@ -37,7 +37,7 @@ internal class CreateWarpCommand : IRocketCommand
 
             var loc = new Vector3(x, y, z);
             
-            warps_module.AddWarp(command[0], loc, 0);
+            warpsModule.AddWarp(command[0], loc, 0);
             return;
         }
 
@@ -49,7 +49,7 @@ internal class CreateWarpCommand : IRocketCommand
         }
 
         var player = caller as UnturnedPlayer;
-        warps_module.AddWarp(command[0], player!.Position, player.Rotation, player);
+        warpsModule.AddWarp(command[0], player!.Position, player.Rotation, player);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

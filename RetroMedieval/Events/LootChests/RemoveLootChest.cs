@@ -11,16 +11,16 @@ public class RemoveLootChestEventArgs
 
     public bool Zone(out Zone zone)
     {
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             zone = default;
             return false;
         }
 
-        if (zones_module.Exists(ZoneName))
+        if (zonesModule.Exists(ZoneName))
         {
-            return zones_module.GetZone(ZoneName, out zone);
+            return zonesModule.GetZone(ZoneName, out zone);
         }
 
         Logger.LogError($"Zone {ZoneName} does not exist!");
@@ -35,9 +35,9 @@ public static class RemoveLootChestEventPublisher
 
     public static event RemoveLootChestEventHandler RemoveLootChestEvent;
 
-    internal static void RaiseEvent(string zone_name) =>
+    internal static void RaiseEvent(string zoneName) =>
         RemoveLootChestEvent?.Invoke(new RemoveLootChestEventArgs
         {
-            ZoneName = zone_name
+            ZoneName = zoneName
         });
 }

@@ -19,15 +19,15 @@ public class Switcher<T, T2>
     public void Default(Action<T2> branch) =>
         Case(x => true, branch);
 
-    public void Switch(T to_switch, T2 instance) =>
-        Switch(to_switch, instance, Cases);
+    public void Switch(T toSwitch, T2 instance) =>
+        Switch(toSwitch, instance, Cases);
 
-    public void Switch(T to_switch, T2 instance, params Decision[] cases) =>
-        Switch(to_switch, instance, cases.ToList());
+    public void Switch(T toSwitch, T2 instance, params Decision[] cases) =>
+        Switch(toSwitch, instance, cases.ToList());
 
-    public void Switch(T to_switch, T2 instance, IEnumerable<Decision> cases)
+    public void Switch(T toSwitch, T2 instance, IEnumerable<Decision> cases)
     {
-        foreach (var @case in cases.Where(@case => @case.Condition(to_switch)))
+        foreach (var @case in cases.Where(@case => @case.Condition(toSwitch)))
         {
             @case.Branch(instance);
             break;

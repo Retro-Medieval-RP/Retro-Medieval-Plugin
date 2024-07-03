@@ -19,13 +19,13 @@ internal class UnmuteCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
         }
 
-        moderation_module.Unmute(caller, command[0]);
+        moderationModule.Unmute(caller, command[0]);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

@@ -19,20 +19,20 @@ internal class CreateZoneCommand : IRocketCommand
             return;
         }
         
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;
         }
 
-        if (zones_module.Exists(command[0]))
+        if (zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does already exist!", Color.red);
             return;
         }
         
-        if (zones_module.CreateZone(command[0]))
+        if (zonesModule.CreateZone(command[0]))
         {
             UnturnedChat.Say(caller, "Created zone: " + command[0]);
             return;

@@ -16,7 +16,7 @@ internal class CreateKitCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kits_module))
+        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
             Logger.LogError("Could not find module [KitsModule]!");
             return;   
@@ -55,7 +55,7 @@ internal class CreateKitCommand : IRocketCommand
             return;
         }
         
-        var kit_items = new List<KitItem>();
+        var kitItems = new List<KitItem>();
         
         for (byte i = 0; i < PlayerInventory.PAGES; i++)
         {
@@ -67,7 +67,7 @@ internal class CreateKitCommand : IRocketCommand
             for (byte index = 0; index < count; index++)
             {
                 var item = player.Inventory.getItem(i, 0);
-                kit_items.Add(new KitItem
+                kitItems.Add(new KitItem
                 {
                     IsEquipped = i is 0 or 1,
                     Amount = item.item.amount,
@@ -80,7 +80,7 @@ internal class CreateKitCommand : IRocketCommand
         }
         
         if(player.Player.clothing.backpack != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -90,7 +90,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.shirt != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -100,7 +100,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.pants != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -110,7 +110,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.glasses != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -120,7 +120,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.vest != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -130,7 +130,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         if(player.Player.clothing.hat != 0)
-            kit_items.Add(new KitItem
+            kitItems.Add(new KitItem
             {
                 IsEquipped = true,
                 Amount = 1,
@@ -140,7 +140,7 @@ internal class CreateKitCommand : IRocketCommand
                 KitItemID = Guid.NewGuid()
             });
         
-        kits_module?.CreateKit(kit, kit_items);
+        kitsModule?.CreateKit(kit, kitItems);
         UnturnedChat.Say(caller, $"Created kit: {kit.KitName}");
     }
 

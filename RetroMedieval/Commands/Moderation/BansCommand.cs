@@ -13,17 +13,17 @@ internal class BansCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
         }
 
-        ulong targets_id;
-        var target_player = UnturnedPlayer.FromName(command[0]);
-        if (target_player == null)
+        ulong targetsID;
+        var targetPlayer = UnturnedPlayer.FromName(command[0]);
+        if (targetPlayer == null)
         {
-            if (!ulong.TryParse(command[0], out targets_id))
+            if (!ulong.TryParse(command[0], out targetsID))
             {
                 UnturnedChat.Say(caller, "Target could not be found.", Color.red);
                 return;
@@ -31,10 +31,10 @@ internal class BansCommand : IRocketCommand
         }
         else
         {
-            targets_id = target_player.CSteamID.m_SteamID;
+            targetsID = targetPlayer.CSteamID.m_SteamID;
         }
         
-        moderation_module.Bans(caller, targets_id);
+        moderationModule.Bans(caller, targetsID);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

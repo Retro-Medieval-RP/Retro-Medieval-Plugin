@@ -13,16 +13,16 @@ public class SpawnLootChestEventArgs
 
     public bool Zone(out Zone zone)
     {
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             zone = default;
             return false;
         }
 
-        if (zones_module.Exists(ZoneName))
+        if (zonesModule.Exists(ZoneName))
         {
-            return zones_module.GetZone(ZoneName, out zone);
+            return zonesModule.GetZone(ZoneName, out zone);
         }
 
         Logger.LogError($"Zone {ZoneName} does not exist!");
@@ -37,10 +37,10 @@ public static class SpawnLootChestEventPublisher
 
     public static event SpawnLootChestEventHandler SpawnLootChestEvent;
 
-    internal static void RaiseEvent(string zone_name, LootChestFlags flag) =>
+    internal static void RaiseEvent(string zoneName, LootChestFlags flag) =>
         SpawnLootChestEvent?.Invoke(new SpawnLootChestEventArgs
         {
-            ZoneName = zone_name,
+            ZoneName = zoneName,
             Flag = flag
         });
 }

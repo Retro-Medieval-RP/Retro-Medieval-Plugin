@@ -10,5 +10,6 @@ public interface IExecutor
     
     bool ExecuteSql();
 
-    T? QuerySql<T>();
+    IEnumerable<T> Query<T>() where T : new();
+    T QuerySingle<T>() where T : new();
 }

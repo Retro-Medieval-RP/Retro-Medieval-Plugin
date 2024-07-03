@@ -11,19 +11,19 @@ public class GetColumnDataTest
 {
     [Theory]
     [ClassData(typeof(TestData<TestModel>))]
-    public void Test1(TableColumn generated_column, TableColumn correct_column) =>
-        Assert.True(generated_column.Equals(correct_column),
+    public void Test1(TableColumn generatedColumn, TableColumn correctColumn) =>
+        Assert.True(generatedColumn.Equals(correctColumn),
             $@"Generated Column: 
-    Name: {generated_column.Name}
-    DataType: {generated_column.DataType}
-    Default: {generated_column.Default}
-    Constraint: {generated_column.Constraint}
+    Name: {generatedColumn.Name}
+    DataType: {generatedColumn.DataType}
+    Default: {generatedColumn.Default}
+    Constraint: {generatedColumn.Constraint}
 
 Correct Column:
-    Name: {correct_column.Name}
-    DataType: {correct_column.DataType}
-    Default: {correct_column.Default}
-    Constraint: {correct_column.Constraint}
+    Name: {correctColumn.Name}
+    DataType: {correctColumn.DataType}
+    Default: {correctColumn.Default}
+    Constraint: {correctColumn.Constraint}
 ");
 
     public class TestData<T> : IEnumerable<object[]>

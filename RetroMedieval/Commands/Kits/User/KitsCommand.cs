@@ -10,13 +10,13 @@ internal class KitsCommand : IRocketCommand
 {
     public void Execute(IRocketPlayer caller, string[] command)
     {
-        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kits_module))
+        if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
             Logger.LogError("Could not find module [KitsModule]!");
             return;   
         }
 
-        kits_module.SendKits(caller);
+        kitsModule.SendKits(caller);
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

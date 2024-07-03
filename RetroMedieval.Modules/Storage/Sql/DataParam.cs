@@ -21,11 +21,11 @@ public class DataParam(string name, object obj, DbType? type = null)
     {
         unchecked
         {
-            var hash_code = ParamName.GetHashCode();
-            hash_code = (hash_code * 397) ^ ParamObject.GetHashCode();
-            hash_code = (hash_code * 397) ^ ParamDbType.GetHashCode();
-            hash_code = (hash_code * 397) ^ ParamType.GetHashCode();
-            return hash_code;
+            var hashCode = ParamName.GetHashCode();
+            hashCode = (hashCode * 397) ^ ParamObject.GetHashCode();
+            hashCode = (hashCode * 397) ^ ParamDbType.GetHashCode();
+            hashCode = (hashCode * 397) ^ ParamType.GetHashCode();
+            return hashCode;
         }
     }
 }

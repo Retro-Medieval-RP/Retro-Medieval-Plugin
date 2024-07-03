@@ -57,7 +57,7 @@ internal class ArmorEquipModule : Module
             }
         }
         
-        var remove_unequipped = () =>
+        var removeUnequipped = () =>
         {
             for (byte i = 0; i < e.Player.Player.inventory.getItemCount(2); i++)
             {
@@ -68,19 +68,19 @@ internal class ArmorEquipModule : Module
         IgnoredPlayers.Add(e.Player.CSteamID);
         
         e.Player.Player.clothing.askWearBackpack(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearGlasses(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearHat(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearPants(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearMask(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearShirt(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         e.Player.Player.clothing.askWearVest(0, 0, Array.Empty<byte>(), true);
-        remove_unequipped();
+        removeUnequipped();
         
         for (byte i = 0; i < PlayerInventory.PAGES; i++)
         {

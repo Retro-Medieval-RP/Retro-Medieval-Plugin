@@ -9,9 +9,9 @@ public class SelectTests
 {
     [Theory]
     [ClassData(typeof(SelectQueryTestData))]
-    public void SelectQueryTests(MySqlExecutor test_executor, string query_string) =>
-        Assert.True(test_executor.SqlString == query_string,
-            $"Test Executor Filter String does not equal correct filter string.\n\nTest Executor: {test_executor.SqlString}\nFilter String: {query_string}");
+    public void SelectQueryTests(MySqlExecutor testExecutor, string queryString) =>
+        Assert.True(testExecutor.SqlString == queryString,
+            $"Test Executor Filter String does not equal correct filter string.\n\nTest Executor: {testExecutor.SqlString}\nFilter String: {queryString}");
 
     private class SelectQueryTestData : IEnumerable<object[]>
     {

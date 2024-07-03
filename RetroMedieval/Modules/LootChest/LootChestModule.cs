@@ -68,20 +68,20 @@ internal class LootChestModule : Module
 
         foreach (var exp in expired)
         {
-            var chest_pos = new Vector3(exp.LocX, exp.LocY, exp.LocZ);
+            var chestPos = new Vector3(exp.LocX, exp.LocY, exp.LocZ);
             var trans = new List<Transform>();
-            BarricadeManager.getBarricadesInRadius(chest_pos, 1, trans);
+            BarricadeManager.getBarricadesInRadius(chestPos, 1, trans);
 
             foreach (var tran in trans)
             {
-                if (tran.position != chest_pos)
+                if (tran.position != chestPos)
                 {
                     continue;
                 }
                 
-                var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(tran);
+                var barricadeDrop = BarricadeManager.FindBarricadeByRootTransform(tran);
                 BarricadeManager.tryGetRegion(tran, out var x, out var y, out var plant, out _);
-                BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+                BarricadeManager.destroyBarricade(barricadeDrop, x, y, plant);
             }
         }
     }
@@ -119,7 +119,7 @@ internal class LootChestModule : Module
             return;
         }
 
-        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawnedStorage))
         {
             Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
             return;
@@ -127,23 +127,23 @@ internal class LootChestModule : Module
         
         foreach (var chest in chests)
         {
-            var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(chest);
+            var barricadeDrop = BarricadeManager.FindBarricadeByRootTransform(chest);
             
-            var storage = barricade_drop.interactable as InteractableStorage;
+            var storage = barricadeDrop.interactable as InteractableStorage;
             if (storage != null)
             {
                 while (storage.items.items.Count > 0)
                 {
-                    var item_jar = storage.items.items.First();
-                    storage.items.items.RemoveAt(storage.items.getIndex(item_jar.x, item_jar.y));
+                    var itemJar = storage.items.items.First();
+                    storage.items.items.RemoveAt(storage.items.getIndex(itemJar.x, itemJar.y));
                 }
             }
 
             BarricadeManager.tryGetRegion(chest, out var x, out var y, out var plant, out _);
-            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            BarricadeManager.destroyBarricade(barricadeDrop, x, y, plant);
 
             var position = chest.position;
-            spawned_storage.RemoveChest(position.x, position.y, position.z);
+            spawnedStorage.RemoveChest(position.x, position.y, position.z);
         }
     }
     
@@ -155,7 +155,7 @@ internal class LootChestModule : Module
             return;
         }
         
-        if (!GetStorage<LootChestSpawnedStorage>(out var spawned_storage))
+        if (!GetStorage<LootChestSpawnedStorage>(out var spawnedStorage))
         {
             Logger.LogError("Could not gather storage [LootChestSpawnedStorage]");
             return;
@@ -171,11 +171,11 @@ internal class LootChestModule : Module
             return;
         }
         
-        var chest_locations = storage.StorageItem.Find(x => x.ZoneName == e.ZoneName);
-        foreach (var chest in chest_locations.Locations)
+        var chestLocations = storage.StorageItem.Find(x => x.ZoneName == e.ZoneName);
+        foreach (var chest in chestLocations.Locations)
         {
             SpawnChest(chest, out var trans);
-            spawned_storage.AddedChest(new SpawnedChest
+            spawnedStorage.AddedChest(new SpawnedChest
             {
                 LocX = trans.position.x,
                 LocY = trans.position.y,
@@ -193,54 +193,54 @@ internal class LootChestModule : Module
         }
     }
 
-    private void SpawnChest(Location chest_location, out Transform transform)
+    private void SpawnChest(Location chestLocation, out Transform transform)
     {
         var chest = _chestPicker.GetRandom();
         
-        var chest_point = new Vector3(chest_location.X, chest_location.Y, chest_location.Z);
-        var chest_angle = new Quaternion(chest_location.RotX, chest_location.RotY, chest_location.RotZ, chest_location.RotW);
+        var chestPoint = new Vector3(chestLocation.X, chestLocation.Y, chestLocation.Z);
+        var chestAngle = new Quaternion(chestLocation.RotX, chestLocation.RotY, chestLocation.RotZ, chestLocation.RotW);
         var barricade = new Barricade((ItemBarricadeAsset)Assets.find(EAssetType.ITEM, chest.ChestBarricade));
-        transform = BarricadeManager.dropNonPlantedBarricade(barricade, chest_point, chest_angle, 0, 0);
+        transform = BarricadeManager.dropNonPlantedBarricade(barricade, chestPoint, chestAngle, 0, 0);
         
-        var barricade_drop = BarricadeManager.FindBarricadeByRootTransform(transform);
+        var barricadeDrop = BarricadeManager.FindBarricadeByRootTransform(transform);
         
-        if (barricade_drop.interactable as InteractableStorage == null)
+        if (barricadeDrop.interactable as InteractableStorage == null)
         {
             BarricadeManager.tryGetRegion(transform, out var x, out var y, out var plant, out _);
-            BarricadeManager.destroyBarricade(barricade_drop, x, y, plant);
+            BarricadeManager.destroyBarricade(barricadeDrop, x, y, plant);
             return;
         }
 
-        InsertItems(chest, AddItemsToPicker(chest), barricade_drop.interactable as InteractableStorage);
+        InsertItems(chest, AddItemsToPicker(chest), barricadeDrop.interactable as InteractableStorage);
     }
 
     private static Picker<LootItem> AddItemsToPicker(Chest chest)
     {
-        var item_picker = new Picker<LootItem>();
+        var itemPicker = new Picker<LootItem>();
 
-        foreach (var loot_item in chest.SpawnTable)
+        foreach (var lootItem in chest.SpawnTable)
         {
-            item_picker.AddEntry(loot_item, loot_item.SpawnChance);
+            itemPicker.AddEntry(lootItem, lootItem.SpawnChance);
         }
 
-        return item_picker;
+        return itemPicker;
     }
 
-    private static void InsertItems(Chest chest, Picker<LootItem> item_picker, InteractableStorage storage)
+    private static void InsertItems(Chest chest, Picker<LootItem> itemPicker, InteractableStorage storage)
     {
-        var items_to_spawn = new List<LootItem>();
+        var itemsToSpawn = new List<LootItem>();
         for (var i = 0; i < chest.AmountToPick; i++)
         {
-            items_to_spawn.Add(item_picker.GetRandom());
+            itemsToSpawn.Add(itemPicker.GetRandom());
         }
 
-        foreach (var item in items_to_spawn)
+        foreach (var item in itemsToSpawn)
         {
             storage!.items.tryAddItem(new Item(item.LootItemID, true));
         }
     }
 
-    public bool AddChest(string zone_name, Vector3 position, Quaternion rotation, string flags, out int id)
+    public bool AddChest(string zoneName, Vector3 position, Quaternion rotation, string flags, out int id)
     {
         if (!GetStorage<LootChestLocationStorage>(out var storage))
         {
@@ -248,22 +248,22 @@ internal class LootChestModule : Module
             return false;
         }
         
-        var flags_list = new List<LootChestFlags>();
+        var flagsList = new List<LootChestFlags>();
         foreach(var flag in flags.Split('¬'))
         {
-            if (Enum.TryParse<LootChestFlags>(flag, out var flag_enum))
+            if (Enum.TryParse<LootChestFlags>(flag, out var flagEnum))
             {
-                flags_list.Add(flag_enum);
+                flagsList.Add(flagEnum);
             }
         }
         
-        storage.AddLocation(zone_name, position, rotation, flags_list);
-        var location = storage.GetLocations(zone_name);
+        storage.AddLocation(zoneName, position, rotation, flagsList);
+        var location = storage.GetLocations(zoneName);
         id = location.Locations.Count - 1;
 
         return true;
     }
 
-    public bool RemoveChest(string zone_name, int id) => 
-        GetStorage<LootChestLocationStorage>(out var storage) && storage.RemoveLocation(zone_name, id);
+    public bool RemoveChest(string zoneName, int id) => 
+        GetStorage<LootChestLocationStorage>(out var storage) && storage.RemoveLocation(zoneName, id);
 }

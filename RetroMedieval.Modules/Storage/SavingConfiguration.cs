@@ -26,30 +26,30 @@ internal class SavingConfiguration : IConfig
         Port = 3306;
     }
     
-    internal static bool LoadedConfiguration(string data_path)
+    internal static bool LoadedConfiguration(string dataPath)
     {
         if (ConfigurationManager.Instance.Has("SaverConfiguration"))
         {
             return false;
         }
 
-        if (!Directory.Exists(data_path))
+        if (!Directory.Exists(dataPath))
         {
-            Directory.CreateDirectory(data_path);
+            Directory.CreateDirectory(dataPath);
         }
 
-        var file_path = Path.Combine(data_path, "SaverConfiguration.json");
+        var filePath = Path.Combine(dataPath, "SaverConfiguration.json");
 
-        if (File.Exists(file_path))
+        if (File.Exists(filePath))
         {
-            string data_text;
-            using (var stream = File.OpenText(file_path))
+            string dataText;
+            using (var stream = File.OpenText(filePath))
             {
-                data_text = stream.ReadToEnd();
+                dataText = stream.ReadToEnd();
             }
 
             ConfigurationManager.Instance.Add(
-                new Configuration.Configuration("SaverConfiguration", JsonConvert.DeserializeObject<SavingConfiguration>(data_text)!));
+                new Configuration.Configuration("SaverConfiguration", JsonConvert.DeserializeObject<SavingConfiguration>(dataText)!));
             return true;
         }
         
@@ -57,10 +57,10 @@ internal class SavingConfiguration : IConfig
             var config = new SavingConfiguration();
             config.LoadDefaults();
 
-            var obj_data = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var objData = JsonConvert.SerializeObject(config, Formatting.Indented);
 
-            using var stream = new StreamWriter(file_path, false);
-            stream.Write(obj_data);
+            using var stream = new StreamWriter(filePath, false);
+            stream.Write(objData);
 
             ConfigurationManager.Instance.Add(new Configuration.Configuration("SaverConfiguration", config));
             

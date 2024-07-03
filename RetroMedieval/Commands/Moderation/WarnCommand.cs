@@ -25,7 +25,7 @@ internal class WarnCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderation_module))
+        if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
             return;
@@ -36,12 +36,12 @@ internal class WarnCommand : IRocketCommand
             PunishmentID = Guid.NewGuid()
         };
         
-        var target_player = UnturnedPlayer.FromName(command[0]);
-        if (target_player == null)
+        var targetPlayer = UnturnedPlayer.FromName(command[0]);
+        if (targetPlayer == null)
         {
-            if (ulong.TryParse(command[0], out var warn_target_id))
+            if (ulong.TryParse(command[0], out var warnTargetID))
             {
-                warn.TargetID = warn_target_id;
+                warn.TargetID = warnTargetID;
             }
             else
             {
@@ -51,14 +51,14 @@ internal class WarnCommand : IRocketCommand
         }
         else
         {
-            warn.TargetID = target_player.CSteamID.m_SteamID;
+            warn.TargetID = targetPlayer.CSteamID.m_SteamID;
         }
         
         warn.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
         warn.Reason = command.ElementAtOrDefault(1);
         warn.PunishmentGiven = DateTime.Now;
         
-        moderation_module.Warn(warn, Provider.clients.Any(x => x.playerID.steamID.m_SteamID == warn.TargetID));
+        moderationModule.Warn(warn, Provider.clients.Any(x => x.playerID.steamID.m_SteamID == warn.TargetID));
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Both;

@@ -22,9 +22,9 @@ public class MySqlCondition(IStatement statement) : ICondition
             throw new NoConditionValues();
         }
 
-        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        if (FilterConditions.TryGetValue("WHERE", out var storedWhere))
         {
-            stored_where.Item1 += $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = @" + x.Item1))}";
+            storedWhere.Item1 += $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = @" + x.Item1))}";
 
             Parameters.AddRange(
                 conditions.Select(data => ConvertDataType(data.Item1, data.Item2, data.Item2.GetType())));
@@ -48,9 +48,9 @@ public class MySqlCondition(IStatement statement) : ICondition
             throw new NoConditionValues();
         }
 
-        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        if (FilterConditions.TryGetValue("WHERE", out var storedWhere))
         {
-            stored_where.Item1 +=
+            storedWhere.Item1 +=
                 $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = " + x.Item2 + "%"))}";
         }
         else
@@ -69,9 +69,9 @@ public class MySqlCondition(IStatement statement) : ICondition
             throw new NoConditionValues();
         }
 
-        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        if (FilterConditions.TryGetValue("WHERE", out var storedWhere))
         {
-            stored_where.Item1 +=
+            storedWhere.Item1 +=
                 $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2))}";
         }
         else
@@ -90,9 +90,9 @@ public class MySqlCondition(IStatement statement) : ICondition
             throw new NoConditionValues();
         }
 
-        if (FilterConditions.TryGetValue("WHERE", out var stored_where))
+        if (FilterConditions.TryGetValue("WHERE", out var storedWhere))
         {
-            stored_where.Item1 +=
+            storedWhere.Item1 +=
                 $" AND {string.Join(" AND ", conditions.Select(x => x.Item1 + " = %" + x.Item2 + "%"))}";
         }
         else
@@ -135,19 +135,19 @@ public class MySqlCondition(IStatement statement) : ICondition
     public IExecutor Finalise() =>
         new MySqlExecutor(this, Parameters, FilterConditions);
 
-    private DataParam ConvertDataType(string property_name, object obj, Type prop_type)
+    private DataParam ConvertDataType(string propertyName, object obj, Type propType)
     {
-        if (Parameters.Any(x => x.ParamName == "@" + property_name))
+        if (Parameters.Any(x => x.ParamName == "@" + propertyName))
         {
-            property_name += Parameters.Count(x => x.ParamName == "@" + property_name);
+            propertyName += Parameters.Count(x => x.ParamName == "@" + propertyName);
         }
 
-        if (prop_type == typeof(byte[]))
-            return new DataParam("@" + property_name, (byte[])obj, DbType.Binary) { ParamType = prop_type };
+        if (propType == typeof(byte[]))
+            return new DataParam("@" + propertyName, (byte[])obj, DbType.Binary) { ParamType = propType };
 
-        if (prop_type == typeof(Guid))
-            return new DataParam("@" + property_name, ((Guid)obj).ToString()) { ParamType = prop_type };
+        if (propType == typeof(Guid))
+            return new DataParam("@" + propertyName, ((Guid)obj).ToString()) { ParamType = propType };
 
-        return new DataParam("@" + property_name, obj) { ParamType = prop_type };
+        return new DataParam("@" + propertyName, obj) { ParamType = propType };
     }
 }

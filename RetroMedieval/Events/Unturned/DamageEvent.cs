@@ -23,7 +23,7 @@ public static class DamageEventEventPublisher
 
     public static event DamageEventEventHandler DamageEventEvent;
 
-    internal static void RaiseEvent(byte amount, Vector3 ragdoll, EDeathCause cause, ELimb limb, CSteamID killer, bool track, ERagdollEffect ragdoll_effect, bool cause_bleeding, Player player, ref EPlayerKill kill, ref bool allow) =>
+    internal static void RaiseEvent(byte amount, Vector3 ragdoll, EDeathCause cause, ELimb limb, CSteamID killer, bool track, ERagdollEffect ragdollEffect, bool causeBleeding, Player player, ref EPlayerKill kill, ref bool allow) =>
         DamageEventEvent?.Invoke(new DamageEventEventArgs()
         {
             Amount = amount,
@@ -32,8 +32,8 @@ public static class DamageEventEventPublisher
             Limb = limb,
             Killer = killer,
             Track = track,
-            RagdollEffect = ragdoll_effect,
-            CauseBleeding = cause_bleeding,
+            RagdollEffect = ragdollEffect,
+            CauseBleeding = causeBleeding,
             Player = player
         }, ref kill, ref allow);
 }

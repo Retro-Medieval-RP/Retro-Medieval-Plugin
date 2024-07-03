@@ -9,9 +9,9 @@ public class WhereTests
 {
     [Theory]
     [ClassData(typeof(WhereQueryTestData))]
-    public void WhereQueryTest(MySqlExecutor conditions, string query_string) =>
-        Assert.True(conditions.FilterConditionString == query_string,
-            $"Test Executor Filter String does not equal correct filter string.\n\nTest Executor: {conditions.FilterConditionString}\nFilter String: {query_string}");
+    public void WhereQueryTest(MySqlExecutor conditions, string queryString) =>
+        Assert.True(conditions.FilterConditionString == queryString,
+            $"Test Executor Filter String does not equal correct filter string.\n\nTest Executor: {conditions.FilterConditionString}\nFilter String: {queryString}");
 
     private class WhereQueryTestData : IEnumerable<object[]>
     {

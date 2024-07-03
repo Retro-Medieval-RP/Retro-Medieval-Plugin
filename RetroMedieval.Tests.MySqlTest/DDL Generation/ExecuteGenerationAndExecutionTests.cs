@@ -10,8 +10,8 @@ public class ExecuteGenerationAndExecutionTests
 {
     [Theory]
     [ClassData(typeof(TestData))]
-    public void Test1(string generated_dll, string correct_ddl, string model_name) => 
-        Assert.True(generated_dll == correct_ddl, $"Model: {model_name} | Generated DDL: {generated_dll} | Correct DDL: {correct_ddl}");
+    public void Test1(string generatedDLL, string correctDdl, string modelName) => 
+        Assert.True(generatedDLL == correctDdl, $"Model: {modelName} | Generated DDL: {generatedDLL} | Correct DDL: {correctDdl}");
 }
 
 public class TestData : IEnumerable<object[]>
@@ -20,13 +20,13 @@ public class TestData : IEnumerable<object[]>
     {
         new object[]
         {
-            TableGenerator.GenerateDDL(typeof(TestModel), out _),
+            TableGenerator.GenerateDdl(typeof(TestModel), out _),
             "CREATE TABLE IF NOT EXISTS Tests (TestID INT(11) DEFAULT AUTO_INCREMENT,TestString VARCHAR(255),CONSTRAINT PK_Tests PRIMARY KEY (TestID));",
             "TestModel"
         },
         new object[]
         {
-            TableGenerator.GenerateDDL(typeof(Test2Model), out _),
+            TableGenerator.GenerateDdl(typeof(Test2Model), out _),
             "CREATE TABLE IF NOT EXISTS Tests2 (TestID INT(11) DEFAULT AUTO_INCREMENT,TestString VARCHAR(255),CONSTRAINT PK_Tests2 PRIMARY KEY (TestID));",
             "Test2Model"
         },

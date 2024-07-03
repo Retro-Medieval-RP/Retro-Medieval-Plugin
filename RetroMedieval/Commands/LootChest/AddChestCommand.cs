@@ -24,13 +24,13 @@ internal class AddChestCommand : IRocketCommand
             return;
         }
 
-        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zones_module))
+        if (!ModuleLoader.Instance.GetModule<ZonesModule>(out var zonesModule))
         {
             Logger.LogError("Could not find module [ZonesModule]!");
             return;   
         }
 
-        if (!zones_module.Exists(command[0]))
+        if (!zonesModule.Exists(command[0]))
         {
             UnturnedChat.Say(caller, "Error: ", Color.red);
             UnturnedChat.Say(caller, $"Zone {command[0]} does not exist!", Color.red);
@@ -47,15 +47,15 @@ internal class AddChestCommand : IRocketCommand
 
         var drop = BarricadeManager.FindBarricadeByRootTransform(result.BarricadeRootTransform);
         
-        if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var loot_chest))
+        if (!ModuleLoader.Instance.GetModule<LootChestModule>(out var lootChest))
         {
             Logger.LogError("Could not find module [LootChestModule]!");
             return;
         }
 
-        if (loot_chest.AddChest(command[0], new Vector3(drop.model.position.x, ((UnturnedPlayer)caller).Position.y, drop.model.position.z), drop.model.rotation, string.Join("¬", command.Skip(1)), out var node_id))
+        if (lootChest.AddChest(command[0], new Vector3(drop.model.position.x, ((UnturnedPlayer)caller).Position.y, drop.model.position.z), drop.model.rotation, string.Join("¬", command.Skip(1)), out var nodeID))
         {
-            UnturnedChat.Say(caller, $"Added chest to zone {command[0]} with id: " + node_id);
+            UnturnedChat.Say(caller, $"Added chest to zone {command[0]} with id: " + nodeID);
             return;
         }
 
