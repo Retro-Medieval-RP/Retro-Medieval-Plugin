@@ -34,8 +34,7 @@ public class TableGenerator
             .Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
             .Select(r => r.Constraint));
 
-        var ddl =
-            $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columnsAndContrains)});{string.Join("", columns.Select(x => x.ReferenceTableDdl))}";
+        var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columnsAndContrains)});{string.Join("", columns.Select(x => x.ReferenceTableDdl))}";
 
         TypeToTable.Add(type, table.TableName);
         return ddl;
@@ -84,7 +83,7 @@ public class TableGenerator
     }
 
     private static bool IsIgnore(MemberInfo property) =>
-        property.GetCustomAttributes<DatabaseIgnore>().Any();
+        property.GetCustomAttributes().Any(x => x.GetType() == typeof(DatabaseIgnore));
 
     private static ForeignKey GetColumnForeignKey(MemberInfo property) =>
         property.GetCustomAttribute<ForeignKey>();
