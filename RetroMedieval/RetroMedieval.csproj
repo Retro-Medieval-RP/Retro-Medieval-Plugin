@@ -129,96 +129,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Kits\Admin\CreateKitCommand.cs" />
-    <Compile Include="Commands\Kits\Admin\DeleteKitCommand.cs" />
-    <Compile Include="Commands\Kits\Admin\RenameKitCommand.cs" />
-    <Compile Include="Commands\Kits\User\KitCommand.cs" />
-    <Compile Include="Commands\Kits\User\KitsCommand.cs" />
-    <Compile Include="Commands\LootChest\AddChestCommand.cs" />
-    <Compile Include="Commands\LootChest\RemoveChestCommand.cs" />
-    <Compile Include="Commands\Moderation\BanCommand.cs" />
-    <Compile Include="Commands\Moderation\BansCommand.cs" />
-    <Compile Include="Commands\Moderation\KickCommand.cs" />
-    <Compile Include="Commands\Moderation\MuteCommand.cs" />
-    <Compile Include="Commands\Moderation\MutesCommand.cs" />
-    <Compile Include="Commands\Moderation\RemoveWarnCommand.cs" />
-    <Compile Include="Commands\Moderation\UnbanCommand.cs" />
-    <Compile Include="Commands\Moderation\UnmuteCommand.cs" />
-    <Compile Include="Commands\Moderation\WarnCommand.cs" />
-    <Compile Include="Commands\Moderation\WarnsCommand.cs" />
     <Compile Include="Commands\System Level\ReloadCommand.cs" />
-    <Compile Include="Commands\Warps\Admin\CreateWarpCommand.cs" />
-    <Compile Include="Commands\Warps\Admin\DeleteWarpCommand.cs" />
-    <Compile Include="Commands\Warps\User\WarpCommand.cs" />
-    <Compile Include="Commands\Warps\User\WarpsCommand.cs" />
-    <Compile Include="Commands\Zones\AddNodeCommand.cs" />
-    <Compile Include="Commands\Zones\CreateZoneCommand.cs" />
-    <Compile Include="Commands\Zones\DeleteZoneCommand.cs" />
-    <Compile Include="Commands\Zones\RemoveNodeCommand.cs" />
-    <Compile Include="Events\DeadBodys\RemoveDeadBody.cs" />
-    <Compile Include="Events\DeadBodys\SpawnDeadBody.cs" />
-    <Compile Include="Events\LootChests\RemoveLootChest.cs" />
-    <Compile Include="Events\LootChests\SpawnLootChest.cs" />
-    <Compile Include="Events\Unturned\ChatEvent.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\HatDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\MaskDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\PantsDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\ShirtDequipped.cs" />
-    <Compile Include="Events\Unturned\CloathingDequip\VestDequipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\BackpackEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\ClothingEquip.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\GlassesEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\HatEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\MaskEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\PantsEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\ShirtEquipped.cs" />
-    <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
-    <Compile Include="Events\Unturned\DamageEvent.cs" />
-    <Compile Include="Events\Unturned\GestureEvent.cs" />
-    <Compile Include="Events\Unturned\PlayerJoinEvent.cs" />
-    <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
-    <Compile Include="Events\Zones\ZoneEnter.cs" />
-    <Compile Include="Events\Zones\ZoneLeft.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Models\ArmorEquip\ArmorSet.cs" />
-    <Compile Include="Models\DeadBodys\Body.cs" />
-    <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\Kits\Kit.cs" />
-    <Compile Include="Models\Kits\KitItem.cs" />
-    <Compile Include="Models\LootChest\Chest.cs" />
-    <Compile Include="Models\LootChest\ChestLocation.cs" />
-    <Compile Include="Models\LootChest\ChestRarity.cs" />
-    <Compile Include="Models\LootChest\Location.cs" />
-    <Compile Include="Models\LootChest\LootChestFlags.cs" />
-    <Compile Include="Models\LootChest\LootItem.cs" />
-    <Compile Include="Models\LootChest\SpawnedChest.cs" />
-    <Compile Include="Models\Moderation\Ban.cs" />
-    <Compile Include="Models\Moderation\Kick.cs" />
-    <Compile Include="Models\Moderation\ModerationAction.cs" />
-    <Compile Include="Models\Moderation\ModerationActionType.cs" />
-    <Compile Include="Models\Moderation\Mute.cs" />
-    <Compile Include="Models\Moderation\Warn.cs" />
-    <Compile Include="Models\Warps\Warp.cs" />
-    <Compile Include="Models\Zones\Node.cs" />
-    <Compile Include="Models\Zones\Zone.cs" />
-    <Compile Include="Modules\ArmorEquip\ArmorEquipConfiguration.cs" />
-    <Compile Include="Modules\ArmorEquip\ArmorEquipModule.cs" />
-    <Compile Include="Modules\DeadBodys\DeathModule.cs" />
-    <Compile Include="Modules\DeadBodys\DeathsConfiguration.cs" />
-    <Compile Include="Modules\DeadBodys\DeathsStorage.cs" />
-    <Compile Include="Modules\Kits\KitsModule.cs" />
-    <Compile Include="Modules\LootChest\LootChestConfiguration.cs" />
-    <Compile Include="Modules\LootChest\LootChestLocationStorage.cs" />
-    <Compile Include="Modules\LootChest\LootChestModule.cs" />
-    <Compile Include="Modules\LootChest\LootChestSpawnedStorage.cs" />
-    <Compile Include="Modules\Moderation\ModerationModule.cs" />
-    <Compile Include="Modules\Warps\WarpsModule.cs" />
-    <Compile Include="Modules\Warps\WarpsStorage.cs" />
-    <Compile Include="Modules\Zones\ZonesModule.cs" />
-    <Compile Include="Modules\Zones\ZonesStorage.cs" />
     <Compile Include="Patches\DamagePatch.cs" />
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
@@ -239,6 +151,10 @@
     <ProjectReference Include="..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
       <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
       <Name>RetroMedieval.Savers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
+      <Project>{de4a11a7-e598-4147-af71-c79cdde855a9}</Project>
+      <Name>RetroMedieval.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
       <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>

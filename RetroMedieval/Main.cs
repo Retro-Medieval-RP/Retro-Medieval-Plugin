@@ -5,7 +5,7 @@ using Rocket.Core.Plugins;
 
 namespace RetroMedieval;
 
-internal class Main : RocketPlugin
+public class Main : RocketPlugin
 {
     public static Main Instance { get; private set; }
     

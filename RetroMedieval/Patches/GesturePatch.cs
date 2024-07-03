@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using RetroMedieval.Events.Unturned;
+using RetroMedieval.Shared.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
