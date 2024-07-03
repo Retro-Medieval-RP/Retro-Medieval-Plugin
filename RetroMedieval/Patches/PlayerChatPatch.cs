@@ -10,7 +10,7 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("receiveChatMessage")]
 internal class PlayerChatPatch
 {
-    public static bool Prefix(CSteamID speakerSteamID, string iconURL, EChatMode mode, Color color, bool isRich, string text, ChatManager instance)
+    public static bool Prefix(CSteamID speakerSteamID, string iconURL, EChatMode mode, Color color, bool isRich, string text, ChatManager __instance)
     {
         var allow = true;
         var args = new ChatEventEventArgs()

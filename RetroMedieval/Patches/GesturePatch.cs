@@ -9,9 +9,9 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("ReceiveGesture")]
 internal class GesturePatch
 {
-    public static bool Prefix(EPlayerGesture newGesture, PlayerAnimator instance)
+    public static bool Prefix(EPlayerGesture newGesture, PlayerAnimator __instance)
     {
-        var ply = instance.player;
+        var ply = __instance.player;
         if (ply is null) return false;
         
         var allow = true;

@@ -9,7 +9,7 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("triggerOnPlayerConnected")]
 internal class PlayerJoinPatch
 {
-    public static bool Prefix(UnturnedPlayer player, UnturnedEvents instance)
+    public static bool Prefix(UnturnedPlayer player, UnturnedEvents __instance)
     {
         var allow = true;
         PlayerJoinEventEventPublisher.RaiseEvent(player, ref allow);
