@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Timers;
@@ -11,7 +12,7 @@ namespace RetroMedieval.Modules;
 
 public sealed class ModuleLoader : Padlock<ModuleLoader>
 {
-    internal string ModuleDirectory { get; private set; } = "";
+    public string ModuleDirectory { get; private set; } = "";
 
     private List<Module> Modules { get; } = [];
     
@@ -39,7 +40,15 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         return true;
     }
     
-    public void SetDirectory(string dir) => ModuleDirectory = dir;
+    public void SetDirectory(string dir)
+    {
+        ModuleDirectory = Path.Combine(dir, "Modules");
+
+        if (!Directory.Exists(ModuleDirectory))
+        {
+            Directory.CreateDirectory(ModuleDirectory);
+        }
+    }
 
     public void LoadModules(Assembly plugin)
     {

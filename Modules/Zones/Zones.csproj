@@ -34,45 +34,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\Assembly-CSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="AstarPathfindingProject">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\AstarPathfindingProject.dll</HintPath>
-        </Reference>
-        <Reference Include="com.rlabrecque.steamworks.net">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\com.rlabrecque.steamworks.net.dll</HintPath>
-        </Reference>
-        <Reference Include="Newtonsoft.Json">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="Rocket.API">
-          <HintPath>..\Libs\Rocket.API.dll</HintPath>
-        </Reference>
-        <Reference Include="Rocket.Core">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\Rocket.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="Rocket.Unturned">
-          <HintPath>..\Libs\Rocket.Unturned.dll</HintPath>
-        </Reference>
-        <Reference Include="SDG.NetTransport">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\SDG.NetTransport.dll</HintPath>
-        </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
-        <Reference Include="UnityEngine">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\UnityEngine.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\..\Retro-Medieval-Modules\PluginLibs\UnityEngine.PhysicsModule.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="Commands\AddNodeCommand.cs" />
         <Compile Include="Commands\CreateZoneCommand.cs" />
         <Compile Include="Commands\DeleteZoneCommand.cs" />
@@ -86,22 +47,57 @@
         <Compile Include="ZonesStorage.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
         <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
         <Name>RetroMedieval.Modules</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
         <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
         <Name>RetroMedieval.Savers</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
+        <Project>{de4a11a7-e598-4147-af71-c79cdde855a9}</Project>
+        <Name>RetroMedieval.Shared</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
         <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
         <Name>RetroMedieval.Utils</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval\RetroMedieval.csproj">
-        <Project>{9e55a473-0216-4890-adbb-1e5013c13ab6}</Project>
-        <Name>RetroMedieval</Name>
-      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>..\Libs\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+      </Reference>
+      <Reference Include="AstarPathfindingProject">
+        <HintPath>..\Libs\AstarPathfindingProject.dll</HintPath>
+      </Reference>
+      <Reference Include="com.rlabrecque.steamworks.net">
+        <HintPath>..\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
+      </Reference>
+      <Reference Include="Rocket.API">
+        <HintPath>..\Libs\Rocket.API.dll</HintPath>
+      </Reference>
+      <Reference Include="Rocket.Core">
+        <HintPath>..\Libs\Rocket.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Rocket.Unturned">
+        <HintPath>..\Libs\Rocket.Unturned.dll</HintPath>
+      </Reference>
+      <Reference Include="SDG.NetTransport">
+        <HintPath>..\Libs\SDG.NetTransport.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\Libs\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule">
+        <HintPath>..\Libs\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

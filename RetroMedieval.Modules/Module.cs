@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Modules.Configuration;
 using RetroMedieval.Modules.Storage;
+using Rocket.API;
+using Rocket.Core;
 using Rocket.Core.Logging;
 
 namespace RetroMedieval.Modules;
@@ -25,6 +28,7 @@ public abstract class Module
         
         LoadConfigs();
         LoadStorages();
+        LoadCommands();
     }
 
     public abstract void Load();
@@ -43,7 +47,7 @@ public abstract class Module
 
         foreach (var config in configs)
         {
-            if (config.LoadedConfiguration(Path.Combine(ModuleLoader.Instance.ModuleDirectory, Information.ModuleName), config.Name + ".json"))
+            if (config.LoadedConfiguration(ModuleDir, config.Name + ".json"))
             {
                 Configurations.Add(config);
                 Logger.Log("Successfully Loaded Config: " + config.Name);
@@ -56,11 +60,11 @@ public abstract class Module
 
     private void LoadStorages()
     {
-        var configs = GetType().GetCustomAttributes<ModuleStorage>();
+        var storages = GetType().GetCustomAttributes<ModuleStorage>();
 
-        foreach (var storage in configs)
+        foreach (var storage in storages)
         {
-            if (storage.LoadedStorage(Path.Combine(ModuleLoader.Instance.ModuleDirectory, Information.ModuleName), storage.Name + ".json"))
+            if (storage.LoadedStorage(ModuleDir, storage.Name + ".json"))
             {
                 Storages.Add(storage);
                 Logger.Log("Successfully Loaded Storage: " + storage.Name);
@@ -68,6 +72,16 @@ public abstract class Module
             }
             
             Logger.LogError("Failed To Load Storage: " + storage.Name);
+        }
+    }
+
+    private void LoadCommands()
+    {
+        var commands = GetType().Assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IRocketCommand)));
+
+        foreach (var command in commands)
+        {
+            R.Commands.Register(Activator.CreateInstance(command) as IRocketCommand);
         }
     }
     

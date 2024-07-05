@@ -16,21 +16,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMedieval.Tests.MySqlTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{2C92398D-0A48-4644-ACDF-D33EA41DEEC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zones", "Zones\Zones.csproj", "{AC611C6E-125B-4B2D-908E-D93F22972760}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zones", "Modules\Zones\Zones.csproj", "{AC611C6E-125B-4B2D-908E-D93F22972760}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootChest", "LootChest\LootChest.csproj", "{D49135FD-E86D-4AB0-9D08-3249093569D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootChest", "Modules\LootChest\LootChest.csproj", "{D49135FD-E86D-4AB0-9D08-3249093569D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warps", "Warps\Warps.csproj", "{D83FDC3B-A6E2-4D4E-A1E1-D3777594CA09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warps", "Modules\Warps\Warps.csproj", "{D83FDC3B-A6E2-4D4E-A1E1-D3777594CA09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kits", "Kits\Kits.csproj", "{590CD34D-7DF4-4E33-849D-1787422B62DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kits", "Modules\Kits\Kits.csproj", "{590CD34D-7DF4-4E33-849D-1787422B62DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeadBodies", "DeadBodies\DeadBodies.csproj", "{0C454384-9541-4D38-A4B5-6931D5EB16FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeadBodies", "Modules\DeadBodies\DeadBodies.csproj", "{0C454384-9541-4D38-A4B5-6931D5EB16FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMedieval.Shared", "RetroMedieval.Shared\RetroMedieval.Shared.csproj", "{DE4A11A7-E598-4147-AF71-C79CDDE855A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArmorEquip", "ArmorEquip\ArmorEquip.csproj", "{5939274F-7F60-45BE-8BE4-591D266C9D5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArmorEquip", "Modules\ArmorEquip\ArmorEquip.csproj", "{5939274F-7F60-45BE-8BE4-591D266C9D5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moderation", "Moderation\Moderation.csproj", "{B949A5CA-52CD-4BD6-8103-278575E4ECFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moderation", "Modules\Moderation\Moderation.csproj", "{B949A5CA-52CD-4BD6-8103-278575E4ECFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

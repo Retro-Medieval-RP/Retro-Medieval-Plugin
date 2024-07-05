@@ -35,41 +35,41 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
-          <HintPath>..\Libs\0Harmony.dll</HintPath>
+          <HintPath>..\Modules\Libs\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-          <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\Modules\Libs\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="AstarPathfindingProject">
-          <HintPath>..\Libs\AstarPathfindingProject.dll</HintPath>
+          <HintPath>..\Modules\Libs\AstarPathfindingProject.dll</HintPath>
         </Reference>
         <Reference Include="com.rlabrecque.steamworks.net">
-          <HintPath>..\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
+          <HintPath>..\Modules\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.API">
-          <HintPath>..\Libs\Rocket.API.dll</HintPath>
+          <HintPath>..\Modules\Libs\Rocket.API.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.Core">
-          <HintPath>..\Libs\Rocket.Core.dll</HintPath>
+          <HintPath>..\Modules\Libs\Rocket.Core.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.Unturned">
-          <HintPath>..\Libs\Rocket.Unturned.dll</HintPath>
+          <HintPath>..\Modules\Libs\Rocket.Unturned.dll</HintPath>
         </Reference>
         <Reference Include="SDG.NetTransport">
-          <HintPath>..\Libs\SDG.NetTransport.dll</HintPath>
+          <HintPath>..\Modules\Libs\SDG.NetTransport.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
-          <HintPath>..\Libs\UnityEngine.dll</HintPath>
+          <HintPath>..\Modules\Libs\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\Modules\Libs\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\Libs\UnityEngine.PhysicsModule.dll</HintPath>
+          <HintPath>..\Modules\Libs\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>

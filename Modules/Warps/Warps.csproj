@@ -5,11 +5,11 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{5939274F-7F60-45BE-8BE4-591D266C9D5A}</ProjectGuid>
+        <ProjectGuid>{D83FDC3B-A6E2-4D4E-A1E1-D3777594CA09}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>ArmorEquip</RootNamespace>
-        <AssemblyName>ArmorEquip</AssemblyName>
+        <RootNamespace>Warps</RootNamespace>
+        <AssemblyName>Warps</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
@@ -73,19 +73,34 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ArmorEquipConfiguration.cs" />
-        <Compile Include="ArmorEquipModule.cs" />
-        <Compile Include="Models\ArmorSet.cs" />
+        <Compile Include="Commands\Admin\CreateWarpCommand.cs" />
+        <Compile Include="Commands\Admin\DeleteWarpCommand.cs" />
+        <Compile Include="Commands\User\WarpCommand.cs" />
+        <Compile Include="Commands\User\WarpsCommand.cs" />
+        <Compile Include="Models\Warp.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="WarpsModule.cs" />
+        <Compile Include="WarpsStorage.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
+      <Folder Include="Commands\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
         <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
         <Name>RetroMedieval.Modules</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
+        <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
+        <Name>RetroMedieval.Savers</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
         <Project>{de4a11a7-e598-4147-af71-c79cdde855a9}</Project>
         <Name>RetroMedieval.Shared</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
+        <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
+        <Name>RetroMedieval.Utils</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

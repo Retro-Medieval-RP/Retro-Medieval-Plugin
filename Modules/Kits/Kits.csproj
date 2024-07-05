@@ -5,11 +5,11 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{D49135FD-E86D-4AB0-9D08-3249093569D0}</ProjectGuid>
+        <ProjectGuid>{590CD34D-7DF4-4E33-849D-1787422B62DF}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>LootChest</RootNamespace>
-        <AssemblyName>LootChest</AssemblyName>
+        <RootNamespace>Kits</RootNamespace>
+        <AssemblyName>Kits</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
@@ -73,39 +73,35 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Commands\AddChestCommand.cs" />
-        <Compile Include="Commands\RemoveChestCommand.cs" />
-        <Compile Include="Events\RemoveLootChest.cs" />
-        <Compile Include="Events\SpawnLootChest.cs" />
-        <Compile Include="LootChestConfiguration.cs" />
-        <Compile Include="LootChestLocationStorage.cs" />
-        <Compile Include="LootChestModule.cs" />
-        <Compile Include="LootChestSpawnedStorage.cs" />
-        <Compile Include="Models\Chest.cs" />
-        <Compile Include="Models\ChestLocation.cs" />
-        <Compile Include="Models\ChestRarity.cs" />
-        <Compile Include="Models\Location.cs" />
-        <Compile Include="Models\LootChestFlags.cs" />
-        <Compile Include="Models\LootItem.cs" />
-        <Compile Include="Models\SpawnedChest.cs" />
+        <Compile Include="Commands\Admin\CreateKitCommand.cs" />
+        <Compile Include="Commands\Admin\DeleteKitCommand.cs" />
+        <Compile Include="Commands\Admin\RenameKitCommand.cs" />
+        <Compile Include="Commands\User\KitCommand.cs" />
+        <Compile Include="Commands\User\KitsCommand.cs" />
+        <Compile Include="KitsModule.cs" />
+        <Compile Include="Models\Kit.cs" />
+        <Compile Include="Models\KitItem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
+      <Folder Include="Commands\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
         <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
         <Name>RetroMedieval.Modules</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Savers\RetroMedieval.Savers.csproj">
         <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
         <Name>RetroMedieval.Savers</Name>
       </ProjectReference>
-      <ProjectReference Include="..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
+      <ProjectReference Include="..\..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
+        <Project>{de4a11a7-e598-4147-af71-c79cdde855a9}</Project>
+        <Name>RetroMedieval.Shared</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
         <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
         <Name>RetroMedieval.Utils</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\Zones\Zones.csproj">
-        <Project>{ac611c6e-125b-4b2d-908e-d93f22972760}</Project>
-        <Name>Zones</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
