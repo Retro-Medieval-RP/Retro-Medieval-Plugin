@@ -49,15 +49,51 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
             Directory.CreateDirectory(ModuleDirectory);
         }
     }
+    
+    private List<string> GetCommandTable(in Module module)
+    {
+        var rows = new List<string>();
+        rows.AddRange(module.Commands.Select(command =>
+            $"| {command.Name} | {command.Help.Replace("|", @"\|").Replace("<", @"\<")} | {command.Syntax.Replace("|", @"\|").Replace("<", @"\<")} | {string.Join(", ", command.Permissions.Count == 0 ? [command.Name] : command.Permissions)} | {string.Join(", ", command.Aliases)} |"));
 
+        return rows;
+    }
+    
+    public void PrintGeneralDoc()
+    {
+        var doc =
+            $"""
+             # Modules:
+             {string.Join("\n", Modules
+                 .Select(x => x.Information.ModuleName)
+                 .Select(x => $"- {x}"))}
+
+             # Commands:
+             | Command Name | Command Help | Command Syntax | Command Permissions | Command Aliases |
+             |--------------|--------------|----------------|---------------------|-----------------|
+             {string.Join("\n", Modules
+                 .Select(x => GetCommandTable(x))
+                 .Select(x => string.Join("\n", x))
+                 .Where(x => !string.IsNullOrEmpty(x)))}
+             """;
+
+        var saveLoc = Path.Combine(
+            ModuleDirectory,
+            "modules.info.md");
+
+        using var stream = new StreamWriter(saveLoc, false);
+        stream.Write(doc);
+    }
+    
     public void LoadModules(Assembly plugin)
     {
         var modules = plugin.GetTypes()
-            .Where(x => x.BaseType == typeof(Module));
+            .Where(x => x.BaseType == typeof(Module))
+            .Select(x => Activator.CreateInstance(x, ModuleDirectory) as Module)
+            .Where(x => x != null);
 
-        foreach (var m in modules)
+        foreach (var module in modules)
         {
-            var module = Activator.CreateInstance(m, ModuleDirectory) as Module;
             module?.Load();
 
             if (module != null)
@@ -65,6 +101,8 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
                 Modules.Add(module);
             }
         }
+
+        PrintGeneralDoc();
     }
 
     public void ReloadAllModules(Assembly plugin)
@@ -78,7 +116,6 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         }
         
         Modules.Clear();
-        
         LoadModules(plugin);
     }
 

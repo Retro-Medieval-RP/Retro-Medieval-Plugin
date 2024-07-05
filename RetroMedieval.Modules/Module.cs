@@ -14,10 +14,11 @@ namespace RetroMedieval.Modules;
 
 public abstract class Module
 {
-    private ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
-    private List<ModuleConfiguration> Configurations { get; }
-    private List<ModuleStorage> Storages { get; }
-    
+    internal ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
+    internal List<ModuleConfiguration> Configurations { get; }
+    internal List<ModuleStorage> Storages { get; }
+    internal List<IRocketCommand> Commands { get; }
+
     protected string ModuleDir { get; set; }
 
     protected Module(string directory)
@@ -25,6 +26,12 @@ public abstract class Module
         ModuleDir = Path.Combine(directory, Information.ModuleName);
         Configurations = [];
         Storages = [];
+        Commands = [];
+
+        if (!Directory.Exists(ModuleDir))
+        {
+            Directory.CreateDirectory(ModuleDir);
+        }
         
         LoadConfigs();
         LoadStorages();
@@ -34,13 +41,13 @@ public abstract class Module
     public abstract void Load();
     public abstract void Unload();
 
-    internal void CallTick() => 
+    internal void CallTick() =>
         OnTimerTick();
 
     protected virtual void OnTimerTick()
     {
     }
-    
+
     private void LoadConfigs()
     {
         var configs = GetType().GetCustomAttributes<ModuleConfiguration>();
@@ -53,7 +60,7 @@ public abstract class Module
                 Logger.Log("Successfully Loaded Config: " + config.Name);
                 continue;
             }
-            
+
             Logger.LogError("Failed To Load Config: " + config.Name);
         }
     }
@@ -70,26 +77,62 @@ public abstract class Module
                 Logger.Log("Successfully Loaded Storage: " + storage.Name);
                 continue;
             }
-            
+
             Logger.LogError("Failed To Load Storage: " + storage.Name);
         }
     }
+    
+    private static List<string> GetCommandTable(List<IRocketCommand> commands)
+    {
+        var rows = new List<string>();
+        rows.AddRange(commands.Select(command =>
+            $"| {command.Name} | {command.Help.Replace("|", @"\|").Replace("<", @"\<")} | {command.Syntax.Replace("|", @"\|").Replace("<", @"\<")} | {string.Join(", ", command.Permissions.Count == 0 ? [command.Name] : command.Permissions)} | {string.Join(", ", command.Aliases)} |"));
 
+        return rows;
+    }
+    
     private void LoadCommands()
     {
-        var commands = GetType().Assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IRocketCommand)));
+        var commands = GetType()
+            .Assembly
+            .GetTypes()
+            .Where(x => x.GetInterfaces().Contains(typeof(IRocketCommand)))
+            .Select(x => Activator.CreateInstance(x) as IRocketCommand)
+            .Where(x => x != null)
+            .ToList();
 
         foreach (var command in commands)
         {
-            R.Commands.Register(Activator.CreateInstance(command) as IRocketCommand);
+            R.Commands.Register(command);
+            Commands.Add(command!);
         }
+        
+        var doc =
+            $"""
+             # {Information.ModuleName}
+
+             ## Commands:
+             | Command Name | Command Help | Command Syntax | Command Permissions | Command Aliases |
+             |--------------|--------------|----------------|---------------------|-----------------|
+             {string.Join("\n", GetCommandTable(Commands))}
+             """;
+
+        var saveLoc = Path.Combine(
+            ModuleDir,
+            $"{Information.ModuleName}.info.md");
+
+        using var stream = new StreamWriter(saveLoc, false);
+        stream.Write(doc);
     }
-    
-    protected bool GetConfiguration<TConfiguration>(out TConfiguration config) where TConfiguration : class, IConfig, new()
+
+    protected bool GetConfiguration<TConfiguration>(out TConfiguration config)
+        where TConfiguration : class, IConfig, new()
     {
         if (Configurations.Any(x => x.IsConfigOfType(typeof(TConfiguration))))
         {
-            config = (Configurations.Find(x => x.IsConfigOfType(typeof(TConfiguration))) as ModuleConfiguration<TConfiguration>)?.Configuration!;
+            config =
+                (Configurations.Find(x => x.IsConfigOfType(typeof(TConfiguration))) as
+                    ModuleConfiguration<TConfiguration>)?.Configuration!;
             return true;
         }
 
@@ -104,11 +147,11 @@ public abstract class Module
             storage = ((ModuleStorage<TStorage>)Storages.First(x => x.IsStorageOfType(typeof(TStorage)))).Storage;
             return true;
         }
-        
+
         storage = default!;
         return false;
     }
 
-    internal bool NameIs(string moduleName) => 
+    internal bool NameIs(string moduleName) =>
         Information.ModuleName == moduleName;
 }
