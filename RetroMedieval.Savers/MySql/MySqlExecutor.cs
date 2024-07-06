@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Reflection;
+using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
-using RetroMedieval.Savers.MySql.Tables.Attributes;
 using Rocket.Core.Logging;
 
 namespace RetroMedieval.Savers.MySql;
@@ -30,23 +28,13 @@ public class MySqlExecutor(
 
         try
         {
-            var command = new MySqlCommand(SqlString, conn);
-            conn.Open();
-
             if (DataParams.Count < 1)
             {
-                command.ExecuteNonQuery();
-                conn.Close();
+                conn.Execute(SqlString);
                 return true;
             }
 
-            foreach (var param in ConvertParams())
-            {
-                command.Parameters.Add(param);
-            }
-
-            command.ExecuteNonQuery();
-            conn.Close();
+            conn.Execute(SqlString, ConvertParams());
             return true;
         }
         catch (MySqlException ex)
@@ -61,84 +49,13 @@ public class MySqlExecutor(
     public IEnumerable<T> Query<T>() where T : new()
     {
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        var output = new List<T>();
-
+        
         try
         {
-            var command = new MySqlCommand(SqlString, conn);
-            conn.Open();
-            
-            if (DataParams.Count < 1)
-            {
-                var reader = command.ExecuteReader();
-                
-                while (reader.Read())
-                {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var fieldName = reader.GetName(i);
-                        var o = new T();
-
-                        foreach (var prop in o.GetType().GetProperties())
-                        {
-                            if (prop.GetCustomAttributes().All(x => x.GetType() != typeof(DatabaseColumn)))
-                            {
-                                continue;
-                            }
-
-                            var column = prop
-                                .GetCustomAttributes()
-                                .First(x => x.GetType() == typeof(DatabaseColumn)) as DatabaseColumn;
-
-                            if (fieldName == column?.ColumnName)
-                            {
-                                prop.SetValue(o, reader[i]);
-                            }
-                        }
-                        
-                        output.Add(o);
-                    }
-                }
-
-                conn.Close();
-                return output;
-            }
-            
-            foreach (var param in ConvertParams())
-            {
-                command.Parameters.Add(param);
-            }
-            
-            var readerParams = command.ExecuteReader();
-            while (readerParams.Read())
-            {
-                for (var i = 0; i < readerParams.FieldCount; i++)
-                {
-                    var fieldName = readerParams.GetName(i);
-                    var o = new T();
-
-                    foreach (var prop in o.GetType().GetProperties())
-                    {
-                        if (prop.GetCustomAttributes().All(x => x.GetType() != typeof(DatabaseColumn)))
-                        {
-                            continue;
-                        }
-
-                        var column = prop
-                            .GetCustomAttributes()
-                            .First(x => x.GetType() == typeof(DatabaseColumn)) as DatabaseColumn;
-
-                        if (fieldName == column?.ColumnName)
-                        {
-                            prop.SetValue(o, readerParams[i]);
-                        }
-                    }
-                    
-                    output.Add(o);
-                }
-            }
-            conn.Close();
-            return output;
+            return DataParams.Count < 1
+                ? conn.Query<T>(SqlString)
+                : conn.Query<T>(SqlString,
+                    ConvertParams());
         }
         catch (MySqlException ex)
         {
@@ -147,90 +64,19 @@ public class MySqlExecutor(
             Logger.LogException(ex);
         }
 
-        return output;
+        return new List<T>();
     }
 
     public T QuerySingle<T>() where T : new()
     {
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        var output = new List<T>();
-
+        
         try
         {
-            var command = new MySqlCommand(SqlString, conn);
-            conn.Open();
-            
-            if (DataParams.Count < 1)
-            {
-                var reader = command.ExecuteReader();
-                
-                while (reader.Read())
-                {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var fieldName = reader.GetName(i);
-                        var o = new T();
-
-                        foreach (var prop in o.GetType().GetProperties())
-                        {
-                            if (prop.GetCustomAttributes().All(x => x.GetType() != typeof(DatabaseColumn)))
-                            {
-                                continue;
-                            }
-
-                            var column = prop
-                                .GetCustomAttributes()
-                                .First(x => x.GetType() == typeof(DatabaseColumn)) as DatabaseColumn;
-
-                            if (fieldName == column?.ColumnName)
-                            {
-                                prop.SetValue(o, reader[i]);
-                            }
-                        }
-                        
-                        output.Add(o);
-                    }
-                }
-
-                conn.Close();
-                return output.Any() ? output.First() : new T();
-            }
-            
-            foreach (var param in ConvertParams())
-            {
-                command.Parameters.Add(param);
-            }
-            
-            var readerParams = command.ExecuteReader();
-            while (readerParams.Read())
-            {
-                for (var i = 0; i < readerParams.FieldCount; i++)
-                {
-                    var fieldName = readerParams.GetName(i);
-                    var o = new T();
-
-                    foreach (var prop in o.GetType().GetProperties())
-                    {
-                        if (prop.GetCustomAttributes().All(x => x.GetType() != typeof(DatabaseColumn)))
-                        {
-                            continue;
-                        }
-
-                        var column = prop
-                            .GetCustomAttributes()
-                            .First(x => x.GetType() == typeof(DatabaseColumn)) as DatabaseColumn;
-
-                        if (fieldName == column?.ColumnName)
-                        {
-                            prop.SetValue(o, readerParams[i]);
-                        }
-                    }
-                    
-                    output.Add(o);
-                }
-            }
-            conn.Close();
-            return output.Any() ? output.First() : new T();
+            return DataParams.Count < 1
+                ? conn.QuerySingle<T>(SqlString)
+                : conn.QuerySingle<T>(SqlString,
+                    ConvertParams());
         }
         catch (MySqlException ex)
         {
@@ -242,14 +88,15 @@ public class MySqlExecutor(
         return new T();
     }
 
-    private IEnumerable<MySqlParameter> ConvertParams() =>
-        DataParams.Select(param =>
-        {
-            var p = new MySqlParameter(param.ParamName, param.ParamObject)
-            {
-                DbType = param.ParamDbType ?? DbType.String
-            };
+    private DynamicParameters ConvertParams()
+    {
+        var params_out = new DynamicParameters();
 
-            return p;
-        });
+        foreach (var param in DataParams)
+        {
+            params_out.Add(param.ParamName, param.ParamObject, param.ParamDbType);
+        }
+
+        return params_out;
+    }
 }
