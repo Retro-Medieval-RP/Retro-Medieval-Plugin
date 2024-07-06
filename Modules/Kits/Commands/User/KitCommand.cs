@@ -53,10 +53,10 @@ internal class KitCommand : IRocketCommand
             return;
         }
 
-        if (!caller.IsAdmin || caller is not ConsolePlayer || !targetPlayer.HasPermission($"kit.{kitName}"))
+        if (caller is not ConsolePlayer && !targetPlayer.HasPermission($"kit.{kitName}"))
         {
             UnturnedChat.Say(caller,
-                $"{(targetPlayer != null && targetPlayer.Equals((UnturnedPlayer)caller) ? "You do " : targetPlayer?.DisplayName + " does ")} not have permission for kit: {kitName}", Color.red);
+                $"{(targetPlayer != null && targetPlayer.Equals((UnturnedPlayer)caller) ? "You do" : targetPlayer?.DisplayName + " does")} not have permission for kit: {kitName}", Color.red);
             return;
         }
 

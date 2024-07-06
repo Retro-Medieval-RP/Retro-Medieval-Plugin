@@ -18,9 +18,9 @@ internal class CreateKitCommand : IRocketCommand
         if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
             Logger.LogError("Could not find module [KitsModule]!");
-            return;   
+            return;
         }
-        
+
         if (command.Length < 1)
         {
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
@@ -38,7 +38,7 @@ internal class CreateKitCommand : IRocketCommand
         {
             if (int.TryParse(command[1], out var cooldown))
             {
-                kit.Cooldown = cooldown;
+                kit.KitCooldown = cooldown;
             }
             else
             {
@@ -53,9 +53,9 @@ internal class CreateKitCommand : IRocketCommand
         {
             return;
         }
-        
+
         var kitItems = new List<KitItem>();
-        
+
         for (byte i = 0; i < PlayerInventory.PAGES; i++)
         {
             if (i == PlayerInventory.AREA)
@@ -65,81 +65,81 @@ internal class CreateKitCommand : IRocketCommand
 
             for (byte index = 0; index < count; index++)
             {
-                var item = player.Inventory.getItem(i, 0);
+                var item = player.Inventory.getItem(i, index);
                 kitItems.Add(new KitItem
                 {
                     IsEquipped = i is 0 or 1,
-                    Amount = item.item.amount,
+                    ItemAmount = item.item.amount,
                     ItemID = item.item.id,
-                    State = item.item.state,
-                    Quality = item.item.quality,
+                    ItemState = item.item.state,
+                    ItemQuality = item.item.quality,
                     KitItemID = Guid.NewGuid()
                 });
             }
         }
-        
-        if(player.Player.clothing.backpack != 0)
+
+        if (player.Player.clothing.backpack != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.backpack,
-                State = player.Player.clothing.backpackState,
-                Quality = player.Player.clothing.backpackQuality,
+                ItemState = player.Player.clothing.backpackState,
+                ItemQuality = player.Player.clothing.backpackQuality,
                 KitItemID = Guid.NewGuid()
             });
-        if(player.Player.clothing.shirt != 0)
+        if (player.Player.clothing.shirt != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.shirt,
-                State = player.Player.clothing.shirtState,
-                Quality = player.Player.clothing.shirtQuality,
+                ItemState = player.Player.clothing.shirtState,
+                ItemQuality = player.Player.clothing.shirtQuality,
                 KitItemID = Guid.NewGuid()
             });
-        if(player.Player.clothing.pants != 0)
+        if (player.Player.clothing.pants != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.pants,
-                State = player.Player.clothing.pantsState,
-                Quality = player.Player.clothing.pantsQuality,
+                ItemState = player.Player.clothing.pantsState,
+                ItemQuality = player.Player.clothing.pantsQuality,
                 KitItemID = Guid.NewGuid()
             });
-        if(player.Player.clothing.glasses != 0)
+        if (player.Player.clothing.glasses != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.glasses,
-                State = player.Player.clothing.glassesState,
-                Quality = player.Player.clothing.glassesQuality,
+                ItemState = player.Player.clothing.glassesState,
+                ItemQuality = player.Player.clothing.glassesQuality,
                 KitItemID = Guid.NewGuid()
             });
-        if(player.Player.clothing.vest != 0)
+        if (player.Player.clothing.vest != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.vest,
-                State = player.Player.clothing.vestState,
-                Quality = player.Player.clothing.vestQuality,
+                ItemState = player.Player.clothing.vestState,
+                ItemQuality = player.Player.clothing.vestQuality,
                 KitItemID = Guid.NewGuid()
             });
-        if(player.Player.clothing.hat != 0)
+        if (player.Player.clothing.hat != 0)
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
-                Amount = 1,
+                ItemAmount = 1,
                 ItemID = player.Player.clothing.hat,
-                State = player.Player.clothing.hatState,
-                Quality = player.Player.clothing.hatQuality,
+                ItemState = player.Player.clothing.hatState,
+                ItemQuality = player.Player.clothing.hatQuality,
                 KitItemID = Guid.NewGuid()
             });
         
-        kitsModule?.CreateKit(kit, kitItems);
+        kitsModule.CreateKit(kit, kitItems);
         UnturnedChat.Say(caller, $"Created kit: {kit.KitName}");
     }
 

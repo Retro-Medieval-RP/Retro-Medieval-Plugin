@@ -10,22 +10,22 @@ internal class KitItem
     [PrimaryKey]
     public Guid KitItemID { get; set; }
     
-    [DatabaseColumn("IsEquipped", "TINYINT(1)")]
-    public bool IsEquipped { get; set; }
-    
     [DatabaseColumn("KitID", "CHAR(36)")]
     [ForeignKey(typeof(Kit), "KitID")]
     public Guid KitID { get; set; }
     
     [DatabaseColumn("ItemID", "SMALLINT UNSIGNED")]
     public ushort ItemID { get; set; }
+    
+    [DatabaseColumn("IsEquipped", "TINYINT(1)")]
+    public bool IsEquipped { get; set; }
 
     [DatabaseColumn("ItemAmount", "INT")]
-    public byte Amount { get; set; }
+    public int ItemAmount { get; set; }
 
     [DatabaseColumn("ItemQuality", "TINYINT UNSIGNED")]
-    public byte Quality { get; set; }
+    public byte ItemQuality { get; set; }
 
     [DatabaseColumn("ItemState", "BLOB")]
-    public byte[] State { get; set; }
+    public byte[] ItemState { get; set; }
 }

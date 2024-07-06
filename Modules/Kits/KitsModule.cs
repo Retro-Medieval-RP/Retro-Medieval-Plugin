@@ -52,14 +52,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
 
     public bool DoesKitExist(string kitName)
     {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return false;
-        }
-
-        var count = kitsStorage.StartQuery().Count().Where(("KitName", kitName)).Finalise().QuerySingle<int>();
-        return count > 0;
+        var kits = GetKits();
+        return kits.Any(x => string.Equals(x.KitName, kitName, StringComparison.CurrentCultureIgnoreCase));
     }
 
     public void RenameKit(string originalName, string newName)
@@ -70,7 +64,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", originalName)).Finalise().QuerySingle<Guid>();
+        var kitID = kitsStorage.StartQuery().Select("KitID", "KitName").Finalise().Query<Kit>()
+            .First(x => x.KitName == originalName).KitID;
         kitsStorage.StartQuery().Update(("KitName", newName)).Where(("KitID", kitID)).Finalise().ExecuteSql();
     }
 
@@ -82,8 +77,19 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        if (kitsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
+        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitItemsStorage]");
+            return;
+        }
+
+        var kitID = GetKits().First(x => x.KitName == kitName).KitID;
+        if (!kitItemsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
+        {
+            return;
+        }
+        
+        if (!kitsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
         {
             Logger.LogError("Could not delete kit with id: " + kitID);
         }
@@ -116,30 +122,23 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
 
         var kit = kitsStorage.StartQuery()
             .Select("KitID", "KitName", "KitCooldown")
-            .Where(("KitName", kitName))
             .Finalise()
-            .QuerySingle<Kit>();
-        
+            .Query<Kit>()
+            .First(x => x.KitName == kitName);
+
         var kitItems = kitItemsStorage.StartQuery()
-            .Select(
-                "KitItemID",
-                "IsEquipped",
-                "KitID",
-                "ItemID",
-                "ItemAmount",
-                "ItemQuality",
-                "ItemState"
-            )
-            .Where(("KitID", kit.KitID))
+            .Select("*")
             .Finalise()
-            .Query<KitItem>();
+            .Query<KitItem>()
+            .Where(x => x.KitID == kit.KitID);
 
         foreach (var item in kitItems.OrderByDescending(x => x.IsEquipped))
         {
-            if (!targetPlayer.Inventory.tryAddItem(new Item(item.ItemID, item.Amount, item.Quality, item.State), true,
+            if (!targetPlayer.Inventory.tryAddItem(
+                    new Item(item.ItemID, (byte)item.ItemAmount, 100, item.ItemState), true,
                     true))
             {
-                ItemManager.dropItem(new Item(item.ItemID, item.Amount, item.Quality, item.State),
+                ItemManager.dropItem(new Item(item.ItemID, (byte)item.ItemAmount, 100, item.ItemState),
                     targetPlayer.Position, false, true, true);
             }
         }
@@ -150,6 +149,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         var kits = GetKits();
         UnturnedChat.Say(caller, "Kits:");
         UnturnedChat.Say(caller,
-            string.Join(", ", kits.Select(x => x.KitName).Where(x => caller.HasPermission($"kit.{x}"))));
+            string.Join(", ",
+                kits.Select(x => x.KitName).Where(x => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrEmpty(x))
+                    .Where(x => caller.HasPermission($"kit.{x}"))));
     }
 }

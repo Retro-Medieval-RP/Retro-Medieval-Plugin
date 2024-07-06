@@ -15,7 +15,5 @@ internal class Kit
     public string KitName { get; set; }
 
     [DatabaseColumn("KitCooldown", "INT", "-1")]
-    public int Cooldown { get; set; }
-    
-    
+    public int KitCooldown { get; set; }
 }
