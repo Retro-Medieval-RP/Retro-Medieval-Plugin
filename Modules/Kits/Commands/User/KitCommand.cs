@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RetroMedieval.Modules;
 using Rocket.API;
@@ -59,7 +60,43 @@ internal class KitCommand : IRocketCommand
                 $"{(targetPlayer != null && targetPlayer.Equals((UnturnedPlayer)caller) ? "You do" : targetPlayer?.DisplayName + " does")} not have permission for kit: {kitName}", Color.red);
             return;
         }
+        
+        if(!caller.HasPermission("kit.cooldown.bypass"))
+        {
+            if (kitsModule.KitCooldowns.ContainsKey((targetPlayer, kitName)))
+            {
+                var lastSpawnTime = kitsModule.KitCooldowns[(targetPlayer, kitName)];
+                var kitCooldown = kitsModule.GetCooldown(kitName);
 
+                if (kitCooldown == -1)
+                {
+                    UnturnedChat.Say(caller, "Error has occured when getting kit cooldown.", Color.red);
+                    return;
+                }
+
+                if ((DateTime.Now - lastSpawnTime).TotalSeconds >= kitCooldown)
+                {
+                    kitsModule.SpawnKit(targetPlayer, kitName);
+                    UnturnedChat.Say(caller,
+                        "Spawned kit " + kitName +
+                        $"{(targetPlayer != null && !targetPlayer.Equals((UnturnedPlayer)caller) ? " for " + targetPlayer.DisplayName : "")}");
+                    kitsModule.KitCooldowns[(targetPlayer, kitName)] = DateTime.Now;
+                    return;
+                }
+
+                UnturnedChat.Say(caller,
+                    $"You have {(DateTime.Now - lastSpawnTime).TotalSeconds - kitCooldown} seconds left before you can spawn the kit again.");
+                return;
+            }
+
+            kitsModule.SpawnKit(targetPlayer, kitName);
+            UnturnedChat.Say(caller,
+                "Spawned kit " + kitName +
+                $"{(targetPlayer != null && !targetPlayer.Equals((UnturnedPlayer)caller) ? " for " + targetPlayer.DisplayName : "")}");
+            kitsModule.KitCooldowns.Add((targetPlayer, kitName), DateTime.Now);
+            return;
+        }
+        
         kitsModule.SpawnKit(targetPlayer, kitName);
         UnturnedChat.Say(caller,
             "Spawned kit " + kitName +

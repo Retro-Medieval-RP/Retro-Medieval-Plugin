@@ -19,12 +19,16 @@ namespace Kits;
 [ModuleStorage<MySqlSaver<KitItem>>("KitItemsStorage")]
 internal class KitsModule([NotNull] string directory) : Module(directory)
 {
+    internal Dictionary<(UnturnedPlayer, string), DateTime> KitCooldowns { get; set; }
+    
     public override void Load()
     {
+        KitCooldowns = [];
     }
 
     public override void Unload()
     {
+        KitCooldowns.Clear();
     }
 
     public void CreateKit(Kit kit, IEnumerable<KitItem> kitItems)
@@ -152,5 +156,19 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             string.Join(", ",
                 kits.Select(x => x.KitName).Where(x => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrEmpty(x))
                     .Where(x => caller.HasPermission($"kit.{x}"))));
+    }
+
+    public int GetCooldown(string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return -1;
+        }
+
+        var kit = kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
+            .Finalise().QuerySingle<Kit>();
+
+        return kit.KitCooldown;
     }
 }
