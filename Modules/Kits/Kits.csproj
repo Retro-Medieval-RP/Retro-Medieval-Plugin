@@ -80,6 +80,7 @@
         <Compile Include="Commands\User\KitsCommand.cs" />
         <Compile Include="KitsModule.cs" />
         <Compile Include="Models\Kit.cs" />
+        <Compile Include="Models\KitCooldown.cs" />
         <Compile Include="Models\KitItem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

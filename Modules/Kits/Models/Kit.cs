@@ -3,7 +3,6 @@ using RetroMedieval.Savers.MySql.Tables.Attributes;
 
 namespace Kits.Models;
 
-
 [DatabaseTable("Kits")]
 internal class Kit
 {

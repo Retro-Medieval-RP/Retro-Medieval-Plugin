@@ -17,18 +17,15 @@ namespace Kits;
 [ModuleInformation("Kits")]
 [ModuleStorage<MySqlSaver<Kit>>("KitsStorage")]
 [ModuleStorage<MySqlSaver<KitItem>>("KitItemsStorage")]
+[ModuleStorage<MySqlSaver<KitCooldown>>("KitCooldownsStorage")]
 internal class KitsModule([NotNull] string directory) : Module(directory)
 {
-    internal Dictionary<(UnturnedPlayer, string), DateTime> KitCooldowns { get; set; }
-
     public override void Load()
     {
-        KitCooldowns = [];
     }
 
     public override void Unload()
     {
-        KitCooldowns.Clear();
     }
 
     public void CreateKit(Kit kit, IEnumerable<KitItem> kitItems)
@@ -186,5 +183,83 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
 
         return kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
             .Finalise().QuerySingle<Kit>();
+    }
+
+    public bool IsKitOnCooldown(UnturnedPlayer targetPlayer, string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return true;
+        }
+
+        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
+            return true;
+        }
+
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        return kitCooldownsStorage.StartQuery().Count().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<int>() > 0;
+    }
+
+    public DateTime GetLastSpawnDate(UnturnedPlayer targetPlayer, string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return DateTime.Now;
+        }
+
+        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
+            return DateTime.Now;
+        }
+
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        return kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<DateTime>();
+    }
+
+    public void DeleteCooldown(UnturnedPlayer targetPlayer, string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return;
+        }
+
+        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
+            return;
+        }
+
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().ExecuteSql();
+    }
+
+    public void AddCooldown(UnturnedPlayer targetPlayer, string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return;
+        }
+
+        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
+            return;
+        }
+
+        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        kitCooldownsStorage.StartQuery().Insert(new KitCooldown
+        {
+            CooldownID = Guid.NewGuid(),
+            KitID = kitID,
+            SpawnDateTime = DateTime.Now,
+            User = targetPlayer.CSteamID.m_SteamID
+        }).ExecuteSql();
     }
 }
