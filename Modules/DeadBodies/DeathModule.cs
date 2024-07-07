@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DeadBodies.Events;
 using DeadBodies.Models;
 using JetBrains.Annotations;
@@ -8,6 +9,7 @@ using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events;
 using RetroMedieval.Utils;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
@@ -21,16 +23,20 @@ namespace DeadBodies;
 [ModuleStorage<DeathsStorage>("DeathsStorage")]
 public class DeathModule([NotNull] string directory) : Module(directory)
 {
+    private Dictionary<UnturnedPlayer, Vector3> CurrentAccessedInvs { get; set; }
+    
     public override void Load()
     {
+        CurrentAccessedInvs = [];
         DamageEventEventPublisher.DamageEventEvent += OnDamage;
         GestureEventEventPublisher.GestureEventEvent += OnGesture;
 
         SpawnDeadBodyEventPublisher.SpawnDeadBodyEvent += SpawnBody;
     }
-    
+
     public override void Unload()
     {
+        CurrentAccessedInvs.Clear();
         DamageEventEventPublisher.DamageEventEvent -= OnDamage;
         GestureEventEventPublisher.GestureEventEvent -= OnGesture;
 
@@ -43,30 +49,51 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         {
             return;
         }
-        
+
         if (!GetConfiguration<DeathsConfiguration>(out var config))
         {
             Logger.LogError("Could not gather configuration [DeathsConfiguration]");
             return;
         }
-        
-        for(var i = storage.StorageItem!.Count - 1; i >= 0; i--)
+
+        for (var i = storage.StorageItem!.Count - 1; i >= 0; i--)
         {
             var body = storage.StorageItem[i];
-            if ((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)
+            if (CurrentAccessedInvs.ContainsValue(new Vector3(body.LocX, body.LocY, body.LocZ)) || !((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime))
             {
-                storage.StorageItem.RemoveAt(i);
+                continue;
             }
+            
+            storage.StorageItem.RemoveAt(i);
+            var trans = new List<Transform>();
+            BarricadeManager.getBarricadesInRadius(new Vector3(body.LocX, body.LocY, body.LocZ), 1, trans);
+
+            if (trans.All(t => t.position != new Vector3(body.LocX, body.LocY, body.LocZ)))
+            {
+                continue;
+            }
+
+            var tran = trans.First(t => t.position == new Vector3(body.LocX, body.LocY, body.LocZ));
+
+            var drop = BarricadeManager.FindBarricadeByRootTransform(tran);
+            BarricadeManager.tryGetRegion(tran, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(drop, x, y, plant);
         }
+
+        storage.Save();
     }
 
-    private void SpawnBody(SpawnDeadBodyEventArgs e) => 
+    private void SpawnBody(SpawnDeadBodyEventArgs e) =>
         SendDeath(e.Player);
 
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
     {
         if (e.Gesture != EPlayerGesture.POINT)
         {
+            if (e.Gesture == EPlayerGesture.INVENTORY_STOP)
+            {
+                CurrentAccessedInvs.Remove(e.Player);
+            }
             return;
         }
 
@@ -88,8 +115,16 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             return;
         }
 
+        if (CurrentAccessedInvs.ContainsValue(drop.model.position))
+        {
+            UnturnedChat.Say(e.Player, "This body is currently being accessed.", Color.red);
+            return;
+        }
+
         var inv = storage.GetInv(drop.model.position);
 
+        CurrentAccessedInvs.Add(e.Player, drop.model.position);
+        
         var inventory = new Items(7);
         inventory.resize(8, 100);
 
@@ -98,8 +133,36 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             inventory.tryAddItem(new SDG.Unturned.Item(item.ItemID, item.Amount, item.Quality, item.State));
         }
 
+        inventory.onItemAdded = (_, _, jar) =>
+        {
+            var body = storage.GetInv(drop.model.position);
+            storage.StorageItem?.Remove(body);
+            body.Items.Add(new Item(jar.item.id, jar.item.amount, jar.item.quality, jar.item.state));
+            storage.StorageItem?.Add(body);
+            storage.Save();
+        };
+
+        inventory.onItemRemoved = (_, _, jar) =>
+        {
+            var body = storage.GetInv(drop.model.position);
+            storage.StorageItem?.RemoveAll(b => new Vector3(b.LocX, b.LocY, b.LocZ) == drop.model.position);
+            var item = body.Items.First(i => i.ItemID == jar.item.id);
+            body.Items.Remove(item);
+            storage.StorageItem?.Add(body);
+            storage.Save();
+
+            if (body.Items.Any())
+            {
+                return;
+            }
+
+            BarricadeManager.tryGetRegion(drop.model.transform, out var x, out var y, out var plant, out _);
+            BarricadeManager.destroyBarricade(drop, x, y, plant);
+        };
+
         e.Player.Inventory.updateItems(7, inventory);
         e.Player.Inventory.sendStorage();
+
     }
 
     private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
@@ -246,29 +309,6 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             }
         }
 
-        player.player.clothing.askWearBackpack(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearGlasses(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearHat(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearPants(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearMask(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearShirt(0, 0, [], true);
-        RemoveUnequipped();
-        player.player.clothing.askWearVest(0, 0, [], true);
-        RemoveUnequipped();
-        yield return null;
         yield break;
-
-        void RemoveUnequipped()
-        {
-            for (byte i = 0; i < player.player.inventory.getItemCount(2); i++)
-            {
-                player.player.inventory.removeItem(2, 0);
-            }
-        }
     }
 }
