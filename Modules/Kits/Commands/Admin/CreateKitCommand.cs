@@ -79,6 +79,7 @@ internal class CreateKitCommand : IRocketCommand
         }
 
         if (player.Player.clothing.backpack != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -88,7 +89,9 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.backpackQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         if (player.Player.clothing.shirt != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -98,7 +101,9 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.shirtQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         if (player.Player.clothing.pants != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -108,7 +113,9 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.pantsQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         if (player.Player.clothing.glasses != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -118,7 +125,9 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.glassesQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         if (player.Player.clothing.vest != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -128,7 +137,9 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.vestQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         if (player.Player.clothing.hat != 0)
+        {
             kitItems.Add(new KitItem
             {
                 IsEquipped = true,
@@ -138,6 +149,7 @@ internal class CreateKitCommand : IRocketCommand
                 ItemQuality = player.Player.clothing.hatQuality,
                 KitItemID = Guid.NewGuid()
             });
+        }
         
         kitsModule.CreateKit(kit, kitItems);
         UnturnedChat.Say(caller, $"Created kit: {kit.KitName}");
