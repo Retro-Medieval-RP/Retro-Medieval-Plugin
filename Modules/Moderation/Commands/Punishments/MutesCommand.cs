@@ -6,7 +6,7 @@ using Rocket.Unturned.Player;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace Moderation.Commands;
+namespace Moderation.Commands.Punishments;
 
 internal class MutesCommand : IRocketCommand
 {
@@ -15,6 +15,13 @@ internal class MutesCommand : IRocketCommand
         if (!ModuleLoader.Instance.GetModule<ModerationModule>(out var moderationModule))
         {
             Logger.LogError("Could not find module [ModerationModule]!");
+            return;
+        }
+
+        if (command.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
 

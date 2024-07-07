@@ -5,7 +5,7 @@ using Rocket.Unturned.Chat;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace Moderation.Commands;
+namespace Moderation.Commands.Punishments;
 
 internal class UnmuteCommand : IRocketCommand
 {
