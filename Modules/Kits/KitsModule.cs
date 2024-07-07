@@ -20,7 +20,7 @@ namespace Kits;
 internal class KitsModule([NotNull] string directory) : Module(directory)
 {
     internal Dictionary<(UnturnedPlayer, string), DateTime> KitCooldowns { get; set; }
-    
+
     public override void Load()
     {
         KitCooldowns = [];
@@ -92,7 +92,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         {
             return;
         }
-        
+
         if (!kitsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
         {
             Logger.LogError("Could not delete kit with id: " + kitID);
@@ -154,8 +154,12 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         UnturnedChat.Say(caller, "Kits:");
         UnturnedChat.Say(caller,
             string.Join(", ",
-                kits.Select(x => x.KitName).Where(x => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrEmpty(x))
-                    .Where(x => caller.HasPermission($"kit.{x}"))));
+                kits
+                    .Select(x => (x.KitName, x.CooldownString))
+                    .Where(x =>
+                        !string.IsNullOrWhiteSpace(x.KitName) && !string.IsNullOrEmpty(x.KitName))
+                    .Where(x => caller.HasPermission($"kit.{x.KitName}"))
+                    .Select(x => $"{x.KitName} ({x.CooldownString})")));
     }
 
     public int GetCooldown(string kitName)
@@ -170,5 +174,17 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             .Finalise().QuerySingle<Kit>();
 
         return kit.KitCooldown;
+    }
+
+    public Kit GetKit(string kitName)
+    {
+        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitsStorage]");
+            return null;
+        }
+
+        return kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
+            .Finalise().QuerySingle<Kit>();
     }
 }

@@ -85,7 +85,7 @@ internal class KitCommand : IRocketCommand
                 }
 
                 UnturnedChat.Say(caller,
-                    $"You have {(DateTime.Now - lastSpawnTime).TotalSeconds - kitCooldown} seconds left before you can spawn the kit again.");
+                    $"You have {kitsModule.GetKit(kitName).TimeSpanString(TimeSpan.FromSeconds(kitCooldown - (DateTime.Now - lastSpawnTime).TotalSeconds))} seconds left before you can spawn the kit again.");
                 return;
             }
 
