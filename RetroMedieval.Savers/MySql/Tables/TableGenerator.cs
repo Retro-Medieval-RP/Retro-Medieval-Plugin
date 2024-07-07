@@ -9,7 +9,7 @@ namespace RetroMedieval.Savers.MySql.Tables;
 
 public class TableGenerator
 {
-    private static Dictionary<Type, string> TypeToTable { get; set; } = [];
+    internal static Dictionary<Type, string> TypeToTable { get; set; } = [];
 
     public static string GenerateDdl(Type type, out string tableName)
     {
