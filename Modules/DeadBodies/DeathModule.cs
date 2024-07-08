@@ -81,6 +81,10 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             var tran = trans.First(t => t.position == new Vector3(body.LocX, body.LocY, body.LocZ));
 
             var drop = BarricadeManager.FindBarricadeByRootTransform(tran);
+
+            var man = drop.interactable as InteractableMannequin;
+            man?.clearClothes();
+            
             BarricadeManager.tryGetRegion(tran, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(drop, x, y, plant);
         }
@@ -189,6 +193,9 @@ public class DeathModule([NotNull] string directory) : Module(directory)
                 return;
             }
 
+            var man = drop.interactable as InteractableMannequin;
+            man?.clearClothes();
+            
             BarricadeManager.tryGetRegion(drop.model.transform, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(drop, x, y, plant);
         };
