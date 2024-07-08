@@ -84,11 +84,14 @@
         <Compile Include="Commands\Punishments\WarnCommand.cs" />
         <Compile Include="Commands\Punishments\WarnsCommand.cs" />
         <Compile Include="Commands\Utils\ClearInventoryCommand.cs" />
+        <Compile Include="Commands\Utils\WhoIsCommand.cs" />
+        <Compile Include="Commands\Utils\WreckBarricadeCommand.cs" />
         <Compile Include="Commands\Utils\WreckVehicleCommand.cs" />
         <Compile Include="Models\Ban.cs" />
         <Compile Include="Models\Kick.cs" />
         <Compile Include="Models\ModerationAction.cs" />
         <Compile Include="Models\ModerationActionType.cs" />
+        <Compile Include="Models\ModerationPlayer.cs" />
         <Compile Include="Models\Mute.cs" />
         <Compile Include="Models\Warn.cs" />
         <Compile Include="ModerationModule.cs" />

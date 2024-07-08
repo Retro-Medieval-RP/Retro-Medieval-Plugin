@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Moderation.Models;
 using RetroMedieval.Modules;
@@ -19,6 +20,7 @@ namespace Moderation
     [ModuleStorage<MySqlSaver<Mute>>("Mutes")]
     [ModuleStorage<MySqlSaver<Kick>>("Kicks")]
     [ModuleStorage<MySqlSaver<Ban>>("Bans")]
+    [ModuleStorage<MySqlSaver<ModerationPlayer>>("Players")]
     internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         public override void Load()
@@ -126,6 +128,7 @@ namespace Moderation
 
         private void OnPlayerJoined(PlayerJoinEventEventArgs e, ref bool allow)
         {
+            
             if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
             {
                 Logger.LogError("Could not gather storage [BansStorage]");
@@ -139,6 +142,19 @@ namespace Moderation
                     .Finalise()
                     .QuerySingle<int>() <= 0)
             {
+                if (!DoesPlayerAlreadyExist(e.Player.CSteamID.m_SteamID))
+                {
+                    InsertPlayer(e.Player);
+                    return;
+                }
+                
+                var storedUser = GetPlayer(e.Player.CSteamID.m_SteamID);
+                if (storedUser.DisplayName != e.Player.DisplayName)
+                {
+                    UpdateDisplayName(e.Player.CSteamID.m_SteamID, e.Player.DisplayName);
+                }
+
+                UpdateLastJoinDate(e.Player.CSteamID.m_SteamID);
                 return;
             }
 
@@ -417,6 +433,68 @@ namespace Moderation
                 UnturnedChat.Say(caller,
                     $"MuteID: {mute.PunishmentID} | Mute Reason: {mute.Reason} | Mute Expire Time: {mute.TimeLeftString} | Mute Given: {mute.PunishmentGiven}");
             }
+        }
+
+        public ModerationPlayer GetPlayer(ulong playerId)
+        {
+            if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
+            {
+                return playersStorage.StartQuery().Select("*").Where(("PlayerID", playerId)).Finalise()
+                    .QuerySingle<ModerationPlayer>();
+            }
+            
+            Logger.LogError("Could not gather storage [PlayersStorage]");
+            return null;
+        }
+
+        private bool DoesPlayerAlreadyExist(ulong playerId)
+        {
+            if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
+            {
+                return playersStorage.StartQuery().Count().Where(("PlayerID", playerId)).Finalise().QuerySingle<int>() > 0;
+            }
+            
+            Logger.LogError("Could not gather storage [PlayersStorage]");
+            return false;
+        }
+
+        private void UpdateLastJoinDate(ulong playerId)
+        {
+            if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
+            {
+                playersStorage.StartQuery().Update(("LastJoinDate", DateTime.Now)).Where(("PlayerID", playerId)).Finalise().ExecuteSql();
+                return;
+            }
+            
+            Logger.LogError("Could not gather storage [PlayersStorage]");
+        }
+
+        private void UpdateDisplayName(ulong playerId, string displayName)
+        {
+            if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
+            {
+                playersStorage.StartQuery().Update(("DisplayName", displayName)).Where(("PlayerID", playerId)).Finalise().ExecuteSql();
+                return;
+            }
+            
+            Logger.LogError("Could not gather storage [PlayersStorage]");
+        }
+
+        private void InsertPlayer(UnturnedPlayer player)
+        {
+            if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
+            {
+                playersStorage.StartQuery().Insert(new ModerationPlayer
+                {
+                    PlayerID = player.CSteamID.m_SteamID,
+                    DisplayName = player.DisplayName,
+                    FirstJoinDate = DateTime.Now,
+                    LastJoinDate = DateTime.Now
+                });
+                return;
+            }
+            
+            Logger.LogError("Could not gather storage [PlayersStorage]");
         }
     }
 }

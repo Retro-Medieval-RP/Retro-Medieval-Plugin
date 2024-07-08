@@ -125,7 +125,7 @@ public abstract class Module
         stream.Write(doc);
     }
 
-    protected bool GetConfiguration<TConfiguration>(out TConfiguration config)
+    public bool GetConfiguration<TConfiguration>(out TConfiguration config)
         where TConfiguration : class, IConfig, new()
     {
         if (Configurations.Any(x => x.IsConfigOfType(typeof(TConfiguration))))
@@ -140,7 +140,7 @@ public abstract class Module
         return false;
     }
 
-    protected bool GetStorage<TStorage>(out TStorage storage) where TStorage : class, IStorage, new()
+    public bool GetStorage<TStorage>(out TStorage storage) where TStorage : class, IStorage, new()
     {
         if (Storages.Any(x => x.IsStorageOfType(typeof(TStorage))))
         {
