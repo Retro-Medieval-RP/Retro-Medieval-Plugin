@@ -46,7 +46,7 @@ public class CityZonesModule(string directory) : Module(directory)
         var city = storage.GetCity(e.Zone.ZoneName);
         EffectManager.sendUIEffect(config.ID, 15543, e.Player.Player.channel.GetOwnerTransportConnection(), false);
         EffectManager.sendUIEffectText(15543, e.Player.Player.channel.GetOwnerTransportConnection(), false, "Text", $"<color=#b25151>{city.WelcomeMessage}</color>{(string.IsNullOrEmpty(city.TerritoryMessage) ? "" : $"\n{city.TerritoryMessage}")}");
-        RetroMedieval.Main.Instance.StartCoroutine(ClearCity(e.Player.CSteamID.m_SteamID, 5));
+        RetroMedieval.Main.Instance.StartCoroutine(ClearCity(e.Player.CSteamID.m_SteamID, 10));
     }
 
     private IEnumerator ClearCity(ulong playerId, int clearTime)
