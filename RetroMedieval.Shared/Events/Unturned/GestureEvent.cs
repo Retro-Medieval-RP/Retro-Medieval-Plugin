@@ -1,7 +1,7 @@
 ﻿using Rocket.Unturned.Player;
 using SDG.Unturned;
 
-namespace RetroMedieval.Shared.Events;
+namespace RetroMedieval.Shared.Events.Unturned;
 
 public class GestureEventEventArgs
 {

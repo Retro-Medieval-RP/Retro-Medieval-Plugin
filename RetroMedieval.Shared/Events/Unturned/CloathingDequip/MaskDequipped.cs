@@ -1,6 +1,6 @@
 using Rocket.Unturned.Player;
 
-namespace RetroMedieval.Shared.Events.CloathingDequip;
+namespace RetroMedieval.Shared.Events.Unturned.CloathingDequip;
 
 public class MaskDequippedEventArgs
 {

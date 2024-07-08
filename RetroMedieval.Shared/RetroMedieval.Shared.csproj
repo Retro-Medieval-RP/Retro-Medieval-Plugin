@@ -73,27 +73,27 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Events\ChatEvent.cs" />
-        <Compile Include="Events\CloathingDequip\BackpackDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\ClothingDequip.cs" />
-        <Compile Include="Events\CloathingDequip\GlassesDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\HatDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\MaskDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\PantsDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\ShirtDequipped.cs" />
-        <Compile Include="Events\CloathingDequip\VestDequipped.cs" />
-        <Compile Include="Events\ClothingEquip\BackpackEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\ClothingEquip.cs" />
-        <Compile Include="Events\ClothingEquip\GlassesEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\HatEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\MaskEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\PantsEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\ShirtEquipped.cs" />
-        <Compile Include="Events\ClothingEquip\VestEquipped.cs" />
-        <Compile Include="Events\DamageEvent.cs" />
-        <Compile Include="Events\GestureEvent.cs" />
-        <Compile Include="Events\PlayerJoinEvent.cs" />
-        <Compile Include="Events\PlayerVoiceEvent.cs" />
+        <Compile Include="Events\Unturned\ChatEvent.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\HatDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\MaskDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\PantsDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\ShirtDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\VestDequipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\BackpackEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\ClothingEquip.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\GlassesEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\HatEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\MaskEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\PantsEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\ShirtEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
+        <Compile Include="Events\Unturned\DamageEvent.cs" />
+        <Compile Include="Events\Unturned\GestureEvent.cs" />
+        <Compile Include="Events\Unturned\PlayerJoinEvent.cs" />
+        <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

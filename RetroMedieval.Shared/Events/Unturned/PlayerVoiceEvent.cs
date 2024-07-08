@@ -1,6 +1,6 @@
 using Rocket.Unturned.Player;
 
-namespace RetroMedieval.Shared.Events;
+namespace RetroMedieval.Shared.Events.Unturned;
 
 public class PlayerVoiceEventEventArgs
 {

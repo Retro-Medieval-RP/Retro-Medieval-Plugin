@@ -2,7 +2,7 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 
-namespace RetroMedieval.Shared.Events;
+namespace RetroMedieval.Shared.Events.Unturned;
 
 public class ChatEventEventArgs
 {
