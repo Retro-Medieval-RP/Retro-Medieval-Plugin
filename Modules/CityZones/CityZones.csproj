@@ -34,10 +34,28 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="com.rlabrecque.steamworks.net">
+          <HintPath>..\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Core">
+          <HintPath>..\Libs\Rocket.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Unturned">
+          <HintPath>..\Warps\bin\Debug\Rocket.Unturned.dll</HintPath>
+        </Reference>
+        <Reference Include="SDG.NetTransport">
+          <HintPath>..\Libs\SDG.NetTransport.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="CitiesStorage.cs" />
@@ -59,10 +77,17 @@
         <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
         <Name>RetroMedieval.Savers</Name>
       </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval\RetroMedieval.csproj">
+        <Project>{9e55a473-0216-4890-adbb-1e5013c13ab6}</Project>
+        <Name>RetroMedieval</Name>
+      </ProjectReference>
       <ProjectReference Include="..\Zones\Zones.csproj">
         <Project>{ac611c6e-125b-4b2d-908e-d93f22972760}</Project>
         <Name>Zones</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Commands\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
