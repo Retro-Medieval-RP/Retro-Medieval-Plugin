@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RetroMedieval.Modules.Storage.Sql;
@@ -46,8 +47,10 @@ public class MySqlExecutor(
         }
     }
 
-    public IEnumerable<T> Query<T>() where T : new()
+    public async Task<IEnumerable<T>> Query<T>() where T : new()
     {
+        return await QueryAsync<T>();
+        
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
         
         try
@@ -66,9 +69,32 @@ public class MySqlExecutor(
 
         return new List<T>();
     }
-
-    public T QuerySingle<T>() where T : new()
+    
+    public async Task<IEnumerable<T>> QueryAsync<T>() where T : new()
     {
+        await using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
+        
+        try
+        {
+            return DataParams.Count < 1
+                ? await conn.QueryAsync<T>(SqlString)
+                : await conn.QueryAsync<T>(SqlString,
+                    ConvertParams());
+        }
+        catch (MySqlException ex)
+        {
+            Logger.LogError(
+                $"Had an error when trying to execute: {SqlString}");
+            Logger.LogException(ex);
+        }
+
+        return new List<T>();
+    }
+
+    public async Task<T> QuerySingle<T>() where T : new()
+    {
+        return await QuerySingleAsync<T>();
+        
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
         
         try
@@ -88,6 +114,27 @@ public class MySqlExecutor(
         return new T();
     }
 
+    public async Task<T> QuerySingleAsync<T>() where T : new()
+    {
+        await using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
+        
+        try
+        {
+            return DataParams.Count < 1
+                ? await conn.QuerySingleAsync<T>(SqlString)
+                : await conn.QuerySingleAsync<T>(SqlString,
+                    ConvertParams());
+        }
+        catch (MySqlException ex)
+        {
+            Logger.LogError(
+                $"Had an error when trying to execute: {SqlString}");
+            Logger.LogException(ex);
+        }
+
+        return new T();
+    }
+    
     private DynamicParameters ConvertParams()
     {
         var params_out = new DynamicParameters();

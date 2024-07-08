@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Moderation.Models;
 using RetroMedieval.Modules;
@@ -8,7 +9,6 @@ using RetroMedieval.Shared.Events.Unturned;
 using Rocket.API;
 using Rocket.Unturned;
 using Rocket.Unturned.Chat;
-using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -33,6 +33,12 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         ChatEventEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
+    private void OnUserMessage(ChatEventEventArgs e, ref bool allow) => _ = OnMessageAsync(e, allow);
+
+    private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow) => _ = OnVoiceAsync(e, allow);
+
+    private void OnPlayerConnected(UnturnedPlayer player) => _ = PlayerJoinAsync(player);
+
     public override void Unload()
     {
         U.Events.OnPlayerConnected -= OnPlayerConnected;
@@ -41,7 +47,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         ChatEventEventPublisher.ChatEventEvent -= OnUserMessage;
     }
 
-    protected override void OnTimerTick()
+    protected override async void OnTimerTick()
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -55,14 +61,14 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var bans = bansStorage
+        var bans = await bansStorage
             .StartQuery()
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
             .Where(("BanOver", false))
             .Finalise()
             .Query<Ban>();
 
-        var mutes = mutesStorage
+        var mutes = await mutesStorage
             .StartQuery()
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
             .Where(("MuteOver", false))
@@ -96,7 +102,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private void OnUserMessage(ChatEventEventArgs e, ref bool allow)
+    private async Task OnMessageAsync(ChatEventEventArgs e, bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -104,7 +110,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (mutesStorage
+        if (await mutesStorage
                 .StartQuery()
                 .Count()
                 .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
@@ -115,7 +121,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow)
+    private async Task OnVoiceAsync(PlayerVoiceEventEventArgs e, bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -123,14 +129,14 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (mutesStorage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
+        if (await mutesStorage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
                 .Finalise().QuerySingle<int>() > 0)
         {
             allow = false;
         }
     }
 
-    private void OnPlayerConnected(UnturnedPlayer player)
+    private async Task PlayerJoinAsync(UnturnedPlayer player)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -138,20 +144,20 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (bansStorage
+        if (await bansStorage
                 .StartQuery()
                 .Count()
                 .Where(("TargetID", player.CSteamID.m_SteamID), ("BanOver", false))
                 .Finalise()
                 .QuerySingle<int>() <= 0)
         {
-            if (!DoesPlayerAlreadyExist(player.CSteamID.m_SteamID))
+            if (!await DoesPlayerAlreadyExist(player.CSteamID.m_SteamID))
             {
                 InsertPlayer(player);
                 return;
             }
             
-            var storedUser = GetPlayer(player.CSteamID.m_SteamID);
+            var storedUser = await GetPlayer(player.CSteamID.m_SteamID);
             if (storedUser.DisplayName != player.DisplayName)
             {
                 UpdateDisplayName(player.CSteamID.m_SteamID, player.DisplayName);
@@ -161,7 +167,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var ban = bansStorage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven")
+        var ban = await bansStorage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven")
             .Where(("TargetID", player.CSteamID.m_SteamID)).Finalise().QuerySingle<Ban>();
 
         Provider.kick(player.CSteamID,
@@ -294,7 +300,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void RemoveWarn(IRocketPlayer caller, string warnID)
+    public async Task RemoveWarn(IRocketPlayer caller, string warnID)
     {
         if (!GetStorage<MySqlSaver<Warn>>(out var warnsStorage))
         {
@@ -302,7 +308,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (warnsStorage.StartQuery().Count().Where(("PunishmentID", warnID), ("WarnRemoved", false)).Finalise()
+        if (await warnsStorage.StartQuery().Count().Where(("PunishmentID", warnID), ("WarnRemoved", false)).Finalise()
                 .QuerySingle<int>() > 0)
         {
             if (!warnsStorage.StartQuery().Update(("WarnRemoved", true)).Finalise().ExecuteSql())
@@ -319,7 +325,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void Unmute(IRocketPlayer caller, string muteID)
+    public async Task Unmute(IRocketPlayer caller, string muteID)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -327,7 +333,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (mutesStorage.StartQuery().Count().Where(("PunishmentID", muteID), ("MuteOver", false)).Finalise()
+        if (await mutesStorage.StartQuery().Count().Where(("PunishmentID", muteID), ("MuteOver", false)).Finalise()
                 .QuerySingle<int>() > 0)
         {
             if (!mutesStorage.StartQuery().Update(("MuteOver", true)).Finalise().ExecuteSql())
@@ -344,7 +350,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void Unban(IRocketPlayer caller, string banID)
+    public async Task Unban(IRocketPlayer caller, string banID)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -352,7 +358,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (bansStorage.StartQuery().Count().Where(("PunishmentID", banID), ("BanOver", false)).Finalise()
+        if (await bansStorage.StartQuery().Count().Where(("PunishmentID", banID), ("BanOver", false)).Finalise()
                 .QuerySingle<int>() > 0)
         {
             if (!bansStorage.StartQuery().Update(("BanOver", true)).Finalise().ExecuteSql())
@@ -369,7 +375,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void Bans(IRocketPlayer caller, ulong targetsID)
+    public async Task Bans(IRocketPlayer caller, ulong targetsID)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -377,7 +383,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var bans = bansStorage
+        var bans = await bansStorage
             .StartQuery()
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
             .Where(("BanOver", false), ("TargetID", targetsID))
@@ -392,7 +398,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void Warns(IRocketPlayer caller, ulong targetsID)
+    public async Task Warns(IRocketPlayer caller, ulong targetsID)
     {
         if (!GetStorage<MySqlSaver<Warn>>(out var warnsStorage))
         {
@@ -400,7 +406,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var warns = warnsStorage
+        var warns = await warnsStorage
             .StartQuery()
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "WarnRemoved")
             .Where(("WarnRemoved", false), ("TargetID", targetsID))
@@ -415,7 +421,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void Mutes(IRocketPlayer caller, ulong targetsID)
+    public async Task Mutes(IRocketPlayer caller, ulong targetsID)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -423,7 +429,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var mutes = mutesStorage
+        var mutes = await mutesStorage
             .StartQuery()
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
             .Where(("MuteOver", false), ("TargetID", targetsID))
@@ -438,11 +444,11 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public ModerationPlayer GetPlayer(ulong playerId)
+    public async Task<ModerationPlayer> GetPlayer(ulong playerId)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            return playersStorage.StartQuery().Select("*").Where(("PlayerID", playerId)).Finalise()
+            return await playersStorage.StartQuery().Select("*").Where(("PlayerID", playerId)).Finalise()
                 .QuerySingle<ModerationPlayer>();
         }
             
@@ -450,11 +456,11 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         return null;
     }
 
-    private bool DoesPlayerAlreadyExist(ulong playerId)
+    private async Task<bool> DoesPlayerAlreadyExist(ulong playerId)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            return playersStorage.StartQuery().Count().Where(("PlayerID", playerId)).Finalise().QuerySingle<int>() > 0;
+            return await playersStorage.StartQuery().Count().Where(("PlayerID", playerId)).Finalise().QuerySingle<int>() > 0;
         }
             
         Logger.LogError("Could not gather storage [PlayersStorage]");

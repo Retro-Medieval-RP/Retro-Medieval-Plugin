@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Kits.Models;
 using RetroMedieval.Modules;
@@ -51,13 +52,13 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public bool DoesKitExist(string kitName)
+    public async Task<bool> DoesKitExist(string kitName)
     {
-        var kits = GetKits();
+        var kits = await GetKits();
         return kits.Any(x => string.Equals(x.KitName, kitName, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public void RenameKit(string originalName, string newName)
+    public async Task RenameKit(string originalName, string newName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -65,12 +66,12 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID", "KitName").Finalise().Query<Kit>()
-            .First(x => x.KitName == originalName).KitID;
-        kitsStorage.StartQuery().Update(("KitName", newName)).Where(("KitID", kitID)).Finalise().ExecuteSql();
+        var kit = await kitsStorage.StartQuery().Select("KitID", "KitName").Where(("KitName", originalName)).Finalise().QuerySingle<Kit>();
+        var kitId = kit.KitID;
+        kitsStorage.StartQuery().Update(("KitName", newName)).Where(("KitID", kitId)).Finalise().ExecuteSql();
     }
 
-    public void DeleteKit(string kitName)
+    public async Task DeleteKit(string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -84,7 +85,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = GetKits().First(x => x.KitName == kitName).KitID;
+        var kits = await GetKits();
+        var kitID = kits.First(x => x.KitName == kitName).KitID;
         if (!kitItemsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
         {
             return;
@@ -96,18 +98,18 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private IEnumerable<Kit> GetKits()
+    private async Task<IEnumerable<Kit>> GetKits()
     {
         if (GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
-            return kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().Query<Kit>();
+            return await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().Query<Kit>();
         }
 
         Logger.LogError("Could not gather storage [KitsStorage]");
         return new List<Kit>();
     }
 
-    public void SpawnKit(UnturnedPlayer targetPlayer, string kitName)
+    public async Task SpawnKit(UnturnedPlayer targetPlayer, string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -121,17 +123,17 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kit = kitsStorage.StartQuery()
+        var kit = await kitsStorage.StartQuery()
             .Select("KitID", "KitName", "KitCooldown")
+            .Where(("KitName", kitName))
             .Finalise()
-            .Query<Kit>()
-            .First(x => x.KitName == kitName);
+            .QuerySingle<Kit>();
 
-        var kitItems = kitItemsStorage.StartQuery()
+        var kitItems = await kitItemsStorage.StartQuery()
             .Select("*")
+            .Where(("KitID", kit.KitID))
             .Finalise()
-            .Query<KitItem>()
-            .Where(x => x.KitID == kit.KitID);
+            .Query<KitItem>();
 
         foreach (var item in kitItems.OrderByDescending(x => x.IsEquipped))
         {
@@ -145,9 +147,9 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    public void SendKits(IRocketPlayer caller)
+    public async Task SendKits(IRocketPlayer caller)
     {
-        var kits = GetKits();
+        var kits = await GetKits();
         UnturnedChat.Say(caller, "Kits:");
         UnturnedChat.Say(caller,
             string.Join(", ",
@@ -159,7 +161,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
                     .Select(x => $"{x.KitName} ({x.CooldownString})")));
     }
 
-    public int GetCooldown(string kitName)
+    public async Task<int> GetCooldown(string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -167,13 +169,13 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return -1;
         }
 
-        var kit = kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
+        var kit = await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
             .Finalise().QuerySingle<Kit>();
 
         return kit.KitCooldown;
     }
 
-    public Kit GetKit(string kitName)
+    public async Task<Kit> GetKit(string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -181,11 +183,11 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return null;
         }
 
-        return kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
+        return await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
             .Finalise().QuerySingle<Kit>();
     }
 
-    public bool IsKitOnCooldown(UnturnedPlayer targetPlayer, string kitName)
+    public async Task<bool> IsKitOnCooldown(UnturnedPlayer targetPlayer, string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -199,11 +201,11 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return true;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        return kitCooldownsStorage.StartQuery().Count().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<int>() > 0;
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        return await kitCooldownsStorage.StartQuery().Count().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<int>() > 0;
     }
 
-    public DateTime GetLastSpawnDate(UnturnedPlayer targetPlayer, string kitName)
+    public async Task<DateTime> GetLastSpawnDate(UnturnedPlayer targetPlayer, string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -217,11 +219,11 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return DateTime.Now;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        return kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<DateTime>();
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        return await kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<DateTime>();
     }
 
-    public void DeleteCooldown(UnturnedPlayer targetPlayer, string kitName)
+    public async Task DeleteCooldown(UnturnedPlayer targetPlayer, string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -235,11 +237,11 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
         kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().ExecuteSql();
     }
 
-    public void AddCooldown(UnturnedPlayer targetPlayer, string kitName)
+    public async Task AddCooldown(UnturnedPlayer targetPlayer, string kitName)
     {
         if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -253,7 +255,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        var kitID = kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
         kitCooldownsStorage.StartQuery().Insert(new KitCooldown
         {
             CooldownID = Guid.NewGuid(),

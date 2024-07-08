@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RetroMedieval.Modules.Storage.Sql;
 
@@ -10,6 +11,6 @@ public interface IExecutor
     
     bool ExecuteSql();
 
-    IEnumerable<T> Query<T>() where T : new();
-    T QuerySingle<T>() where T : new();
+    Task<IEnumerable<T>> Query<T>() where T : new();
+    Task<T> QuerySingle<T>() where T : new();
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RetroMedieval.Modules;
 using Rocket.API;
 using Rocket.Unturned.Chat;
@@ -9,7 +10,7 @@ namespace Kits.Commands.Admin;
 
 internal class DeleteKitCommand : IRocketCommand
 {
-    public void Execute(IRocketPlayer caller, string[] command)
+    public async void Execute(IRocketPlayer caller, string[] command)
     {
         if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
@@ -24,7 +25,7 @@ internal class DeleteKitCommand : IRocketCommand
             return;
         }
         
-        if (!kitsModule.DoesKitExist(command[0]))
+        if (!await kitsModule.DoesKitExist(command[0]))
         {
             UnturnedChat.Say(caller, $"A kit with the name ({command[0]}) inputted does not exist!", Color.red);
             return;

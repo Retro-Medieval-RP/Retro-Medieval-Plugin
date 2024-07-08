@@ -12,7 +12,7 @@ namespace Moderation.Commands.Utils;
 
 internal class WhoIsCommand : IRocketCommand
 {
-    public void Execute(IRocketPlayer caller, string[] command)
+    public async void Execute(IRocketPlayer caller, string[] command)
     {
         var player = caller as UnturnedPlayer;
         var result = Raycaster.RayCastPlayer(player, RayMasks.BARRICADE | RayMasks.STRUCTURE);
@@ -21,7 +21,7 @@ internal class WhoIsCommand : IRocketCommand
             return;
         }
 
-        ulong ownerId = 0;
+        ulong ownerId;
         switch (result.Barricade)
         {
             case null when result.Structure == null:
@@ -51,7 +51,7 @@ internal class WhoIsCommand : IRocketCommand
             return;
         }
         
-        var ownerPlayer = moderationModule.GetPlayer(ownerId);
+        var ownerPlayer = await moderationModule.GetPlayer(ownerId);
         UnturnedChat.Say(caller, $"Owner is: {ownerPlayer.DisplayName} ({ownerPlayer.PlayerID})");
     }
 

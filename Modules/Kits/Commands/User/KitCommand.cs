@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RetroMedieval.Modules;
 using Rocket.API;
 using Rocket.Unturned.Chat;
@@ -12,7 +13,7 @@ namespace Kits.Commands.User;
 
 internal class KitCommand : IRocketCommand
 {
-    public void Execute(IRocketPlayer caller, string[] command)
+    public async void Execute(IRocketPlayer caller, string[] command)
     {
         if (!ModuleLoader.Instance.GetModule<KitsModule>(out var kitsModule))
         {
@@ -48,7 +49,7 @@ internal class KitCommand : IRocketCommand
             }
         }
 
-        if (!kitsModule.DoesKitExist(kitName))
+        if (!await kitsModule.DoesKitExist(kitName))
         {
             UnturnedChat.Say(caller, "Could not find kit with name: " + kitName, Color.red);
             return;
@@ -63,10 +64,10 @@ internal class KitCommand : IRocketCommand
         
         if(!caller.HasPermission("kit.cooldown.bypass"))
         {
-            if (kitsModule.IsKitOnCooldown(targetPlayer, kitName))
+            if (await kitsModule.IsKitOnCooldown(targetPlayer, kitName))
             {
-                var lastSpawnTime = kitsModule.GetLastSpawnDate(targetPlayer, kitName);
-                var kitCooldown = kitsModule.GetCooldown(kitName);
+                var lastSpawnTime = await kitsModule.GetLastSpawnDate(targetPlayer, kitName);
+                var kitCooldown = await kitsModule.GetCooldown(kitName);
                 
                 if (kitCooldown == -1)
                 {
@@ -84,9 +85,10 @@ internal class KitCommand : IRocketCommand
                     kitsModule.AddCooldown(targetPlayer, kitName);
                     return;
                 }
-                
+
+                var kit = await kitsModule.GetKit(kitName);
                 UnturnedChat.Say(caller,
-                    $"You have {kitsModule.GetKit(kitName).TimeSpanString(TimeSpan.FromSeconds(kitCooldown - (DateTime.Now - lastSpawnTime).TotalSeconds))} seconds left before you can spawn the kit again.");
+                    $"You have {kit.TimeSpanString(TimeSpan.FromSeconds(kitCooldown - (DateTime.Now - lastSpawnTime).TotalSeconds))} seconds left before you can spawn the kit again.");
                 return;
             }
 
