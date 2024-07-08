@@ -12,6 +12,7 @@ using RetroMedieval.Utils;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
+using Steamworks;
 using UnityEngine;
 using Item = DeadBodies.Models.Item;
 using Logger = Rocket.Core.Logging.Logger;
@@ -31,6 +32,8 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         DamageEventEventPublisher.DamageEventEvent += OnDamage;
         GestureEventEventPublisher.GestureEventEvent += OnGesture;
 
+        BarricadeManager.onDamageBarricadeRequested += OnDamageBarricade;
+        
         SpawnDeadBodyEventPublisher.SpawnDeadBodyEvent += SpawnBody;
     }
 
@@ -39,10 +42,12 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         CurrentAccessedInvs.Clear();
         DamageEventEventPublisher.DamageEventEvent -= OnDamage;
         GestureEventEventPublisher.GestureEventEvent -= OnGesture;
-
+        
+        BarricadeManager.onDamageBarricadeRequested -= OnDamageBarricade;
+        
         SpawnDeadBodyEventPublisher.SpawnDeadBodyEvent -= SpawnBody;
     }
-
+    
     protected override void OnTimerTick()
     {
         if (!GetStorage<DeathsStorage>(out var storage))
@@ -83,14 +88,32 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         storage.Save();
     }
 
+    private void OnDamageBarricade(CSteamID instigatorSteamId, Transform barricadeTransform, ref ushort pendingTotalDamage, ref bool shouldAllow, EDamageOrigin damageOrigin)
+    {
+        if (!GetStorage<DeathsStorage>(out var storage))
+        {
+            return;
+        }
+
+        if (storage.InventoryAt(barricadeTransform.position))
+        {
+            shouldAllow = false;
+        }
+    }
+
     private void SpawnBody(SpawnDeadBodyEventArgs e) =>
         SendDeath(e.Player);
 
     private void OnGesture(GestureEventEventArgs e, ref bool allow)
     {
+        if (e.Player == null)
+        {
+            return;
+        }
+        
         if (e.Gesture != EPlayerGesture.POINT)
         {
-            if (e.Gesture == EPlayerGesture.INVENTORY_STOP)
+            if (e.Gesture is EPlayerGesture.INVENTORY_STOP or EPlayerGesture.NONE)
             {
                 CurrentAccessedInvs.Remove(e.Player);
             }
@@ -103,6 +126,16 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             return;
         }
 
+        if (result.BarricadeRootTransform == null)
+        {
+            return;
+        }
+
+        if (Vector3.Distance(e.Player.Position, result.BarricadeRootTransform.position) > 2)
+        {
+            return;
+        }
+        
         var drop = BarricadeManager.FindBarricadeByRootTransform(result.BarricadeRootTransform);
 
         if (!GetStorage<DeathsStorage>(out var storage))
@@ -162,7 +195,6 @@ public class DeathModule([NotNull] string directory) : Module(directory)
 
         e.Player.Inventory.updateItems(7, inventory);
         e.Player.Inventory.sendStorage();
-
     }
 
     private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
