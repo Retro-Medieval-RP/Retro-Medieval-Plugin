@@ -128,7 +128,6 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
 
     private void OnPlayerJoined(PlayerJoinEventEventArgs e, ref bool allow)
     {
-            
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
             Logger.LogError("Could not gather storage [BansStorage]");
@@ -147,7 +146,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 InsertPlayer(e.Player);
                 return;
             }
-                
+            
             var storedUser = GetPlayer(e.Player.CSteamID.m_SteamID);
             if (storedUser.DisplayName != e.Player.DisplayName)
             {
@@ -490,7 +489,8 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 DisplayName = player.DisplayName,
                 FirstJoinDate = DateTime.Now,
                 LastJoinDate = DateTime.Now
-            });
+            })
+            .ExecuteSql();
             return;
         }
             
