@@ -121,7 +121,6 @@
     <Compile Include="Patches\EquipClothingPatch.cs" />
     <Compile Include="Patches\GesturePatch.cs" />
     <Compile Include="Patches\PlayerChatPatch.cs" />
-    <Compile Include="Patches\PlayerJoinPatch.cs" />
     <Compile Include="Patches\PlayerVoicePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

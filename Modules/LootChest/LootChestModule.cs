@@ -6,11 +6,11 @@ using LootChest.Events;
 using LootChest.Models;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
+using RetroMedieval.Shared.Events.Zones;
+using RetroMedieval.Shared.Models.Zones;
 using RetroMedieval.Utils;
 using SDG.Unturned;
 using UnityEngine;
-using Zones.Events;
-using Zones.Models;
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace LootChest;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Zones.Models;
+namespace RetroMedieval.Shared.Models.Zones;
 
 public class Zone
 {

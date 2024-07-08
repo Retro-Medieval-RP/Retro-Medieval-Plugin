@@ -1,7 +1,7 @@
-﻿using Rocket.Unturned.Player;
-using Zones.Models;
+﻿using RetroMedieval.Shared.Models.Zones;
+using Rocket.Unturned.Player;
 
-namespace Zones.Events;
+namespace RetroMedieval.Shared.Events.Zones;
 
 public class ZoneLeftEventArgs(UnturnedPlayer player, Zone zone)
 {
@@ -15,6 +15,6 @@ public static class ZoneLeftEventPublisher
 
     public static event ZoneLeftEventHandler ZoneLeftEvent;
 
-    internal static void RaiseEvent(UnturnedPlayer player, Zone zone) =>
+    public static void RaiseEvent(UnturnedPlayer player, Zone zone) =>
         ZoneLeftEvent?.Invoke(new ZoneLeftEventArgs(player, zone));
 }

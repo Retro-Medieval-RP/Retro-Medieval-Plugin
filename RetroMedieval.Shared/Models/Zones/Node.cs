@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Zones.Models;
+namespace RetroMedieval.Shared.Models.Zones;
 
 public class Node
 {

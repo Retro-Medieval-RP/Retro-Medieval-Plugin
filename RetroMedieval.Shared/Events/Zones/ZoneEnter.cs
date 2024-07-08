@@ -1,7 +1,7 @@
-﻿using Rocket.Unturned.Player;
-using Zones.Models;
+﻿using RetroMedieval.Shared.Models.Zones;
+using Rocket.Unturned.Player;
 
-namespace Zones.Events;
+namespace RetroMedieval.Shared.Events.Zones;
 
 public class ZoneEnterEventArgs(ref UnturnedPlayer player, ref Zone zone, ref bool allow)
 {
@@ -16,6 +16,6 @@ public static class ZoneEnterEventPublisher
 
     public static event ZoneEnterEventHandler ZoneEnterEvent;
 
-    internal static void RaiseEvent(ref UnturnedPlayer player, ref Zone zone,ref bool allow) =>
+    public static void RaiseEvent(ref UnturnedPlayer player, ref Zone zone,ref bool allow) =>
         ZoneEnterEvent?.Invoke(new ZoneEnterEventArgs(ref player, ref zone, ref allow));
 }

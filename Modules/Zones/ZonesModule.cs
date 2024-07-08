@@ -3,11 +3,11 @@ using System.Linq;
 using JetBrains.Annotations;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
+using RetroMedieval.Shared.Events.Zones;
+using RetroMedieval.Shared.Models.Zones;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using UnityEngine;
-using Zones.Events;
-using Zones.Models;
 
 namespace Zones;
 
@@ -64,7 +64,7 @@ public class ZonesModule([NotNull] string directory) : Module(directory)
 
     private bool IsInZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) &&
-        storage.GetZones().Select(zone => zone.IsInZone(point)).FirstOrDefault();
+        storage.GetZones().Any(zone => zone.IsInZone(point));
 
     public Zone GetZone(Vector3 point) =>
         GetStorage<ZonesStorage>(out var storage) ? storage.GetZones()?.FirstOrDefault(x => x.IsInZone(point)) : null;

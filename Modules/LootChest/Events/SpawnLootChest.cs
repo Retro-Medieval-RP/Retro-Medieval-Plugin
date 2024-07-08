@@ -1,8 +1,8 @@
 using LootChest.Models;
 using RetroMedieval.Modules;
+using RetroMedieval.Shared.Models.Zones;
 using Rocket.Core.Logging;
 using Zones;
-using Zones.Models;
 
 namespace LootChest.Events;
 

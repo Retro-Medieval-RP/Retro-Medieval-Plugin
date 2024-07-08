@@ -92,8 +92,11 @@
         <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
         <Compile Include="Events\Unturned\DamageEvent.cs" />
         <Compile Include="Events\Unturned\GestureEvent.cs" />
-        <Compile Include="Events\Unturned\PlayerJoinEvent.cs" />
         <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
+        <Compile Include="Events\Zones\ZoneEnter.cs" />
+        <Compile Include="Events\Zones\ZoneLeft.cs" />
+        <Compile Include="Models\Zones\Node.cs" />
+        <Compile Include="Models\Zones\Zone.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using RetroMedieval.Shared.Events;
+using RetroMedieval.Shared.Events.Unturned;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;

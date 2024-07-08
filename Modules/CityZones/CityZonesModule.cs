@@ -2,11 +2,11 @@
 using CityZones.Models;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
+using RetroMedieval.Shared.Events.Zones;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
-using Zones.Events;
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace CityZones;
@@ -42,29 +42,29 @@ public class CityZonesModule(string directory) : Module(directory)
         {
             return;
         }
-            
+        
         var city = storage.GetCity(e.Zone.ZoneName);
         EffectManager.sendUIEffect(config.ID, 15543, e.Player.Player.channel.GetOwnerTransportConnection(), false);
-        EffectManager.sendUIEffectText(15543, e.Player.Player.channel.GetOwnerTransportConnection(), false, "Text", $"<color=#b25151>{city.WelcomeMessage}</color>{(string.IsNullOrEmpty(city.TerritoryMessage) ? "" : $"\n{city.WelcomeMessage}")}");
+        EffectManager.sendUIEffectText(15543, e.Player.Player.channel.GetOwnerTransportConnection(), false, "Text", $"<color=#b25151>{city.WelcomeMessage}</color>{(string.IsNullOrEmpty(city.TerritoryMessage) ? "" : $"\n{city.TerritoryMessage}")}");
         RetroMedieval.Main.Instance.StartCoroutine(ClearCity(e.Player.CSteamID.m_SteamID, 5));
     }
 
     private IEnumerator ClearCity(ulong playerId, int clearTime)
     {
         yield return new WaitForSeconds(clearTime);
-            
+        
         if (UnturnedPlayer.FromCSteamID(new CSteamID(playerId)) == null)
         {
             yield break;
         }
-            
+        
         var player = UnturnedPlayer.FromCSteamID(new CSteamID(playerId));
-                
+        
         if (!GetConfiguration<CityZonesConfiguration>(out var config))
         {
             yield break;
         }
-            
+        
         EffectManager.askEffectClearByID(config.ID, player.Player.channel.GetOwnerTransportConnection());
     }
 

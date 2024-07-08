@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RetroMedieval.Savers.Json;
-using Zones.Models;
+using RetroMedieval.Shared.Models.Zones;
 
 namespace Zones;
 

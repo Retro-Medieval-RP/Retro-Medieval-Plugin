@@ -7,7 +7,7 @@ using DeadBodies.Models;
 using JetBrains.Annotations;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
-using RetroMedieval.Shared.Events;
+using RetroMedieval.Shared.Events.Unturned;
 using RetroMedieval.Utils;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
@@ -24,7 +24,7 @@ namespace DeadBodies;
 [ModuleStorage<DeathsStorage>("DeathsStorage")]
 public class DeathModule([NotNull] string directory) : Module(directory)
 {
-    private Dictionary<UnturnedPlayer, Vector3> CurrentAccessedInvs { get; set; }
+    private Dictionary<(UnturnedPlayer, Vector3), Vector3> CurrentAccessedInvs { get; set; }
     
     public override void Load()
     {
@@ -64,7 +64,7 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         for (var i = storage.StorageItem!.Count - 1; i >= 0; i--)
         {
             var body = storage.StorageItem[i];
-            if (CurrentAccessedInvs.ContainsValue(new Vector3(body.LocX, body.LocY, body.LocZ)) || !((DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime))
+            if (CurrentAccessedInvs.ContainsValue(new Vector3(body.LocX, body.LocY, body.LocZ)) || (DateTime.Now - body.BodySpawnTime).TotalMilliseconds >= config.DespawnTime)
             {
                 continue;
             }
@@ -117,10 +117,6 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         
         if (e.Gesture != EPlayerGesture.POINT)
         {
-            if (e.Gesture is EPlayerGesture.INVENTORY_STOP or EPlayerGesture.NONE)
-            {
-                CurrentAccessedInvs.Remove(e.Player);
-            }
             return;
         }
 
@@ -154,13 +150,19 @@ public class DeathModule([NotNull] string directory) : Module(directory)
 
         if (CurrentAccessedInvs.ContainsValue(drop.model.position))
         {
-            UnturnedChat.Say(e.Player, "This body is currently being accessed.", Color.red);
-            return;
+            var user = CurrentAccessedInvs.First(x => x.Value == drop.model.position).Key;
+            if (user.Item2 == user.Item1.Position && user.Item1.Inventory.isStoring)
+            {
+                UnturnedChat.Say(e.Player, "This body is currently being accessed.", Color.red);
+                return;
+            }
+
+            CurrentAccessedInvs.Remove(user);
         }
 
         var inv = storage.GetInv(drop.model.position);
 
-        CurrentAccessedInvs.Add(e.Player, drop.model.position);
+        CurrentAccessedInvs.Add((e.Player, e.Player.Position), drop.model.position);
         
         var inventory = new Items(7);
         inventory.resize(8, 100);
@@ -199,7 +201,9 @@ public class DeathModule([NotNull] string directory) : Module(directory)
             BarricadeManager.tryGetRegion(drop.model.transform, out var x, out var y, out var plant, out _);
             BarricadeManager.destroyBarricade(drop, x, y, plant);
         };
-
+        
+        e.Player.Inventory.isStoring = true;
+        
         e.Player.Inventory.updateItems(7, inventory);
         e.Player.Inventory.sendStorage();
     }

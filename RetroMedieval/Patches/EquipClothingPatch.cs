@@ -1,7 +1,7 @@
 using System;
 using HarmonyLib;
-using RetroMedieval.Shared.Events.CloathingDequip;
-using RetroMedieval.Shared.Events.ClothingEquip;
+using RetroMedieval.Shared.Events.Unturned.CloathingDequip;
+using RetroMedieval.Shared.Events.Unturned.ClothingEquip;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 

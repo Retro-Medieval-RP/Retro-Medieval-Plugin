@@ -4,9 +4,11 @@ using Moderation.Models;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
-using RetroMedieval.Shared.Events;
+using RetroMedieval.Shared.Events.Unturned;
 using Rocket.API;
+using Rocket.Unturned;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -25,14 +27,16 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
 {
     public override void Load()
     {
-        PlayerJoinEventEventPublisher.PlayerJoinEventEvent += OnPlayerJoined;
+        U.Events.OnPlayerConnected += OnPlayerConnected;
+        
         PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent += OnVoice;
         ChatEventEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
     public override void Unload()
     {
-        PlayerJoinEventEventPublisher.PlayerJoinEventEvent -= OnPlayerJoined;
+        U.Events.OnPlayerConnected -= OnPlayerConnected;
+        
         PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent -= OnVoice;
         ChatEventEventPublisher.ChatEventEvent -= OnUserMessage;
     }
@@ -126,7 +130,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private void OnPlayerJoined(PlayerJoinEventEventArgs e, ref bool allow)
+    private void OnPlayerConnected(UnturnedPlayer player)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -137,30 +141,30 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         if (bansStorage
                 .StartQuery()
                 .Count()
-                .Where(("TargetID", e.Player.CSteamID.m_SteamID), ("BanOver", false))
+                .Where(("TargetID", player.CSteamID.m_SteamID), ("BanOver", false))
                 .Finalise()
                 .QuerySingle<int>() <= 0)
         {
-            if (!DoesPlayerAlreadyExist(e.Player.CSteamID.m_SteamID))
+            if (!DoesPlayerAlreadyExist(player.CSteamID.m_SteamID))
             {
-                InsertPlayer(e.Player);
+                InsertPlayer(player);
                 return;
             }
             
-            var storedUser = GetPlayer(e.Player.CSteamID.m_SteamID);
-            if (storedUser.DisplayName != e.Player.DisplayName)
+            var storedUser = GetPlayer(player.CSteamID.m_SteamID);
+            if (storedUser.DisplayName != player.DisplayName)
             {
-                UpdateDisplayName(e.Player.CSteamID.m_SteamID, e.Player.DisplayName);
+                UpdateDisplayName(player.CSteamID.m_SteamID, player.DisplayName);
             }
 
-            UpdateLastJoinDate(e.Player.CSteamID.m_SteamID);
+            UpdateLastJoinDate(player.CSteamID.m_SteamID);
             return;
         }
 
         var ban = bansStorage.StartQuery().Select("Reason", "BanLength", "PunishmentGiven")
-            .Where(("TargetID", e.Player.CSteamID.m_SteamID)).Finalise().QuerySingle<Ban>();
+            .Where(("TargetID", player.CSteamID.m_SteamID)).Finalise().QuerySingle<Ban>();
 
-        Provider.kick(e.Player.CSteamID,
+        Provider.kick(player.CSteamID,
             $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
     }
 
