@@ -84,6 +84,7 @@
         <Compile Include="Commands\Punishments\WarnCommand.cs" />
         <Compile Include="Commands\Punishments\WarnsCommand.cs" />
         <Compile Include="Commands\Utils\ClearInventoryCommand.cs" />
+        <Compile Include="Commands\Utils\JumpCommand.cs" />
         <Compile Include="Commands\Utils\WhoIsCommand.cs" />
         <Compile Include="Commands\Utils\WreckBarricadeCommand.cs" />
         <Compile Include="Commands\Utils\WreckVehicleCommand.cs" />
