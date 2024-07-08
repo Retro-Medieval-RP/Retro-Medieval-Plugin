@@ -40,6 +40,12 @@
         <Reference Include="com.rlabrecque.steamworks.net">
           <HintPath>..\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
         </Reference>
+        <Reference Include="Rocket.API">
+          <HintPath>..\Libs\Rocket.API.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.API">
+          <HintPath>..\Libs\Rocket.API.dll</HintPath>
+        </Reference>
         <Reference Include="Rocket.Core">
           <HintPath>..\Libs\Rocket.Core.dll</HintPath>
         </Reference>
@@ -61,6 +67,8 @@
         <Compile Include="CitiesStorage.cs" />
         <Compile Include="CityZonesConfiguration.cs" />
         <Compile Include="CityZonesModule.cs" />
+        <Compile Include="Commands\AddCityCommand.cs" />
+        <Compile Include="Commands\RemoveCityCommand.cs" />
         <Compile Include="Models\City.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
@@ -77,6 +85,10 @@
         <Project>{67e1116d-33ca-4d1c-aeb6-1bd5bdc68736}</Project>
         <Name>RetroMedieval.Savers</Name>
       </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
+        <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
+        <Name>RetroMedieval.Utils</Name>
+      </ProjectReference>
       <ProjectReference Include="..\..\RetroMedieval\RetroMedieval.csproj">
         <Project>{9e55a473-0216-4890-adbb-1e5013c13ab6}</Project>
         <Name>RetroMedieval</Name>
@@ -85,9 +97,6 @@
         <Project>{ac611c6e-125b-4b2d-908e-d93f22972760}</Project>
         <Name>Zones</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Commands\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

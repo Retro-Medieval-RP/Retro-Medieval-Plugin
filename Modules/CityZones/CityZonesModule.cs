@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using CityZones.Models;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using Rocket.Unturned.Player;
@@ -6,6 +7,7 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using Zones.Events;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace CityZones
 {
@@ -64,6 +66,39 @@ namespace CityZones
             }
             
             EffectManager.askEffectClearByID(config.ID, player.Player.channel.GetOwnerTransportConnection());
+        }
+
+        public void AddCity(City city)
+        {
+            if (!GetStorage<CitiesStorage>(out var storage))
+            {
+                Logger.LogError("Could not get storage [CitiesStorage]");
+                return;
+            }
+            
+            storage.AddCity(city);
+        }
+
+        public bool DoesCityExist(string zoneName)
+        {
+            if (GetStorage<CitiesStorage>(out var storage))
+            {
+                return storage.CityExists(zoneName);
+            }
+            
+            Logger.LogError("Could not get storage [CitiesStorage]");
+            return true;
+        }
+
+        public void RemoveCity(string zoneName)
+        {
+            if (!GetStorage<CitiesStorage>(out var storage))
+            {
+                Logger.LogError("Could not get storage [CitiesStorage]");
+                return;
+            }
+            
+            storage.RemoveCity(zoneName);
         }
     }
 }
