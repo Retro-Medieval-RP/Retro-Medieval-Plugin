@@ -355,4 +355,7 @@ public class DeathModule([NotNull] string directory) : Module(directory)
 
         yield break;
     }
+
+    public bool IsUserAccessBody(UnturnedPlayer ePlayer) => 
+        CurrentAccessedInvs.Any(x => x.Key.Item1.CSteamID.m_SteamID == ePlayer.CSteamID.m_SteamID);
 }
