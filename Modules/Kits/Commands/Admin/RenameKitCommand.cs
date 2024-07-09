@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using RetroMedieval.Modules;
 using Rocket.API;
 using Rocket.Unturned.Chat;
