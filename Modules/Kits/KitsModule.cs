@@ -85,9 +85,20 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return;
         }
 
+        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
+        {
+            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
+            return;
+        }
+
         var kits = await GetKits();
         var kitID = kits.First(x => x.KitName == kitName).KitID;
         if (!kitItemsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
+        {
+            return;
+        }
+
+        if (!kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
         {
             return;
         }
