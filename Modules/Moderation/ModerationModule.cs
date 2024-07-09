@@ -29,13 +29,13 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         U.Events.OnPlayerConnected += OnPlayerConnected;
         
-        PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent += OnVoice;
-        ChatEventEventPublisher.ChatEventEvent += OnUserMessage;
+        PlayerVoiceEventPublisher.PlayerVoiceEventEvent += OnVoice;
+        ChatEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
-    private void OnUserMessage(ChatEventEventArgs e, ref bool allow) => _ = OnMessageAsync(e, allow);
+    private void OnUserMessage(ChatEventArgs e, ref bool allow) => _ = OnMessageAsync(e, allow);
 
-    private void OnVoice(PlayerVoiceEventEventArgs e, ref bool allow) => _ = OnVoiceAsync(e, allow);
+    private void OnVoice(PlayerVoiceEventArgs e, ref bool allow) => _ = OnVoiceAsync(e, allow);
 
     private void OnPlayerConnected(UnturnedPlayer player) => _ = PlayerJoinAsync(player);
 
@@ -43,8 +43,8 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         U.Events.OnPlayerConnected -= OnPlayerConnected;
         
-        PlayerVoiceEventEventPublisher.PlayerVoiceEventEvent -= OnVoice;
-        ChatEventEventPublisher.ChatEventEvent -= OnUserMessage;
+        PlayerVoiceEventPublisher.PlayerVoiceEventEvent -= OnVoice;
+        ChatEventPublisher.ChatEventEvent -= OnUserMessage;
     }
 
     protected override async void OnTimerTick()
@@ -102,7 +102,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private async Task OnMessageAsync(ChatEventEventArgs e, bool allow)
+    private async Task OnMessageAsync(ChatEventArgs e, bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -121,7 +121,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private async Task OnVoiceAsync(PlayerVoiceEventEventArgs e, bool allow)
+    private async Task OnVoiceAsync(PlayerVoiceEventArgs e, bool allow)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {

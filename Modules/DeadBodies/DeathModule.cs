@@ -30,8 +30,8 @@ public class DeathModule([NotNull] string directory) : Module(directory)
     public override void Load()
     {
         CurrentAccessedInvs = [];
-        DamageEventEventPublisher.DamageEventEvent += OnDamage;
-        GestureEventEventPublisher.GestureEventEvent += OnGesture;
+        DamageEventPublisher.DamageEventEvent += OnDamage;
+        GestureEventPublisher.GestureEventEvent += OnGesture;
 
         BarricadeManager.onDamageBarricadeRequested += OnDamageBarricade;
         
@@ -41,8 +41,8 @@ public class DeathModule([NotNull] string directory) : Module(directory)
     public override void Unload()
     {
         CurrentAccessedInvs.Clear();
-        DamageEventEventPublisher.DamageEventEvent -= OnDamage;
-        GestureEventEventPublisher.GestureEventEvent -= OnGesture;
+        DamageEventPublisher.DamageEventEvent -= OnDamage;
+        GestureEventPublisher.GestureEventEvent -= OnGesture;
         
         BarricadeManager.onDamageBarricadeRequested -= OnDamageBarricade;
         
@@ -109,7 +109,7 @@ public class DeathModule([NotNull] string directory) : Module(directory)
     private void SpawnBody(SpawnDeadBodyEventArgs e) =>
         SendDeath(e.Player);
 
-    private void OnGesture(GestureEventEventArgs e, ref bool allow)
+    private void OnGesture(GestureEventArgs e, ref bool allow)
     {
         if (e.Player == null)
         {
@@ -209,7 +209,7 @@ public class DeathModule([NotNull] string directory) : Module(directory)
         e.Player.Inventory.sendStorage();
     }
 
-    private void OnDamage(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow)
+    private void OnDamage(DamageEventArgs e, ref EPlayerKill kill, ref bool allow)
     {
         if (e.Amount >= e.Player.life.health)
         {

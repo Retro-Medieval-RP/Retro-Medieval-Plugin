@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RetroMedieval.Shared.Events.Unturned;
 
-public class ChatEventEventArgs
+public class ChatEventArgs
 {
     public CSteamID Sender { get; set; }
     public string IconURL { get; set; }
@@ -14,12 +14,12 @@ public class ChatEventEventArgs
     public string Text { get; set; }
 }
 
-public static class ChatEventEventPublisher
+public static class ChatEventPublisher
 {
-    public delegate void ChatEventEventHandler(ChatEventEventArgs e, ref bool allow);
+    public delegate void ChatEventEventHandler(ChatEventArgs e, ref bool allow);
 
     public static event ChatEventEventHandler ChatEventEvent;
 
-    public static void RaiseEvent(ChatEventEventArgs args, ref bool allow) =>
+    public static void RaiseEvent(ChatEventArgs args, ref bool allow) =>
         ChatEventEvent?.Invoke(args, ref allow);
 }

@@ -3,20 +3,20 @@ using SDG.Unturned;
 
 namespace RetroMedieval.Shared.Events.Unturned;
 
-public class GestureEventEventArgs
+public class GestureEventArgs
 {
     public EPlayerGesture Gesture { get; set; }
     public UnturnedPlayer Player { get; set; }
 }
 
-public static class GestureEventEventPublisher
+public static class GestureEventPublisher
 {
-    public delegate void GestureEventEventHandler(GestureEventEventArgs e, ref bool allow);
+    public delegate void GestureEventEventHandler(GestureEventArgs e, ref bool allow);
 
     public static event GestureEventEventHandler GestureEventEvent;
 
     public static void RaiseEvent(EPlayerGesture gesture, UnturnedPlayer player, ref bool allow) =>
-        GestureEventEvent?.Invoke(new GestureEventEventArgs
+        GestureEventEvent?.Invoke(new GestureEventArgs
         {
             Gesture = gesture,
             Player = player
