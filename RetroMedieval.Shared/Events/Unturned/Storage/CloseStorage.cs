@@ -1,4 +1,3 @@
-using RetroMedieval.Utils;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
@@ -8,7 +7,6 @@ namespace RetroMedieval.Shared.Events.Unturned.Storage
     {
         public UnturnedPlayer Player { get; set; }
         public InteractableStorage StorageClosed { get; set; }
-        public RaycastResult StorageRaycast { get; set; }
     }
 
     public static class CloseStorageEventPublisher
