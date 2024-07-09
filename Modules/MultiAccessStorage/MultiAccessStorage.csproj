@@ -34,10 +34,22 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="com.rlabrecque.steamworks.net">
+          <HintPath>..\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Unturned">
+          <HintPath>..\Warps\bin\Debug\Rocket.Unturned.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MultiAccessModule.cs" />
@@ -47,6 +59,18 @@
       <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
         <Project>{54452196-1e4e-4338-9fae-1033161455d6}</Project>
         <Name>RetroMedieval.Modules</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Shared\RetroMedieval.Shared.csproj">
+        <Project>{de4a11a7-e598-4147-af71-c79cdde855a9}</Project>
+        <Name>RetroMedieval.Shared</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\RetroMedieval.Utils\RetroMedieval.Utils.csproj">
+        <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
+        <Name>RetroMedieval.Utils</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\DeadBodies\DeadBodies.csproj">
+        <Project>{0c454384-9541-4d38-a4b5-6931d5eb16ff}</Project>
+        <Name>DeadBodies</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
