@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RetroMedieval.Shared.Events.Unturned;
 
-public class DamageEventEventArgs
+public class DamageEventArgs
 {
     public byte Amount { get; set; }
     public Vector3 Ragdoll { get; set; }
@@ -17,14 +17,14 @@ public class DamageEventEventArgs
     public Player Player { get; set; }
 }
 
-public static class DamageEventEventPublisher
+public static class DamageEventPublisher
 {
-    public delegate void DamageEventEventHandler(DamageEventEventArgs e, ref EPlayerKill kill, ref bool allow);
+    public delegate void DamageEventEventHandler(DamageEventArgs e, ref EPlayerKill kill, ref bool allow);
 
     public static event DamageEventEventHandler DamageEventEvent;
 
     public static void RaiseEvent(byte amount, Vector3 ragdoll, EDeathCause cause, ELimb limb, CSteamID killer, bool track, ERagdollEffect ragdollEffect, bool causeBleeding, Player player, ref EPlayerKill kill, ref bool allow) =>
-        DamageEventEvent?.Invoke(new DamageEventEventArgs()
+        DamageEventEvent?.Invoke(new DamageEventArgs()
         {
             Amount = amount,
             Ragdoll = ragdoll,

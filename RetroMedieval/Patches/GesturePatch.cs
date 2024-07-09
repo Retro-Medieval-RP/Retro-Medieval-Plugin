@@ -17,7 +17,7 @@ internal class GesturePatch
         var allow = true;
         var player = UnturnedPlayer.FromPlayer(ply);
 
-        GestureEventEventPublisher.RaiseEvent(newGesture, player, ref allow);
+        GestureEventPublisher.RaiseEvent(newGesture, player, ref allow);
         return allow;
     }
 }
