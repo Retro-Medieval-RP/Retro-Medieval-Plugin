@@ -21,7 +21,7 @@ internal class StorageOpenPatch
             return true;
         }
         
-        OpenStorageEventPublisher.RaiseEvent(player, newStorage, result, ref allow);
+        OpenStorageEventPublisher.RaiseEvent(player, newStorage, ref allow);
         return allow;
     }
 }
@@ -42,7 +42,7 @@ internal class StorageClosePatch
             return true;
         }
         
-        OpenStorageEventPublisher.RaiseEvent(player, currentStorage, result, ref allow);
+        OpenStorageEventPublisher.RaiseEvent(player, currentStorage, ref allow);
         return allow;
     }
 }
