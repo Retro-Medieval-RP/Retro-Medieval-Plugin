@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{DE4A11A7-E598-4147-AF71-C79CDDE855A9}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>RetroMedieval.Shared</RootNamespace>
+        <AssemblyName>RetroMedieval.Shared</AssemblyName>
+        <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>..\Modules\Libs\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\Modules\Libs\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="AstarPathfindingProject">
+          <HintPath>..\Modules\Libs\AstarPathfindingProject.dll</HintPath>
+        </Reference>
+        <Reference Include="com.rlabrecque.steamworks.net">
+          <HintPath>..\Modules\Libs\com.rlabrecque.steamworks.net.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.API">
+          <HintPath>..\Modules\Libs\Rocket.API.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Core">
+          <HintPath>..\Modules\Libs\Rocket.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Unturned">
+          <HintPath>..\Modules\Libs\Rocket.Unturned.dll</HintPath>
+        </Reference>
+        <Reference Include="SDG.NetTransport">
+          <HintPath>..\Modules\Libs\SDG.NetTransport.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>..\Modules\Libs\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\Modules\Libs\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\Modules\Libs\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Events\Unturned\ChatEvent.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\BackpackDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\ClothingDequip.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\GlassesDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\HatDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\MaskDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\PantsDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\ShirtDequipped.cs" />
+        <Compile Include="Events\Unturned\CloathingDequip\VestDequipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\BackpackEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\ClothingEquip.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\GlassesEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\HatEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\MaskEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\PantsEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\ShirtEquipped.cs" />
+        <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
+        <Compile Include="Events\Unturned\DamageEvent.cs" />
+        <Compile Include="Events\Unturned\GestureEvent.cs" />
+        <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
+        <Compile Include="Events\Unturned\Storage\CloseStorage.cs" />
+        <Compile Include="Events\Unturned\Storage\OpenStorage.cs" />
+        <Compile Include="Events\Zones\ZoneEnter.cs" />
+        <Compile Include="Events\Zones\ZoneLeft.cs" />
+        <Compile Include="Models\Zones\Node.cs" />
+        <Compile Include="Models\Zones\Zone.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

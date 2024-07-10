@@ -12,7 +12,7 @@ public class MySqlSaver<T> : ISqlStorage<T>
     public StorageType StorageType => StorageType.Sql;
 
     private MySqlConnection Connection => new(SavePath);
-    
+
     private string TableName { get; set; } = "";
 
     public bool Load(string filePath)
@@ -39,6 +39,12 @@ public class MySqlSaver<T> : ISqlStorage<T>
         }
     }
 
-    public IStatement StartQuery() => 
+    public IStatement StartQuery() =>
         new MySqlStatement(TableName, SavePath);
+
+
+    ~MySqlSaver()
+    {
+        TableGenerator.TypeToTable.Clear();
+    }
 }

@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using RetroMedieval.Events.Unturned;
+using RetroMedieval.Shared.Events.Unturned;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
@@ -16,7 +16,7 @@ internal class DamagePatch
         if (ply is null) return false;
 
         var allow = true;
-        DamageEventEventPublisher.RaiseEvent(amount, newRagdoll, newCause, newLimb, newKiller, trackKill, newRagdollEffect, canCauseBleeding, ply, ref kill, ref allow);
+        DamageEventPublisher.RaiseEvent(amount, newRagdoll, newCause, newLimb, newKiller, trackKill, newRagdollEffect, canCauseBleeding, ply, ref kill, ref allow);
         return allow;
     }
 }

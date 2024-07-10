@@ -9,7 +9,7 @@ namespace RetroMedieval.Savers.MySql.Tables;
 
 public class TableGenerator
 {
-    private static Dictionary<Type, string> TypeToTable { get; set; } = [];
+    internal static Dictionary<Type, string> TypeToTable { get; set; } = [];
 
     public static string GenerateDdl(Type type, out string tableName)
     {
@@ -28,22 +28,23 @@ public class TableGenerator
 
         var properties = type.GetProperties();
         var columns = properties.Select(property => GetColumnData(property, table.TableName)).ToList();
-        var columnsAndContrains = new List<string>();
-        columnsAndContrains.AddRange(columns.Where(r => !r.IgnoreColumn).Select(r => r.DdlColumn));
-        columnsAndContrains.AddRange(columns.Where(r => !r.IgnoreColumn)
-            .Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
-            .Select(r => r.Constraint));
-
-        var ddl = $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columnsAndContrains)});{string.Join("", columns.Select(x => x.ReferenceTableDdl))}";
+        var columnsAndConstraints = columns
+            .Where(r => !r.IgnoreColumn)
+            .Select(r => r.DdlColumn)
+            .Concat(columns
+                .Where(r => !r.IgnoreColumn)
+                .Where(r => !string.IsNullOrWhiteSpace(r.Constraint))
+                .Select(r => r.Constraint));
+        
+        var ddl =
+            $"CREATE TABLE IF NOT EXISTS {table.TableName} ({string.Join(",", columnsAndConstraints)});{string.Join("", columns.Select(x => x.ReferenceTableDdl))}";
 
         TypeToTable.Add(type, table.TableName);
         return ddl;
     }
 
-    public static TableColumn GetColumnDataTest(PropertyInfo property, string tableName)
-    {
-        return GetColumnData(property, tableName);
-    }
+    public static TableColumn GetColumnDataTest(PropertyInfo property, string tableName) =>
+        GetColumnData(property, tableName);
 
     private static TableColumn GetColumnData(PropertyInfo property, string tableName)
     {

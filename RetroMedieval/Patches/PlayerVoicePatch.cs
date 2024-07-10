@@ -1,5 +1,5 @@
 using HarmonyLib;
-using RetroMedieval.Events.Unturned;
+using RetroMedieval.Shared.Events.Unturned;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
@@ -12,7 +12,7 @@ internal class PlayerVoicePatch
     public static bool Prefix(PlayerVoice speaker, PlayerVoice listener, PlayerVoice __instance)
     {
         var allow = true;
-        PlayerVoiceEventEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(speaker.player), UnturnedPlayer.FromPlayer(listener.player), ref allow);
+        PlayerVoiceEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(speaker.player), UnturnedPlayer.FromPlayer(listener.player), ref allow);
         return allow;
     }
 }
