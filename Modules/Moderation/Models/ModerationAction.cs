@@ -26,7 +26,7 @@ internal class ModerationAction(ModerationActionType actionType)
     [DatabaseColumn("Reason", "VARCHAR(255)")]
     public string Reason { get; set; } = "No Reason Specified";
     
-    public static int? ConvertToBanDuration(IEnumerable<string> args)
+    public static int? ConvertToDuration(IEnumerable<string> args)
     {
         int? seconds = 0;
 
@@ -36,15 +36,14 @@ internal class ModerationAction(ModerationActionType actionType)
             return seconds == 0 ? null : seconds;
         }
         
-        var timePeriods = new Dictionary<char, int>()
+        var timePeriods = new Dictionary<char, int>
         {
             { 'd', 86400 },
             { 'h', 3600 },
             { 'm', 60 },
             { 's', 1 }
         };
-
-
+        
         foreach (var arg in enumerable)
         {
             foreach (var pair in timePeriods.Where(pair => arg.Contains(pair.Key)))

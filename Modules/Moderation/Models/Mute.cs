@@ -53,7 +53,7 @@ internal class Mute() : ModerationAction(ModerationActionType.Mute)
         }
     }
 
-    private string TimeSpanString(TimeSpan span)
+    private static string TimeSpanString(TimeSpan span)
     {
         var formatted =
             $"{(span.Duration().Days > 0 ? $"{span.Days:0}d " : string.Empty)}{(span.Duration().Hours > 0 ? $"{span.Hours:0}h " : string.Empty)}{(span.Duration().Minutes > 0 ? $"{span.Minutes:0}m " : string.Empty)}";

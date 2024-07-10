@@ -54,7 +54,7 @@ internal class BanCommand : IRocketCommand
 
         ban.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
         ban.Reason = command.ElementAtOrDefault(1);
-        var length = ModerationAction.ConvertToBanDuration(command.Skip(2));
+        var length = ModerationAction.ConvertToDuration(command.Skip(2));
         ban.BanLength = length ?? -1;
         ban.PunishmentGiven = DateTime.Now;
         

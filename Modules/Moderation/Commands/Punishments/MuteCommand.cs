@@ -60,7 +60,7 @@ internal class MuteCommand : IRocketCommand
 
         mute.PunisherID = caller is ConsolePlayer ? 0 : ulong.Parse(caller.Id);
         mute.Reason = command.ElementAtOrDefault(1);
-        var length = ModerationAction.ConvertToBanDuration(command.Skip(2));
+        var length = ModerationAction.ConvertToDuration(command.Skip(2));
         mute.MuteLength = length ?? -1;
         mute.PunishmentGiven = DateTime.Now;
         
