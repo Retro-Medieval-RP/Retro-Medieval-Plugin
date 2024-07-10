@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace MultiAccessStorage;
 
-[ModuleInformation("Multi User Access Storage")]
+[ModuleInformation("Multi User Storage")]
 public class MultiAccessModule(string directory) : Module(directory)
 {
     private Dictionary<Vector3, List<UnturnedPlayer>> UsersInChest { get; set; }
