@@ -18,6 +18,7 @@ using Logger = Rocket.Core.Logging.Logger;
 namespace Moderation;
 
 [ModuleInformation("Moderation")]
+[ModuleConfiguration<ModerationConfiguration>("ModerationConfiguration")]
 [ModuleStorage<MySqlSaver<Warn>>("Warns")]
 [ModuleStorage<MySqlSaver<Mute>>("Mutes")]
 [ModuleStorage<MySqlSaver<Kick>>("Kicks")]
@@ -33,11 +34,14 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         ChatEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
-    private void OnUserMessage(ChatEventArgs e, ref bool allow) => _ = OnMessageAsync(e, allow);
+    private void OnUserMessage(ChatEventArgs e, ref bool allow) => 
+        allow = OnMessageAsync(e).Result;
 
-    private void OnVoice(PlayerVoiceEventArgs e, ref bool allow) => _ = OnVoiceAsync(e, allow);
+    private void OnVoice(PlayerVoiceEventArgs e, ref bool allow) => 
+        allow = OnVoiceAsync(e).Result;
 
-    private void OnPlayerConnected(UnturnedPlayer player) => _ = PlayerJoinAsync(player);
+    private void OnPlayerConnected(UnturnedPlayer player) => 
+        _ = PlayerJoinAsync(player);
 
     public override void Unload()
     {
@@ -102,12 +106,12 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         }
     }
 
-    private async Task OnMessageAsync(ChatEventArgs e, bool allow)
+    private async Task<bool> OnMessageAsync(ChatEventArgs e)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
             Logger.LogError("Could not gather storage [MutesStorage]");
-            return;
+            return true;
         }
 
         if (await mutesStorage
@@ -117,23 +121,27 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 .Finalise()
                 .QuerySingle<int>() > 0)
         {
-            allow = false;
+            return false;
         }
+
+        return true;
     }
 
-    private async Task OnVoiceAsync(PlayerVoiceEventArgs e, bool allow)
+    private async Task<bool> OnVoiceAsync(PlayerVoiceEventArgs e)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
             Logger.LogError("Could not gather storage [MutesStorage]");
-            return;
+            return true;
         }
 
         if (await mutesStorage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
                 .Finalise().QuerySingle<int>() > 0)
         {
-            allow = false;
+            return false;
         }
+
+        return true;
     }
 
     private async Task PlayerJoinAsync(UnturnedPlayer player)

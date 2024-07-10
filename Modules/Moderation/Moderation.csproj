@@ -89,12 +89,14 @@
         <Compile Include="Commands\Utils\WreckBarricadeCommand.cs" />
         <Compile Include="Commands\Utils\WreckVehicleCommand.cs" />
         <Compile Include="Models\Ban.cs" />
+        <Compile Include="Models\DiscordWebhook.cs" />
         <Compile Include="Models\Kick.cs" />
         <Compile Include="Models\ModerationAction.cs" />
         <Compile Include="Models\ModerationActionType.cs" />
         <Compile Include="Models\ModerationPlayer.cs" />
         <Compile Include="Models\Mute.cs" />
         <Compile Include="Models\Warn.cs" />
+        <Compile Include="ModerationConfiguration.cs" />
         <Compile Include="ModerationModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
