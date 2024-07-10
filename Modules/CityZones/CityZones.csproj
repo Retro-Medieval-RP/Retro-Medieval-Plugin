@@ -59,7 +59,7 @@
           <HintPath>..\Libs\Rocket.Core.dll</HintPath>
         </Reference>
         <Reference Include="Rocket.Unturned">
-          <HintPath>..\Warps\bin\Debug\Rocket.Unturned.dll</HintPath>
+          <HintPath>..\Libs\Rocket.Unturned.dll</HintPath>
         </Reference>
         <Reference Include="SDG.NetTransport">
           <HintPath>..\Libs\SDG.NetTransport.dll</HintPath>

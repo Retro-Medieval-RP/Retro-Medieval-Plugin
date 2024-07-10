@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\Libs\0Harmony.dll</HintPath>
+      <HintPath>..\Modules\Libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Modules\Libs\Assembly-CSharp.dll</HintPath>
