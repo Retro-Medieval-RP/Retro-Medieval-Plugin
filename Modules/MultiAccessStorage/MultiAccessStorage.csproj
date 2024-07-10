@@ -68,10 +68,6 @@
         <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
         <Name>RetroMedieval.Utils</Name>
       </ProjectReference>
-      <ProjectReference Include="..\DeadBodies\DeadBodies.csproj">
-        <Project>{0c454384-9541-4d38-a4b5-6931d5eb16ff}</Project>
-        <Name>DeadBodies</Name>
-      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

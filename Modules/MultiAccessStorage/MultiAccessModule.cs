@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using DeadBodies;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events.Unturned.Storage;
@@ -15,7 +15,7 @@ public class MultiAccessModule(string directory) : Module(directory)
 {
     private Dictionary<Vector3, List<UnturnedPlayer>> UsersInChest { get; set; }
     private Dictionary<UnturnedPlayer, bool> TempCloses { get; set; }
-    
+
     public override void Load()
     {
         UsersInChest = [];
@@ -26,20 +26,17 @@ public class MultiAccessModule(string directory) : Module(directory)
 
     private void OnOpenStorage(OpenStorageEventArgs e, ref bool allow)
     {
-        if (!ModuleLoader.Instance.GetModule<DeathModule>(out var deathModule))
+        if (e.StorageOpened == null)
         {
-            if (deathModule.IsUserAccessBody(e.Player))
-            {
-                return;
-            }
+            return;
         }
-
+        
         if (UsersInChest.ContainsKey(e.StorageOpened.transform.position))
         {
             UsersInChest[e.StorageOpened.transform.position].Add(e.Player);
             TempCloses.Add(e.Player, true);
             e.Player.Inventory.closeStorage();
-            
+
             var inventory = new Items(7);
             inventory.resize(e.StorageOpened.items.width, e.StorageOpened.items.height);
 
@@ -47,7 +44,7 @@ public class MultiAccessModule(string directory) : Module(directory)
             {
                 inventory.addItem(item.x, item.y, item.rot, item.item);
             }
-            
+
             inventory.onItemAdded = (_, _, jar) =>
             {
                 var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
@@ -60,13 +57,13 @@ public class MultiAccessModule(string directory) : Module(directory)
                     user.Inventory.storage.items.addItem(jar.x, jar.y, jar.rot, jar.item);
                 }
             };
-            
+
             inventory.onItemRemoved = (_, index, _) =>
             {
                 var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
                 var storage = drop.interactable as InteractableStorage;
                 storage?.items.removeItem(index);
-                
+
                 var users = UsersInChest[e.StorageOpened.transform.position];
                 foreach (var user in users)
                 {
@@ -87,14 +84,6 @@ public class MultiAccessModule(string directory) : Module(directory)
             TempCloses.Remove(e.Player);
             return;
         }
-        
-        if (!ModuleLoader.Instance.GetModule<DeathModule>(out var deathModule))
-        {
-            if (deathModule.IsUserAccessBody(e.Player))
-            {
-                return;
-            }
-        }
 
         if (!UsersInChest.TryGetValue(e.StorageClosed.transform.position, out var players))
         {
@@ -106,7 +95,8 @@ public class MultiAccessModule(string directory) : Module(directory)
             return;
         }
 
-        UsersInChest[e.StorageClosed.transform.position].RemoveAll(x => x.CSteamID.m_SteamID == e.Player.CSteamID.m_SteamID);
+        UsersInChest[e.StorageClosed.transform.position]
+            .RemoveAll(x => x.CSteamID.m_SteamID == e.Player.CSteamID.m_SteamID);
 
         if (!UsersInChest[e.StorageClosed.transform.position].Any())
         {
