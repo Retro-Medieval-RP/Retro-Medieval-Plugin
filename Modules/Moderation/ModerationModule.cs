@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Moderation.Models;
+using Moderation.Services;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
@@ -26,27 +27,31 @@ namespace Moderation;
 [ModuleStorage<MySqlSaver<ModerationPlayer>>("Players")]
 internal class ModerationModule([NotNull] string directory) : Module(directory)
 {
+    internal DiscordService DiscordService { get; set; }
+
     public override void Load()
     {
+        DiscordService = new DiscordService();
+
         U.Events.OnPlayerConnected += OnPlayerConnected;
-        
+
         PlayerVoiceEventPublisher.PlayerVoiceEventEvent += OnVoice;
         ChatEventPublisher.ChatEventEvent += OnUserMessage;
     }
 
-    private void OnUserMessage(ChatEventArgs e, ref bool allow) => 
+    private void OnUserMessage(ChatEventArgs e, ref bool allow) =>
         allow = OnMessageAsync(e).Result;
 
-    private void OnVoice(PlayerVoiceEventArgs e, ref bool allow) => 
+    private void OnVoice(PlayerVoiceEventArgs e, ref bool allow) =>
         allow = OnVoiceAsync(e).Result;
 
-    private void OnPlayerConnected(UnturnedPlayer player) => 
+    private void OnPlayerConnected(UnturnedPlayer player) =>
         _ = PlayerJoinAsync(player);
 
     public override void Unload()
     {
         U.Events.OnPlayerConnected -= OnPlayerConnected;
-        
+
         PlayerVoiceEventPublisher.PlayerVoiceEventEvent -= OnVoice;
         ChatEventPublisher.ChatEventEvent -= OnUserMessage;
     }
@@ -108,40 +113,35 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
 
     private async Task<bool> OnMessageAsync(ChatEventArgs e)
     {
-        if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
+        if (GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
-            Logger.LogError("Could not gather storage [MutesStorage]");
-            return true;
-        }
-
-        if (await mutesStorage
+            return await mutesStorage
                 .StartQuery()
                 .Count()
                 .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
                 .Finalise()
-                .QuerySingle<int>() > 0)
-        {
-            return false;
+                .QuerySingle<int>() <= 0;
         }
-
+        Logger.LogError("Could not gather storage [MutesStorage]");
         return true;
+
     }
 
     private async Task<bool> OnVoiceAsync(PlayerVoiceEventArgs e)
     {
-        if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
+        if (GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
-            Logger.LogError("Could not gather storage [MutesStorage]");
-            return true;
+            return await mutesStorage
+                .StartQuery()
+                .Count()
+                .Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
+                .Finalise()
+                .QuerySingle<int>() <= 0;
         }
-
-        if (await mutesStorage.StartQuery().Count().Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
-                .Finalise().QuerySingle<int>() > 0)
-        {
-            return false;
-        }
-
+        
+        Logger.LogError("Could not gather storage [MutesStorage]");
         return true;
+
     }
 
     private async Task PlayerJoinAsync(UnturnedPlayer player)
@@ -164,7 +164,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 InsertPlayer(player);
                 return;
             }
-            
+
             var storedUser = await GetPlayer(player.CSteamID.m_SteamID);
             if (storedUser.DisplayName != player.DisplayName)
             {
@@ -182,7 +182,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
     }
 
-    public void Ban(Ban ban, bool userOnline = true)
+    public async void Ban(Ban ban, bool userOnline = true)
     {
         if (!GetStorage<MySqlSaver<Ban>>(out var bansStorage))
         {
@@ -212,9 +212,22 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             Provider.kick(new CSteamID(ban.TargetID),
                 $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
         }
+
+        var target = await GetPlayer(ban.TargetID);
+        var punisher = ban.PunisherID == 0
+            ? new ModerationPlayer
+            {
+                DisplayName = "Console",
+                FirstJoinDate = DateTime.Now,
+                LastJoinDate = DateTime.Now,
+                PlayerID = 0
+            }
+            : await GetPlayer(ban.PunisherID);
+        
+        DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, ban.Reason, ban.DurationString], ModerationActionType.Ban);
     }
 
-    public void Kick(Kick kick, bool userOnline = true)
+    public async void Kick(Kick kick, bool userOnline = true)
     {
         if (!GetStorage<MySqlSaver<Kick>>(out var kicksStorage))
         {
@@ -222,7 +235,10 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (!kicksStorage.StartQuery().Insert(kick).ExecuteSql())
+        if (!kicksStorage
+                .StartQuery()
+                .Insert(kick)
+                .ExecuteSql())
         {
             Logger.LogError("Could not enter kick into [KicksStorage]");
             return;
@@ -243,9 +259,22 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         {
             Provider.kick(new CSteamID(kick.TargetID), $"[KICK] Reason: {kick.Reason}");
         }
+        
+        var target = await GetPlayer(kick.TargetID);
+        var punisher = kick.PunisherID == 0
+            ? new ModerationPlayer
+            {
+                DisplayName = "Console",
+                FirstJoinDate = DateTime.Now,
+                LastJoinDate = DateTime.Now,
+                PlayerID = 0
+            }
+            : await GetPlayer(kick.PunisherID);
+        
+        DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, kick.Reason], ModerationActionType.Kick);
     }
 
-    public void Mute(Mute mute, bool userOnline = true)
+    public async void Mute(Mute mute, bool userOnline = true)
     {
         if (!GetStorage<MySqlSaver<Mute>>(out var mutesStorage))
         {
@@ -253,7 +282,10 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (!mutesStorage.StartQuery().Insert(mute).ExecuteSql())
+        if (!mutesStorage
+                .StartQuery()
+                .Insert(mute)
+                .ExecuteSql())
         {
             Logger.LogError("Could not enter mute into [MutesStorage]");
             return;
@@ -275,9 +307,22 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             UnturnedChat.Say(UnturnedPlayer.FromCSteamID(new CSteamID(mute.PunisherID)),
                 $"Muted {UnturnedPlayer.FromCSteamID(new CSteamID(mute.TargetID)).DisplayName} for reason {mute.Reason} with time length: {mute.TimeLeftString}");
         }
+        
+        var target = await GetPlayer(mute.TargetID);
+        var punisher = mute.PunisherID == 0
+            ? new ModerationPlayer
+            {
+                DisplayName = "Console",
+                FirstJoinDate = DateTime.Now,
+                LastJoinDate = DateTime.Now,
+                PlayerID = 0
+            }
+            : await GetPlayer(mute.PunisherID);
+        
+        DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, mute.Reason, mute.DurationString], ModerationActionType.Mute);
     }
 
-    public void Warn(Warn warn, bool userOnline = true)
+    public async void Warn(Warn warn, bool userOnline = true)
     {
         if (!GetStorage<MySqlSaver<Warn>>(out var warnsStorage))
         {
@@ -285,7 +330,10 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (!warnsStorage.StartQuery().Insert(warn).ExecuteSql())
+        if (!warnsStorage
+                .StartQuery()
+                .Insert(warn)
+                .ExecuteSql())
         {
             Logger.LogError("Could not enter warn into [WarnsStorage]");
             return;
@@ -306,6 +354,19 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             UnturnedChat.Say(UnturnedPlayer.FromCSteamID(new CSteamID(warn.PunisherID)),
                 $"Warned {UnturnedPlayer.FromCSteamID(new CSteamID(warn.TargetID)).DisplayName} for reason {warn.Reason}");
         }
+        
+        var target = await GetPlayer(warn.TargetID);
+        var punisher = warn.PunisherID == 0
+            ? new ModerationPlayer
+            {
+                DisplayName = "Console",
+                FirstJoinDate = DateTime.Now,
+                LastJoinDate = DateTime.Now,
+                PlayerID = 0
+            }
+            : await GetPlayer(warn.PunisherID);
+        
+        DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, warn.Reason], ModerationActionType.Warn);
     }
 
     public async Task RemoveWarn(IRocketPlayer caller, string warnID)
@@ -316,16 +377,43 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (await warnsStorage.StartQuery().Count().Where(("PunishmentID", warnID), ("WarnRemoved", false)).Finalise()
+        if (await warnsStorage
+                .StartQuery()
+                .Count()
+                .Where(("PunishmentID", warnID), ("WarnRemoved", false))
+                .Finalise()
                 .QuerySingle<int>() > 0)
         {
-            if (!warnsStorage.StartQuery().Update(("WarnRemoved", true)).Finalise().ExecuteSql())
+            if (!warnsStorage
+                    .StartQuery()
+                    .Update(("WarnRemoved", true))
+                    .Finalise()
+                    .ExecuteSql())
             {
                 Logger.LogError($"Could not update warn in [WarnsStorage] for warn id: {warnID}");
                 return;
             }
 
             UnturnedChat.Say(caller, $"Warn ({warnID}) has been removed.");
+            
+            var warn = await warnsStorage
+                .StartQuery()
+                .Select("*")
+                .Where(("PunishmentID", warnID))
+                .Finalise()
+                .QuerySingle<Warn>();
+            var target = await GetPlayer(warn.TargetID);
+            var punisher = caller is ConsolePlayer
+                ? new ModerationPlayer
+                {
+                    DisplayName = "Console",
+                    FirstJoinDate = DateTime.Now,
+                    LastJoinDate = DateTime.Now,
+                    PlayerID = 0
+                }
+                : await GetPlayer(((UnturnedPlayer)caller).CSteamID.m_SteamID);
+        
+            DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, warn.Reason], ModerationActionType.RemoveWarn);
         }
         else
         {
@@ -341,15 +429,41 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (await mutesStorage.StartQuery().Count().Where(("PunishmentID", muteID), ("MuteOver", false)).Finalise()
+        if (await mutesStorage
+                .StartQuery()
+                .Count()
+                .Where(("PunishmentID", muteID), ("MuteOver", false))
+                .Finalise()
                 .QuerySingle<int>() > 0)
         {
-            if (!mutesStorage.StartQuery().Update(("MuteOver", true)).Finalise().ExecuteSql())
+            if (!mutesStorage
+                    .StartQuery()
+                    .Update(("MuteOver", true))
+                    .Finalise()
+                    .ExecuteSql())
             {
                 Logger.LogError($"Could not update mute in [MutesStorage] for mute id: {muteID}");
                 return;
             }
-
+            
+            var mute = await mutesStorage
+                .StartQuery()
+                .Select("*")
+                .Where(("PunishmentID", muteID))
+                .Finalise()
+                .QuerySingle<Mute>();
+            var target = await GetPlayer(mute.TargetID);
+            var punisher = caller is ConsolePlayer
+                ? new ModerationPlayer
+                {
+                    DisplayName = "Console",
+                    FirstJoinDate = DateTime.Now,
+                    LastJoinDate = DateTime.Now,
+                    PlayerID = 0
+                }
+                : await GetPlayer(((UnturnedPlayer)caller).CSteamID.m_SteamID);
+        
+            DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, mute.Reason], ModerationActionType.Unmute);
             UnturnedChat.Say(caller, $"Mute ({muteID}) has been undone.");
         }
         else
@@ -366,14 +480,41 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return;
         }
 
-        if (await bansStorage.StartQuery().Count().Where(("PunishmentID", banID), ("BanOver", false)).Finalise()
+        if (await bansStorage
+                .StartQuery()
+                .Count()
+                .Where(("PunishmentID", banID), ("BanOver", false))
+                .Finalise()
                 .QuerySingle<int>() > 0)
         {
-            if (!bansStorage.StartQuery().Update(("BanOver", true)).Finalise().ExecuteSql())
+            if (!bansStorage
+                    .StartQuery()
+                    .Update(("BanOver", true))
+                    .Finalise()
+                    .ExecuteSql())
             {
                 Logger.LogError($"Could not update ban in [BansStorage] for ban id: {banID}");
                 return;
             }
+            
+            var ban = await bansStorage
+                .StartQuery()
+                .Select("*")
+                .Where(("PunishmentID", banID))
+                .Finalise()
+                .QuerySingle<Ban>();
+            var target = await GetPlayer(ban.TargetID);
+            var punisher = caller is ConsolePlayer
+                ? new ModerationPlayer
+                {
+                    DisplayName = "Console",
+                    FirstJoinDate = DateTime.Now,
+                    LastJoinDate = DateTime.Now,
+                    PlayerID = 0
+                }
+                : await GetPlayer(((UnturnedPlayer)caller).CSteamID.m_SteamID);
+        
+            DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, ban.Reason], ModerationActionType.Unban);
 
             UnturnedChat.Say(caller, $"Ban ({banID}) has been removed.");
         }
@@ -397,7 +538,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             .Where(("BanOver", false), ("TargetID", targetsID))
             .Finalise()
             .Query<Ban>();
-        
+
         UnturnedChat.Say(caller, "Bans:");
         foreach (var ban in bans)
         {
@@ -459,7 +600,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
             return await playersStorage.StartQuery().Select("*").Where(("PlayerID", playerId)).Finalise()
                 .QuerySingle<ModerationPlayer>();
         }
-            
+
         Logger.LogError("Could not gather storage [PlayersStorage]");
         return null;
     }
@@ -468,9 +609,14 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            return await playersStorage.StartQuery().Count().Where(("PlayerID", playerId)).Finalise().QuerySingle<int>() > 0;
+            return await playersStorage
+                .StartQuery()
+                .Count()
+                .Where(("PlayerID", playerId))
+                .Finalise()
+                .QuerySingle<int>() > 0;
         }
-            
+
         Logger.LogError("Could not gather storage [PlayersStorage]");
         return false;
     }
@@ -479,10 +625,15 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            playersStorage.StartQuery().Update(("LastJoinDate", DateTime.Now)).Where(("PlayerID", playerId)).Finalise().ExecuteSql();
+            playersStorage
+                .StartQuery()
+                .Update(("LastJoinDate", DateTime.Now))
+                .Where(("PlayerID", playerId))
+                .Finalise()
+                .ExecuteSql();
             return;
         }
-            
+
         Logger.LogError("Could not gather storage [PlayersStorage]");
     }
 
@@ -490,10 +641,15 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            playersStorage.StartQuery().Update(("DisplayName", displayName)).Where(("PlayerID", playerId)).Finalise().ExecuteSql();
+            playersStorage
+                .StartQuery()
+                .Update(("DisplayName", displayName))
+                .Where(("PlayerID", playerId))
+                .Finalise()
+                .ExecuteSql();
             return;
         }
-            
+
         Logger.LogError("Could not gather storage [PlayersStorage]");
     }
 
@@ -501,17 +657,19 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
     {
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
-            playersStorage.StartQuery().Insert(new ModerationPlayer
-            {
-                PlayerID = player.CSteamID.m_SteamID,
-                DisplayName = player.DisplayName,
-                FirstJoinDate = DateTime.Now,
-                LastJoinDate = DateTime.Now
-            })
-            .ExecuteSql();
+            playersStorage
+                .StartQuery()
+                .Insert(new ModerationPlayer
+                {
+                    PlayerID = player.CSteamID.m_SteamID,
+                    DisplayName = player.DisplayName,
+                    FirstJoinDate = DateTime.Now,
+                    LastJoinDate = DateTime.Now
+                })
+                .ExecuteSql();
             return;
         }
-            
+
         Logger.LogError("Could not gather storage [PlayersStorage]");
     }
 }

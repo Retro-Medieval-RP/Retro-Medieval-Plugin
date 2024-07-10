@@ -1,4 +1,6 @@
-namespace Moderation.Models;
+using Newtonsoft.Json;
+
+namespace Moderation.Models.Discord;
 
 internal class DiscordWebhook
 {
@@ -17,7 +19,10 @@ internal class DiscordWebhook
     public string WebhookUrl { get; set; }
     public string WebhookColor { get; set; }
     public bool Inline { get; set; }
-    public string Title { get; set; }
-    public string Url { get; set; }
     public string MessageFormat { get; set; }
+    
+    [JsonIgnore]
+    public string Title { get; set; }
+    [JsonIgnore]
+    public string Url { get; set; }
 }

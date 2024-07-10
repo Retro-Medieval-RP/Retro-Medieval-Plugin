@@ -42,6 +42,7 @@ public class MySqlSaver<T> : ISqlStorage<T>
     public IStatement StartQuery() =>
         new MySqlStatement(TableName, SavePath);
 
+
     ~MySqlSaver()
     {
         TableGenerator.TypeToTable.Clear();
