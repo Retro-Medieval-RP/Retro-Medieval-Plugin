@@ -2,6 +2,8 @@ namespace Moderation.Models.Discord;
 
 internal class Footer
 {
-    public string IconURL { get; set; }
-    public string Text { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string icon_url { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string text { get; set; }
 }

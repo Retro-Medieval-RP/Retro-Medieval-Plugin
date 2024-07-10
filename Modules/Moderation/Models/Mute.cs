@@ -7,10 +7,10 @@ namespace Moderation.Models;
 internal class Mute() : ModerationAction(ModerationActionType.Mute)
 {
     [DatabaseColumn("MuteLength", "INT", "-1")]
-    public int MuteLength { get; set; }
-    
+    public int MuteLength { get; set; } = -1;
+
     [DatabaseColumn("MuteOver", "TINYINT", "0")]
-    public bool MuteOver { get; set; }
+    public bool MuteOver { get; set; } = false;
     
     [DatabaseIgnore]
     public bool IsExpired 
@@ -30,7 +30,7 @@ internal class Mute() : ModerationAction(ModerationActionType.Mute)
         {
             if (MuteLength == -1)
             {
-                return "Ban is permanent";
+                return "Mute is permanent";
             }
             
             var span = TimeSpan.FromSeconds(MuteLength);

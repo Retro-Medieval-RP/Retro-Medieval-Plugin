@@ -4,16 +4,18 @@ namespace Moderation.Models.Discord;
 
 internal class DiscordWebhookMessage
 {
-    public List<Embed> Embeds { get; set; }
-    public string Content { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public List<Embed> embeds { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string content { get; set; }
     
     public DiscordWebhookMessage(Embed embed)
     {
-        Embeds = [embed];
+        embeds = [embed];
     }
 
     public DiscordWebhookMessage(string content)
     {
-        Content = content;
+        this.content = content;
     }
 }

@@ -2,7 +2,10 @@ namespace Moderation.Models.Discord;
 
 internal class Field(string name, string value, bool inline)
 {
-    public string Name { get; set; } = name;
-    public string Value { get; set; } = value;
-    public bool Inline { get; set; } = inline;
+    // ReSharper disable once InconsistentNaming
+    public string name { get; set; } = name;
+    // ReSharper disable once InconsistentNaming
+    public string value { get; set; } = value;
+    // ReSharper disable once InconsistentNaming
+    public bool inline { get; set; } = inline;
 }

@@ -5,26 +5,33 @@ namespace Moderation.Models.Discord;
 
 internal class Embed
 {
-    public string Title { get; set; }
-    public string URL { get; set; }
-    public int Color { get; set; }
-    public string Timestamp { get; set; }
-    public string Description { get; set; }
-    public List<Field> Fields { get; set; }
-    public Footer Footer { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string title { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string url { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public int color { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string timestamp { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public string description { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public List<Field> fields { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public Footer footer { get; set; }
     
     public Embed(string description, int color)
     {
-        Description = description;
-        Color = color;
-        Timestamp = DateTime.Now.ToString("u");
+        this.description = description;
+        this.color = color;
+        timestamp = DateTime.Now.ToString("u");
     }
 
     public Embed(List<Field> fields, int color, Footer footer)
     {
-        Fields = fields;
-        Color = color;
-        Timestamp = DateTime.Now.ToString("u");
-        Footer = footer;
+        this.fields = fields;
+        this.color = color;
+        timestamp = DateTime.Now.ToString("u");
+        this.footer = footer;
     }
 }

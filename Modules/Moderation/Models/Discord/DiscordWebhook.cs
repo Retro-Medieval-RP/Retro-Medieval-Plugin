@@ -21,8 +21,6 @@ internal class DiscordWebhook
     public bool Inline { get; set; }
     public string MessageFormat { get; set; }
     
-    [JsonIgnore]
     public string Title { get; set; }
-    [JsonIgnore]
     public string Url { get; set; }
 }

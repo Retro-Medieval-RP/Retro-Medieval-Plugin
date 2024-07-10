@@ -22,7 +22,7 @@ internal class DiscordService
             return;
         }
 
-        if (moderationModule.GetConfiguration<ModerationConfiguration>(out var config))
+        if (!moderationModule.GetConfiguration<ModerationConfiguration>(out var config))
         {
             Logger.LogError("Could not find configuration [ModerationConfiguration]!");
             return;
@@ -85,7 +85,7 @@ internal class DiscordService
             return;
         }
 
-        if (moderationModule.GetConfiguration<ModerationConfiguration>(out var config))
+        if (!moderationModule.GetConfiguration<ModerationConfiguration>(out var config))
         {
             Logger.LogError("Could not find configuration [ModerationConfiguration]!");
             return;
@@ -127,8 +127,8 @@ internal class DiscordService
         {
             footer = new Footer
             {
-                Text = Provider.serverName,
-                IconURL = Provider.configData.Browser.Icon
+                text = Provider.serverName,
+                icon_url = Provider.configData.Browser.Icon
             };
         }
 
@@ -136,12 +136,12 @@ internal class DiscordService
 
         if (!string.IsNullOrEmpty(webhook.Title))
         {
-            embed.Title = FormatMessage(webhook.Title, args, messageType);
+            embed.title = FormatMessage(webhook.Title, args, messageType);
         }
 
         if (!string.IsNullOrEmpty(webhook.Url))
         {
-            embed.URL = FormatMessage(webhook.Url, args, messageType);
+            embed.url = FormatMessage(webhook.Url, args, messageType);
         }
 
         var msg = new DiscordWebhookMessage(embed);
