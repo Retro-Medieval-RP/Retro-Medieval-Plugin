@@ -29,28 +29,20 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
     {
     }
 
-    public void CreateKit(Kit kit, IEnumerable<KitItem> kitItems)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
+    public void CreateKit(Kit kit, IEnumerable<KitItem> kitItems) => 
+        ThreadCalls.CreateKit.Start(new Tuple<KitsModule, Kit, IEnumerable<KitItem>>(this, kit, kitItems));
 
-        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitItemsStorage]");
-            return;
-        }
+    public void RenameKit(string originalName, string newName) => 
+        ThreadCalls.RenameKit.Start(new Tuple<KitsModule, string, string>(this, originalName, newName));
 
-        kitsStorage.StartQuery().Insert(kit).ExecuteSql();
+    public void DeleteKit(string kitName) => 
+        ThreadCalls.DeleteKit.Start(new Tuple<KitsModule, string>(this, kitName));
 
-        foreach (var item in kitItems)
-        {
-            item.KitID = kit.KitID;
-            kitItemsStorage.StartQuery().Insert(item).ExecuteSql();
-        }
-    }
+    public void SpawnKit(UnturnedPlayer targetPlayer, string kitName) => 
+        ThreadCalls.SpawnKit.Start(new Tuple<KitsModule, UnturnedPlayer, string>(this, targetPlayer, kitName));
+
+    public void SendKits(IRocketPlayer caller) => 
+        ThreadCalls.SendKits.Start(new Tuple<KitsModule, IRocketPlayer>(this, caller));
 
     public async Task<bool> DoesKitExist(string kitName)
     {
@@ -58,58 +50,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         return kits.Any(x => string.Equals(x.KitName, kitName, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public async Task RenameKit(string originalName, string newName)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
-
-        var kit = await kitsStorage.StartQuery().Select("KitID", "KitName").Where(("KitName", originalName)).Finalise().QuerySingle<Kit>();
-        var kitId = kit.KitID;
-        kitsStorage.StartQuery().Update(("KitName", newName)).Where(("KitID", kitId)).Finalise().ExecuteSql();
-    }
-
-    public async Task DeleteKit(string kitName)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
-
-        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitItemsStorage]");
-            return;
-        }
-
-        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
-            return;
-        }
-
-        var kits = await GetKits();
-        var kitID = kits.First(x => x.KitName == kitName).KitID;
-        if (!kitItemsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
-        {
-            return;
-        }
-
-        if (!kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
-        {
-            return;
-        }
-
-        if (!kitsStorage.StartQuery().Delete().Where(("KitID", kitID)).Finalise().ExecuteSql())
-        {
-            Logger.LogError("Could not delete kit with id: " + kitID);
-        }
-    }
-
-    private async Task<IEnumerable<Kit>> GetKits()
+    internal async Task<IEnumerable<Kit>> GetKits()
     {
         if (GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
@@ -118,58 +59,6 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
 
         Logger.LogError("Could not gather storage [KitsStorage]");
         return new List<Kit>();
-    }
-
-    public async Task SpawnKit(UnturnedPlayer targetPlayer, string kitName)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
-
-        if (!GetStorage<MySqlSaver<KitItem>>(out var kitItemsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitItemsStorage]");
-            return;
-        }
-
-        var kit = await kitsStorage.StartQuery()
-            .Select("KitID", "KitName", "KitCooldown")
-            .Where(("KitName", kitName))
-            .Finalise()
-            .QuerySingle<Kit>();
-
-        var kitItems = await kitItemsStorage.StartQuery()
-            .Select("*")
-            .Where(("KitID", kit.KitID))
-            .Finalise()
-            .Query<KitItem>();
-
-        foreach (var item in kitItems.OrderByDescending(x => x.IsEquipped))
-        {
-            if (!targetPlayer.Inventory.tryAddItem(
-                    new Item(item.ItemID, (byte)item.ItemAmount, 100, item.ItemState), true,
-                    true))
-            {
-                ItemManager.dropItem(new Item(item.ItemID, (byte)item.ItemAmount, 100, item.ItemState),
-                    targetPlayer.Position, false, true, true);
-            }
-        }
-    }
-
-    public async Task SendKits(IRocketPlayer caller)
-    {
-        var kits = await GetKits();
-        UnturnedChat.Say(caller, "Kits:");
-        UnturnedChat.Say(caller,
-            string.Join(", ",
-                kits
-                    .Select(x => (x.KitName, x.CooldownString))
-                    .Where(x =>
-                        !string.IsNullOrWhiteSpace(x.KitName) && !string.IsNullOrEmpty(x.KitName))
-                    .Where(x => caller.HasPermission($"kit.{x.KitName}"))
-                    .Select(x => $"{x.KitName} ({x.CooldownString})")));
     }
 
     public async Task<int> GetCooldown(string kitName)
@@ -234,45 +123,9 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         return await kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<DateTime>();
     }
 
-    public async Task DeleteCooldown(UnturnedPlayer targetPlayer, string kitName)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
+    public void DeleteCooldown(UnturnedPlayer targetPlayer, string kitName) => 
+        ThreadCalls.DeleteCooldown.Start(new Tuple<KitsModule, UnturnedPlayer, string>(this, targetPlayer, kitName));
 
-        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
-            return;
-        }
-
-        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().ExecuteSql();
-    }
-
-    public async Task AddCooldown(UnturnedPlayer targetPlayer, string kitName)
-    {
-        if (!GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitsStorage]");
-            return;
-        }
-
-        if (!GetStorage<MySqlSaver<KitCooldown>>(out var kitCooldownsStorage))
-        {
-            Logger.LogError("Could not gather storage [KitCooldownsStorage]");
-            return;
-        }
-
-        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        kitCooldownsStorage.StartQuery().Insert(new KitCooldown
-        {
-            CooldownID = Guid.NewGuid(),
-            KitID = kitID,
-            SpawnDateTime = DateTime.Now,
-            User = targetPlayer.CSteamID.m_SteamID
-        }).ExecuteSql();
-    }
+    public void AddCooldown(UnturnedPlayer targetPlayer, string kitName) => 
+        ThreadCalls.AddCooldown.Start(new Tuple<KitsModule, UnturnedPlayer, string>(this, targetPlayer, kitName));
 }
