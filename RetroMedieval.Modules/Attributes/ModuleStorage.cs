@@ -38,6 +38,30 @@ public class ModuleStorage<TStorage>(string name) : ModuleStorage(name) where TS
         var path = StorageManager.GetSavingConfig();
         return store.Load(path.ConnectionString);
     }
+    
+    public override bool UnloadStorage(string dataPath, string fileName)
+    {
+        if (!StorageManager.Instance.Get((x => x.StorageName == Name), out var storage))
+        {
+            return false;
+        }
+        
+        if (storage.Store.StorageType == StorageType.File)
+        {
+            if (!Directory.Exists(dataPath))
+            {
+                Directory.CreateDirectory(dataPath);
+            }
+
+            var filePath = Path.Combine(dataPath, fileName);
+            StorageManager.Instance.Remove(storage);
+            return storage.Store.Unload(filePath);
+        }
+        
+        var path = StorageManager.GetSavingConfig();
+        StorageManager.Instance.Remove(storage);
+        return storage.Store.Unload(path.ConnectionString);
+    }
 
     internal override bool IsStorageOfType(Type t) => t == typeof(TStorage);
 }
@@ -49,4 +73,5 @@ public abstract class ModuleStorage(string name) : Attribute
 
     internal abstract bool LoadedStorage(string dataPath, string fileName);
     internal abstract bool IsStorageOfType(Type t);
+    public abstract bool UnloadStorage(string dataPath, string fileName);
 }

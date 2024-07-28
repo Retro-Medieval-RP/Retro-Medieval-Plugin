@@ -34,21 +34,47 @@ internal class ReloadCommand : IRocketCommand
 
     private void ReloadModule(IRocketPlayer caller, string[] args)
     {
-        ModuleLoader.Instance.ReloadAllModules(Main.Instance.Assembly);
+        if (args.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
+            return;
+        }
+
+        if (args[0] == "all")
+        {
+            ModuleLoader.Instance.ReloadAllModules();
+        }
+        else
+        {
+            ModuleLoader.Instance.ReloadModule(args[0]);
+        }
     }
 
     private void ReloadStorage(IRocketPlayer caller, string[] args)
     {
+        if (args.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
+            return;
+        }
     }
 
     private void ReloadConfig(IRocketPlayer caller, string[] args)
     {
+        if (args.Length < 1)
+        {
+            UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
+            UnturnedChat.Say(caller, Syntax, Color.red);
+            return;
+        }
     }
 
     public AllowedCaller AllowedCaller => AllowedCaller.Console;
     public string Name => "reload";
     public string Help => "Allows reload of the different components or config or storage.";
-    public string Syntax => "reload <config | storage | modules>";
+    public string Syntax => "reload <config | storage | modules> <all | name>";
     public List<string> Aliases => [];
     public List<string> Permissions => [];
 }

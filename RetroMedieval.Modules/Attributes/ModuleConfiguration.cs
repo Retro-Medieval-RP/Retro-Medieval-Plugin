@@ -15,6 +15,15 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
 
         return (TConfiguration)config.Config;
     }
+
+    public void SaveConfiguration(TConfiguration config)
+    {
+        ConfigurationManager.Instance.Get(x => x.ConfigName == Name, out var configuration);
+        ConfigurationManager.Instance.Remove(configuration);
+        configuration.Config = config;
+        
+        ConfigurationManager.Instance.Add(configuration);
+    }
     
     internal override bool LoadedConfiguration(string dataPath, string fileName)
     {
@@ -57,6 +66,26 @@ public sealed class ModuleConfiguration<TConfiguration>(string name) : ModuleCon
             return true;
         }
     }
+    
+    public override bool UnloadConfiguration(string dataPath, string fileName)
+    {
+        if (!Directory.Exists(dataPath))
+        {
+            Directory.CreateDirectory(dataPath);
+        }
+
+        var filePath = Path.Combine(dataPath, fileName);
+        var config = GetConfig();
+        
+        {
+            var objData = JsonConvert.SerializeObject(config, Formatting.Indented);
+
+            using var stream = new StreamWriter(filePath, false);
+            stream.Write(objData);
+        }
+
+        return true;
+    }
 
     internal override bool IsConfigOfType(Type t) => t == typeof(TConfiguration);
 }
@@ -68,4 +97,5 @@ public abstract class ModuleConfiguration(string name) : Attribute
 
     internal abstract bool LoadedConfiguration(string dataPath, string fileName);
     internal abstract bool IsConfigOfType(Type t);
+    public abstract bool UnloadConfiguration(string dataPath, string fileName);
 }

@@ -12,7 +12,7 @@ using Rocket.Core.Logging;
 
 namespace RetroMedieval.Modules;
 
-public abstract class Module
+public abstract class Module : IDisposable
 {
     internal ModuleInformation Information => GetType().GetCustomAttribute<ModuleInformation>();
     internal List<ModuleConfiguration> Configurations { get; }
@@ -154,4 +154,17 @@ public abstract class Module
 
     internal bool NameIs(string moduleName) =>
         Information.ModuleName == moduleName;
+
+    public void Dispose()
+    {
+        foreach (var config in Configurations)
+        {
+            config.UnloadConfiguration(ModuleDir, config.Name + ".json");
+        }
+
+        foreach (var storage in Storages)
+        {
+            storage.UnloadStorage(ModuleDir, storage.Name + ".json");
+        }
+    }
 }

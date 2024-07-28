@@ -7,6 +7,7 @@ using System.Timers;
 using RetroMedieval.Modules.Configuration;
 using RetroMedieval.Modules.Storage;
 using RetroMedieval.Utils;
+using Rocket.Core.Logging;
 
 namespace RetroMedieval.Modules;
 
@@ -105,21 +106,33 @@ public sealed class ModuleLoader : Padlock<ModuleLoader>
         PrintGeneralDoc();
     }
 
-    public void ReloadAllModules(Assembly plugin)
+    public void ReloadAllModules()
     {
-        ConfigurationManager.Instance.Clear();
-        StorageManager.Instance.Clear();
-
-        foreach (var m in Modules)
+        foreach (var module in Modules)
         {
-            m.Unload();
+            ReloadModule(module);
         }
-        
-        Modules.Clear();
-        LoadModules(plugin);
     }
 
-    public bool Exists(string moduleName) => 
+    public void ReloadModule(string moduleName)
+    {
+        if (!Exists(moduleName))
+        {
+            Logger.LogError($"Module with {moduleName} cannot be found to be reloaded");
+            return;
+        }
+
+        var module = Modules.First(x => x.Information.ModuleName == moduleName);
+        ReloadModule(module);
+    }
+
+    private static void ReloadModule(Module module)
+    {
+        module.Unload();
+        module.Dispose();
+    }
+
+    private bool Exists(string moduleName) => 
         Modules.Any(x => x.NameIs(moduleName));
 
     public void SetUpdateTimer(Timer timer)

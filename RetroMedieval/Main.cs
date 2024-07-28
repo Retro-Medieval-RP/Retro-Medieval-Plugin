@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Timers;
 using HarmonyLib;
 using RetroMedieval.Modules;
@@ -9,6 +11,7 @@ namespace RetroMedieval;
 public class Main : RocketPlugin
 {
     public static Main Instance { get; private set; }
+    public List<Assembly> LoadedModules { get; set; } = [];
     
     protected override void Load()
     {
@@ -20,8 +23,9 @@ public class Main : RocketPlugin
         foreach (var file in files)
         {
             var assemblyBytes = File.ReadAllBytes(file);
-            var assembly = System.Reflection.Assembly.Load(assemblyBytes);
+            var assembly = Assembly.Load(assemblyBytes);
             ModuleLoader.Instance.LoadModules(assembly);
+            LoadedModules.Add(assembly);
         }
         
         ModuleLoader.Instance.SetUpdateTimer(new Timer(10000));

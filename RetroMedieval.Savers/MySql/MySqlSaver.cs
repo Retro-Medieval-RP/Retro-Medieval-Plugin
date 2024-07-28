@@ -39,6 +39,11 @@ public class MySqlSaver<T> : ISqlStorage<T>
         }
     }
 
+    public bool Unload(string filePath)
+    {
+        return true;
+    }
+
     public IStatement StartQuery() =>
         new MySqlStatement(TableName, SavePath);
 

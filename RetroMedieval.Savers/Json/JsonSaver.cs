@@ -32,6 +32,12 @@ public class JsonSaver<T> : IFileStorage<T> where T : new()
         return true;
     }
 
+    public bool Unload(string filePath)
+    {
+        Save();
+        return true;
+    }
+
     public virtual void Save()
     {
         var objData = JsonConvert.SerializeObject(StorageItem, Formatting.Indented);
