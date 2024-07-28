@@ -14,14 +14,14 @@ namespace Kits;
 
 internal static class ThreadCalls
 {
-    internal static Thread CreateKit = new(CreateKitStart);
-    internal static Thread RenameKit = new(RenameKitStart);
-    internal static Thread DeleteKit = new(DeleteKitStart);
-    internal static Thread SpawnKit = new(SpawnKitStart);
-    internal static Thread SendKits = new(SendKitsStart);
+    internal static Thread CreateKit => new(CreateKitStart);
+    internal static Thread RenameKit => new(RenameKitStart);
+    internal static Thread DeleteKit => new(DeleteKitStart);
+    internal static Thread SpawnKit => new(SpawnKitStart);
+    internal static Thread SendKits => new(SendKitsStart);
 
-    internal static Thread DeleteCooldown = new(DeleteCooldownStart);
-    internal static Thread AddCooldown = new(AddCooldownStart);
+    internal static Thread DeleteCooldown => new(DeleteCooldownStart);
+    internal static Thread AddCooldown => new(AddCooldownStart);
 
     private static void CreateKitStart(object obj)
     {

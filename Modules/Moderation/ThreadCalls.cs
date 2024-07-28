@@ -14,15 +14,15 @@ namespace Moderation;
 
 internal static class ThreadCalls
 {
-    internal static readonly Thread BanCheck = new(BanCheckStart);
-    internal static readonly Thread MuteCheck = new(MuteCheckStart);
-    internal static readonly Thread PlayerJoin = new(PlayerJoinStart);
-    internal static readonly Thread PlayerBan = new(PlayerBanStart);
-    internal static readonly Thread PlayerKick = new(PlayerKickStart);
-    internal static readonly Thread PlayerMute = new(PlayerMuteStart);
-    internal static readonly Thread PlayerWarn = new(PlayerWarnStart);
-    internal static readonly Thread Warns = new(WarnsStart);
-    internal static readonly Thread Mutes = new(MutesStart);
+    internal static Thread BanCheck => new(BanCheckStart);
+    internal static Thread MuteCheck => new(MuteCheckStart);
+    internal static Thread PlayerJoin => new(PlayerJoinStart);
+    internal static Thread PlayerBan => new(PlayerBanStart);
+    internal static Thread PlayerKick => new(PlayerKickStart);
+    internal static Thread PlayerMute => new(PlayerMuteStart);
+    internal static Thread PlayerWarn => new(PlayerWarnStart);
+    internal static Thread Warns => new(WarnsStart);
+    internal static Thread Mutes => new(MutesStart);
 
     private static async void BanCheckStart(object module)
     {
