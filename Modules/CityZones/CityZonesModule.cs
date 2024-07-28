@@ -42,6 +42,11 @@ public class CityZonesModule(string directory) : Module(directory)
         {
             return;
         }
+
+        if (e.Player == null)
+        {
+            return;
+        }
         
         var city = storage.GetCity(e.Zone.ZoneName);
         EffectManager.sendUIEffect(config.ID, 15543, e.Player.Player.channel.GetOwnerTransportConnection(), false);
