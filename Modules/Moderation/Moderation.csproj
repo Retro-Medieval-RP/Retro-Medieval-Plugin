@@ -110,6 +110,7 @@
         <Compile Include="ModerationModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Services\DiscordService.cs" />
+        <Compile Include="ThreadCalls.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
