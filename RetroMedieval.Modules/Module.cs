@@ -38,6 +38,13 @@ public abstract class Module : IDisposable
         LoadCommands();
     }
 
+    internal void Reload()
+    {
+        LoadConfigs();
+        LoadStorages();
+        LoadCommands();
+    }
+
     public abstract void Load();
     public abstract void Unload();
 
@@ -161,10 +168,14 @@ public abstract class Module : IDisposable
         {
             config.UnloadConfiguration(ModuleDir, config.Name + ".json");
         }
+        
+        Configurations.Clear();
 
         foreach (var storage in Storages)
         {
             storage.UnloadStorage(ModuleDir, storage.Name + ".json");
         }
+        
+        Storages.Clear();
     }
 }

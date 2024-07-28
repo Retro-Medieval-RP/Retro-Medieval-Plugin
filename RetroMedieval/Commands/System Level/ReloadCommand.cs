@@ -59,6 +59,15 @@ internal class ReloadCommand : IRocketCommand
             UnturnedChat.Say(caller, Syntax, Color.red);
             return;
         }
+
+        if (args[0] == "all")
+        {
+            ModuleLoader.Instance.ReloadAllStorages();
+        }
+        else
+        {
+            ModuleLoader.Instance.ReloadStorage(args[0]);
+        }
     }
 
     private void ReloadConfig(IRocketPlayer caller, string[] args)
@@ -68,6 +77,15 @@ internal class ReloadCommand : IRocketCommand
             UnturnedChat.Say(caller, "Syntax Error: ", Color.red);
             UnturnedChat.Say(caller, Syntax, Color.red);
             return;
+        }
+
+        if (args[0] == "all")
+        {
+            ModuleLoader.Instance.ReloadAllConfigurations();
+        }
+        else
+        {
+            ModuleLoader.Instance.ReloadConfiguration(args[0]);
         }
     }
 
