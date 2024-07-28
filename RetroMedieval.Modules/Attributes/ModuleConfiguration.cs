@@ -17,11 +17,11 @@ public sealed class ModuleConfiguration<TConfiguration>(string name)
         return (TConfiguration)config.Config;
     }
 
-    public void SaveConfiguration(TConfiguration config)
+    public override void SaveConfiguration(object config)
     {
         ConfigurationManager.Instance.Get(x => x.ConfigName == Name, out var configuration);
         ConfigurationManager.Instance.Remove(configuration);
-        configuration.Config = config;
+        configuration.Config = (config as IConfig)!;
 
         ConfigurationManager.Instance.Add(configuration);
     }
@@ -102,4 +102,5 @@ public abstract class ModuleConfiguration(string name) : Attribute
     internal abstract bool LoadedConfiguration(string dataPath, string fileName);
     internal abstract bool IsConfigOfType(Type t);
     public abstract bool UnloadConfiguration(string dataPath, string fileName);
+    public abstract void SaveConfiguration(object config);
 }

@@ -147,6 +147,20 @@ public abstract class Module : IDisposable
         return false;
     }
 
+    public bool SaveConfiguration<TConfiguration>(TConfiguration config) where TConfiguration : class, IConfig
+    {
+        if (!Configurations.Any(x => x.IsConfigOfType(typeof(TConfiguration))))
+        {
+            return false;
+        }
+        
+        {
+            var conf = Configurations.First(x => x.IsConfigOfType(typeof(TConfiguration)));
+            conf.SaveConfiguration(config);
+            return true;
+        }
+    }
+
     public bool GetStorage<TStorage>(out TStorage storage) where TStorage : class, IStorage, new()
     {
         if (Storages.Any(x => x.IsStorageOfType(typeof(TStorage))))
