@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using RetroMedieval.Modules;
+﻿using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events.Unturned;
 using Rocket.Unturned.Player;

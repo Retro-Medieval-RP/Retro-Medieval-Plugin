@@ -9,9 +9,7 @@ using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Savers.MySql;
 using Rocket.API;
 using Rocket.Core.Logging;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
-using SDG.Unturned;
 
 namespace Kits;
 

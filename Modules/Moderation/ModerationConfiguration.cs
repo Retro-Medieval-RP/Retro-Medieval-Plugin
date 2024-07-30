@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Moderation.Models;
 using Moderation.Models.Discord;
 using RetroMedieval.Modules.Configuration;
 

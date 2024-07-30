@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Moderation.Models.Discord;
 
 internal class DiscordWebhook

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using RetroMedieval.Modules;
 using Rocket.API;
 using Rocket.Unturned.Chat;
-using SDG.Unturned;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
