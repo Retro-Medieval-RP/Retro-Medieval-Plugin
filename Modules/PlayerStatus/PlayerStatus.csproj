@@ -34,14 +34,29 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Rocket.Unturned">
+          <HintPath>..\Libs\Rocket.Unturned.dll</HintPath>
+        </Reference>
+        <Reference Include="SDG.NetTransport">
+          <HintPath>..\Libs\SDG.NetTransport.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Models\ImageChangeRange.cs" />
+        <Compile Include="Models\UIPart.cs" />
         <Compile Include="PlayerStatusModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="StatusConfiguration.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">
