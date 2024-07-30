@@ -23,6 +23,9 @@ internal static class ThreadCalls
     internal static Thread PlayerKick => new(PlayerKickStart);
     internal static Thread PlayerMute => new(PlayerMuteStart);
     internal static Thread PlayerWarn => new(PlayerWarnStart);
+    internal static Thread UnbanPlayer => new(UnbanPlayerStart);
+    internal static Thread RemoveWarn => new(RemoveWarnStart);
+    internal static Thread UnmutePlayer => new(UnmutePlayerStart);
     internal static Thread Warns => new(WarnsStart);
     internal static Thread Mutes => new(MutesStart);
 
@@ -308,8 +311,6 @@ internal static class ThreadCalls
         v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), v.Item2.Reason], ModerationActionType.Warn);
     }
 
-    internal static readonly Thread RemoveWarn = new(RemoveWarnStart);
-
     private static async void RemoveWarnStart(object vals)
     {
         var v = vals as Tuple<ModerationModule, string, IRocketPlayer>;
@@ -353,8 +354,6 @@ internal static class ThreadCalls
             UnturnedChat.Say(v.Item3, $"Could not find an active warn or a warn with the id: {v.Item2}", Color.red);
         }
     }
-
-    internal static readonly Thread UnmutePlayer = new(UnmutePlayerStart);
 
     private static async void UnmutePlayerStart(object vals)
     {
@@ -401,7 +400,6 @@ internal static class ThreadCalls
         }
     }
 
-    internal static readonly Thread UnbanPlayer = new(UnbanPlayerStart);
 
     private static async void UnbanPlayerStart(object vals)
     {
