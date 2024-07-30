@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events.Unturned.Storage;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
@@ -29,51 +31,43 @@ public class MultiAccessModule(string directory) : Module(directory)
         {
             return;
         }
-        
-        if (UsersInChest.ContainsKey(e.StorageOpened.transform.position))
+
+        TempCloses.Add(e.Player, true);
+        e.Player.Inventory.closeStorage();
+
+        var inventory = new Items(7);
+        inventory.resize(e.StorageOpened.items.width, e.StorageOpened.items.height);
+
+        foreach (var item in e.StorageOpened.items.items)
         {
-            UsersInChest[e.StorageOpened.transform.position].Add(e.Player);
-            TempCloses.Add(e.Player, true);
-            e.Player.Inventory.closeStorage();
-
-            var inventory = new Items(7);
-            inventory.resize(e.StorageOpened.items.width, e.StorageOpened.items.height);
-
-            foreach (var item in e.StorageOpened.items.items)
-            {
-                inventory.addItem(item.x, item.y, item.rot, item.item);
-            }
-
-            inventory.onItemAdded = (_, _, jar) =>
-            {
-                var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
-                var storage = drop.interactable as InteractableStorage;
-                storage?.items.addItem(jar.x, jar.y, jar.rot, jar.item);
-
-                var users = UsersInChest[e.StorageOpened.transform.position];
-                foreach (var user in users)
-                {
-                    user.Inventory.storage.items.addItem(jar.x, jar.y, jar.rot, jar.item);
-                }
-            };
-
-            inventory.onItemRemoved = (_, index, _) =>
-            {
-                var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
-                var storage = drop.interactable as InteractableStorage;
-                storage?.items.removeItem(index);
-
-                var users = UsersInChest[e.StorageOpened.transform.position];
-                foreach (var user in users)
-                {
-                    user.Inventory.storage.items.removeItem(index);
-                }
-            };
-
-            return;
+            inventory.addItem(item.x, item.y, item.rot, item.item);
         }
 
-        UsersInChest.Add(e.StorageOpened.transform.position, [e.Player]);
+        inventory.onItemAdded = (_, _, jar) =>
+        {
+            var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
+            var storage = drop.interactable as InteractableStorage;
+            storage?.items.addItem(jar.x, jar.y, jar.rot, jar.item);
+
+            var users = UsersInChest[e.StorageOpened.transform.position];
+            foreach (var user in users)
+            {
+                user.Inventory.storage.items.addItem(jar.x, jar.y, jar.rot, jar.item);
+            }
+        };
+
+        inventory.onItemRemoved = (_, index, _) =>
+        {
+            var drop = BarricadeManager.FindBarricadeByRootTransform(e.StorageOpened.transform);
+            var storage = drop.interactable as InteractableStorage;
+            storage?.items.removeItem(index);
+
+            var users = UsersInChest[e.StorageOpened.transform.position];
+            foreach (var user in users)
+            {
+                user.Inventory.storage.items.removeItem(index);
+            }
+        };
     }
 
     private void OnCloseStorage(CloseStorageEventArgs e, ref bool allow)
@@ -94,12 +88,16 @@ public class MultiAccessModule(string directory) : Module(directory)
             return;
         }
 
+        Console.WriteLine($"Before | Number In Chest: {UsersInChest[e.StorageClosed.transform.position].Count}");
         UsersInChest[e.StorageClosed.transform.position]
             .RemoveAll(x => x.CSteamID.m_SteamID == e.Player.CSteamID.m_SteamID);
+        Console.WriteLine($"After | Number In Chest: {UsersInChest[e.StorageClosed.transform.position].Count}");
 
         if (!UsersInChest[e.StorageClosed.transform.position].Any())
         {
+            Console.WriteLine($"Removing Storage From UsersInChest");
             UsersInChest.Remove(e.StorageClosed.transform.position);
+            Console.WriteLine($"Removed Storage From UsersInChest");
         }
     }
 
