@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Moderation.Models;
 using RetroMedieval.Savers.MySql;
@@ -97,6 +99,36 @@ internal static class ThreadCalls
                 .Finalise()
                 .QuerySingle<int>() <= 0)
         {
+            if (v.Item1.GetConfiguration<NameBlackListConfiguration>(out var nameBlacklist))
+            {
+                const string englishCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234";
+                const string specialCharacters = @"`¬-_=+[{]};:'@#~,<.>/?|\!£$%^&*()""";
+                
+                if (nameBlacklist.BlacklistFilter.Any(x => Regex.IsMatch(v.Item2.DisplayName, x)))
+                {
+                    Provider.kick(v.Item2.CSteamID, $"Name: {v.Item2.DisplayName} | Has been matched with name blacklist, please change your name.");
+                    return;
+                }
+                
+                if (nameBlacklist.BlacklistNonEnglishCharacters)
+                {
+                    if (v.Item2.DisplayName.Any(x => !englishCharacters.Contains(x) || !specialCharacters.Contains(x)))
+                    {
+                        Provider.kick(v.Item2.CSteamID, $"Name: {v.Item2.DisplayName} | Contains non english characters, please change your name.");
+                        return;
+                    }
+                }
+
+                if (nameBlacklist.BlacklistSpecialCharacters)
+                {
+                    if (v.Item2.DisplayName.Any(x => specialCharacters.Contains(x)))
+                    {
+                        Provider.kick(v.Item2.CSteamID, $"Name: {v.Item2.DisplayName} | Contains special characters, please change your name.");
+                        return;
+                    }
+                }
+            }
+            
             if (!await v.Item1.DoesPlayerAlreadyExist(v.Item2.CSteamID.m_SteamID))
             {
                 v.Item1.InsertPlayer(v.Item2);

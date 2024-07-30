@@ -21,6 +21,7 @@ namespace Moderation;
 
 [ModuleInformation("Moderation")]
 [ModuleConfiguration<ModerationConfiguration>("ModerationConfiguration")]
+[ModuleConfiguration<NameBlackListConfiguration>("ModerationNameConfiguration")]
 [ModuleStorage<MySqlSaver<Warn>>("Warns")]
 [ModuleStorage<MySqlSaver<Mute>>("Mutes")]
 [ModuleStorage<MySqlSaver<Kick>>("Kicks")]
