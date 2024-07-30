@@ -188,7 +188,7 @@ internal static class ThreadCalls
             ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
             : await v.Item1.GetPlayer(v.Item2.PunisherID);
 
-        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, v.Item2.Reason, v.Item2.DurationString], ModerationActionType.Ban);
+        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), v.Item2.Reason, v.Item2.DurationString], ModerationActionType.Ban);
     }
 
     private static async void PlayerKickStart(object vals)
@@ -227,7 +227,7 @@ internal static class ThreadCalls
             ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
             : await v.Item1.GetPlayer(v.Item2.PunisherID);
 
-        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, v.Item2.Reason], ModerationActionType.Kick);
+        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), v.Item2.Reason], ModerationActionType.Kick);
     }
 
     private static async void PlayerMuteStart(object vals)
@@ -266,7 +266,7 @@ internal static class ThreadCalls
             ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
             : await v.Item1.GetPlayer(v.Item2.PunisherID);
 
-        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, v.Item2.Reason, v.Item2.DurationString], ModerationActionType.Mute);
+        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), v.Item2.Reason, v.Item2.DurationString], ModerationActionType.Mute);
     }
 
     private static async void PlayerWarnStart(object vals)
@@ -305,7 +305,7 @@ internal static class ThreadCalls
             ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
             : await v.Item1.GetPlayer(v.Item2.PunisherID);
 
-        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, v.Item2.Reason], ModerationActionType.Warn);
+        v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), v.Item2.Reason], ModerationActionType.Warn);
     }
 
     internal static readonly Thread RemoveWarn = new(RemoveWarnStart);
@@ -346,7 +346,7 @@ internal static class ThreadCalls
                 ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
                 : await v.Item1.GetPlayer(((UnturnedPlayer)v.Item3).CSteamID.m_SteamID);
 
-            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, warn.Reason], ModerationActionType.RemoveWarn);
+            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), warn.Reason], ModerationActionType.RemoveWarn);
         }
         else
         {
@@ -392,7 +392,7 @@ internal static class ThreadCalls
                 ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
                 : await v.Item1.GetPlayer(((UnturnedPlayer)v.Item3).CSteamID.m_SteamID);
 
-            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, mute.Reason], ModerationActionType.Unmute);
+            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), mute.Reason], ModerationActionType.Unmute);
             UnturnedChat.Say(v.Item3, $"Mute ({v.Item2}) has been undone.");
         }
         else
@@ -437,7 +437,7 @@ internal static class ThreadCalls
                 ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
                 : await v.Item1.GetPlayer(((UnturnedPlayer)v.Item3).CSteamID.m_SteamID);
 
-            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, ban.Reason], ModerationActionType.Unban);
+            v.Item1.DiscordService.SendMessage([target.DisplayName, target.PlayerID.ToString(), punisher.DisplayName, punisher.PlayerID.ToString(), ban.Reason], ModerationActionType.Unban);
 
             UnturnedChat.Say(v.Item3, $"Ban ({v.Item2}) has been removed.");
         }

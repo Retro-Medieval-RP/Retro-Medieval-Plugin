@@ -63,15 +63,16 @@ internal class DiscordService
         value = value.Replace("{name}", args[0])
             .Replace("{steamid}", args[1])
             .Replace("{punisher}", args[2])
+            .Replace("{punisherId}", args[3])
             .Replace("{servername}", Provider.serverName);
 
         if (messageType != ModerationActionType.Unban)
         {
-            value = value.Replace("{reason}", args[3]);
+            value = value.Replace("{reason}", args[4]);
         }
         if (messageType == ModerationActionType.Ban)
         {
-            value = value.Replace("{duration}", args[4]);
+            value = value.Replace("{duration}", args[5]);
         }
 
         return value;
