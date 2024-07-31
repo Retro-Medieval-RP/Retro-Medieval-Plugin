@@ -14,7 +14,6 @@ internal class ArmorEquipConfiguration : IConfig
         [
             new ArmorSet
             {
-                ReplaceClothing = true,
                 DropInventoryWhenEquip = true,
                 MainItem = 40517,
                 Items =

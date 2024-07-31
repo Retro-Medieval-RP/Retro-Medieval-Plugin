@@ -17,9 +17,8 @@ namespace ArmorEquip;
 [ModuleConfiguration<ArmorEquipConfiguration>("Armors")]
 internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
 {
-    private List<CSteamID> IgnoredPlayers { get; set; } = [];
-    private Dictionary<CSteamID, ArmorSet> PlayerSets { get; set; } = [];
-
+    private Dictionary<CSteamID, bool> IgnoreEquipOfClothing { get; } = [];
+    
     public override void Load()
     {
         ClothingEquipEventPublisher.ClothingEquipEvent += OnClothingEquipped;
@@ -28,138 +27,88 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
 
     private void OnClothingDequipped(ClothingDequipEventArgs e)
     {
-        if (!PlayerSets.ContainsKey(e.Player.CSteamID) || IgnoredPlayers.Contains(e.Player.CSteamID))
-        {
-            return;
-        }
-
-        var set = PlayerSets[e.Player.CSteamID];
-
-        if (!set.Items.Contains(e.DequippedClothingID) && set.MainItem != e.DequippedClothingID)
-        {
-            return;
-        }
-        
-        ItemManager.dropItem(new Item(set.MainItem, true), e.Player.Position, true, true, false);
-        
-        for (byte i = 0; i < PlayerInventory.PAGES; i++)
-        {
-            if (i == PlayerInventory.AREA)
-                continue;
-
-            var count = e.Player.Inventory.getItemCount(i);
-
-            for (byte index = 0; index < count; index++)
-            {
-                var item = e.Player.Inventory.getItem(i, 0);
-                ItemManager.dropItem(new Item(item.item.id, item.item.amount, item.item.quality, item.item.state),
-                    e.Player.Position, true, true, false);
-                e.Player.Inventory.removeItem(i, 0);
-            }
-        }
-        
-        var removeUnequipped = () =>
-        {
-            for (byte i = 0; i < e.Player.Player.inventory.getItemCount(2); i++)
-            {
-                e.Player.Player.inventory.removeItem(2, 0);
-            }
-        };
-        
-        IgnoredPlayers.Add(e.Player.CSteamID);
-        
-        e.Player.Player.clothing.askWearBackpack(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearGlasses(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearHat(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearPants(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearMask(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearShirt(0, 0, [], true);
-        removeUnequipped();
-        e.Player.Player.clothing.askWearVest(0, 0, [], true);
-        removeUnequipped();
-        
-        for (byte i = 0; i < PlayerInventory.PAGES; i++)
-        {
-            if (i == PlayerInventory.AREA)
-                continue;
-
-            var count = e.Player.Inventory.getItemCount(i);
-
-            for (byte index = 0; index < count; index++)
-            {
-                e.Player.Inventory.removeItem(i, 0);
-            }
-        }
-        
-        IgnoredPlayers.Remove(e.Player.CSteamID);
-        PlayerSets.Remove(e.Player.CSteamID);
     }
 
     private void OnClothingEquipped(ClothingEquipEventArgs e)
     {
-        if (IgnoredPlayers.Contains(e.Player.CSteamID))
+        if (IgnoreEquipOfClothing.ContainsKey(e.Player.CSteamID))
+        {
+            return;
+        }
+        
+        if (!GetConfiguration<ArmorEquipConfiguration>(out var configuration))
         {
             return;
         }
 
-        if (!GetConfiguration<ArmorEquipConfiguration>(out var config))
-        {
-            Logger.LogError("Could not gather configuration [ArmorEquipConfiguration]");
-            return;
-        }
-
-        if (config.ArmorSets.All(x => x.MainItem != e.ClothingItem))
+        if (configuration.ArmorSets.All(x => x.MainItem != e.ClothingItem))
         {
             return;
         }
 
-        var set = config.ArmorSets.Find(x => x.MainItem == e.ClothingItem);
+        var set = configuration.ArmorSets.Find(x => x.MainItem == e.ClothingItem);
+        var items = GetUserItems(e.Player);
 
         if (set.DropInventoryWhenEquip)
         {
-            e.Player.Player.clothing.askWearBackpack(0, 0, [], true);
-            e.Player.Player.clothing.askWearGlasses(0, 0, [], true);
-            e.Player.Player.clothing.askWearHat(0, 0, [], true);
-            e.Player.Player.clothing.askWearPants(0, 0, [], true);
-            e.Player.Player.clothing.askWearMask(0, 0, [], true);
-            e.Player.Player.clothing.askWearShirt(0, 0, [], true);
-            e.Player.Player.clothing.askWearVest(0, 0, [], true);
-
-            for (byte i = 0; i < PlayerInventory.PAGES; i++)
+            foreach (var item in items)
             {
-                if (i == PlayerInventory.AREA)
-                    continue;
-
-                var count = e.Player.Inventory.getItemCount(i);
-
-                for (byte index = 0; index < count; index++)
-                {
-                    var item = e.Player.Inventory.getItem(i, 0);
-                    ItemManager.dropItem(new Item(item.item.id, item.item.amount, item.item.quality, item.item.state),
-                        e.Player.Position, true, true, false);
-                    e.Player.Inventory.removeItem(i, 0);
-                }
+                ItemManager.dropItem(new Item(item.ItemID, item.ItemAmount, item.ItemQuality, item.ItemState), e.Player.Position, true, true, true);
             }
+
+            ClearUserItems(e.Player);
         }
         
-        IgnoredPlayers.Add(e.Player.CSteamID);
-        foreach (var item in set.Items)
-        {
-            Equip(item, e.Player);
-        }
-        
-        IgnoredPlayers.Remove(e.Player.CSteamID);
-        PlayerSets.Add(e.Player.CSteamID, set);
+        IgnoreEquipOfClothing.Add(e.Player.CSteamID, true);
+        // TODO: Add in the checks for if the user has the clothing equipped, if yes remove it for that slot, drop it on the floor and remove it from the inv and replace with set equipment
     }
 
     private static void Equip(ushort item, UnturnedPlayer player) =>
         player.Inventory.forceAddItem(new Item(item, true), true, true);
 
+    private static List<UserItem> GetUserItems(UnturnedPlayer player)
+    {
+        var userItems = new List<UserItem>();
+
+        for (byte i = 0; i < PlayerInventory.PAGES; i++)
+        {
+            if (i == PlayerInventory.AREA)
+                continue;
+
+            var count = player.Inventory.getItemCount(i);
+
+            for (byte index = 0; index < count; index++)
+            {
+                var item = player.Inventory.getItem(i, index);
+                userItems.Add(new UserItem
+                {
+                    ItemID = item.item.id,
+                    ItemState = item.item.state,
+                    ItemAmount = item.item.amount,
+                    ItemQuality = item.item.quality,
+                });
+            }
+        }
+
+        return userItems;
+    }
+
+    private static void ClearUserItems(UnturnedPlayer player)
+    {
+        for (byte i = 0; i < PlayerInventory.PAGES; i++)
+        {
+            if (i == PlayerInventory.AREA)
+                continue;
+
+            var count = player.Inventory.getItemCount(i);
+
+            for (byte index = 0; index < count; index++)
+            {
+                player.Inventory.removeItem(i, 0);
+            }
+        }
+    }
+    
     public override void Unload()
     {
         ClothingEquipEventPublisher.ClothingEquipEvent -= OnClothingEquipped;
