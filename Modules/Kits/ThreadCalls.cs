@@ -57,7 +57,7 @@ internal static class ThreadCalls
         }
 
         var kit = await kitsStorage.StartQuery().Select("KitID", "KitName").Where(("KitName", v.Item2)).Finalise()
-            .QuerySingle<Kit>();
+            .QuerySingleAsync<Kit>();
         var kitId = kit.KitID;
         kitsStorage.StartQuery().Update(("KitName", v.Item3)).Where(("KitID", kitId)).Finalise().ExecuteSql();
     }
@@ -120,13 +120,13 @@ internal static class ThreadCalls
             .Select("KitID", "KitName", "KitCooldown")
             .Where(("KitName", v.Item3))
             .Finalise()
-            .QuerySingle<Kit>();
+            .QuerySingleAsync<Kit>();
 
         var kitItems = await kitItemsStorage.StartQuery()
             .Select("*")
             .Where(("KitID", kit.KitID))
             .Finalise()
-            .Query<KitItem>();
+            .QueryAsync<KitItem>();
 
         foreach (var item in kitItems.OrderByDescending(x => x.IsEquipped))
         {
@@ -171,7 +171,7 @@ internal static class ThreadCalls
         }
 
         var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", v.Item3)).Finalise()
-            .QuerySingle<Guid>();
+            .QuerySingleAsync<Guid>();
         
         kitCooldownsStorage.StartQuery().Delete().Where(("KitID", kitID), ("User", v.Item2.CSteamID.m_SteamID))
             .Finalise().ExecuteSql();
@@ -193,7 +193,7 @@ internal static class ThreadCalls
         }
 
         var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", v!.Item3)).Finalise()
-            .QuerySingle<Guid>();
+            .QuerySingleAsync<Guid>();
         
         kitCooldownsStorage.StartQuery().Insert(new KitCooldown
         {

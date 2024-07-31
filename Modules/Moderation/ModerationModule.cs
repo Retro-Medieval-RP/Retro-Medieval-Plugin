@@ -68,7 +68,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 .Count()
                 .Where(("TargetID", e.Sender.m_SteamID), ("MuteOver", false))
                 .Finalise()
-                .QuerySingle<int>() <= 0;
+                .QuerySingleAsync<int>() <= 0;
         }
 
         Logger.LogError("Could not gather storage [MutesStorage]");
@@ -84,7 +84,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 .Count()
                 .Where(("TargetID", e.Sender.CSteamID.m_SteamID), ("MuteOver", false))
                 .Finalise()
-                .QuerySingle<int>() <= 0;
+                .QuerySingleAsync<int>() <= 0;
         }
 
         Logger.LogError("Could not gather storage [MutesStorage]");
@@ -126,7 +126,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
         if (GetStorage<MySqlSaver<ModerationPlayer>>(out var playersStorage))
         {
             return await playersStorage.StartQuery().Select("*").Where(("PlayerID", playerId)).Finalise()
-                .QuerySingle<ModerationPlayer>();
+                .QuerySingleAsync<ModerationPlayer>();
         }
 
         Logger.LogError("Could not gather storage [PlayersStorage]");
@@ -142,7 +142,7 @@ internal class ModerationModule([NotNull] string directory) : Module(directory)
                 .Count()
                 .Where(("PlayerID", playerId))
                 .Finalise()
-                .QuerySingle<int>() > 0;
+                .QuerySingleAsync<int>() > 0;
         }
 
         Logger.LogError("Could not gather storage [PlayersStorage]");

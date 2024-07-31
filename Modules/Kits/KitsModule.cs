@@ -52,7 +52,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
     {
         if (GetStorage<MySqlSaver<Kit>>(out var kitsStorage))
         {
-            return await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().Query<Kit>();
+            return await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Finalise().QueryAsync<Kit>();
         }
 
         Logger.LogError("Could not gather storage [KitsStorage]");
@@ -68,7 +68,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         }
 
         var kit = await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
-            .Finalise().QuerySingle<Kit>();
+            .Finalise().QuerySingleAsync<Kit>();
 
         return kit.KitCooldown;
     }
@@ -82,7 +82,7 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
         }
 
         return await kitsStorage.StartQuery().Select("KitID", "KitName", "KitCooldown").Where(("KitName", kitName))
-            .Finalise().QuerySingle<Kit>();
+            .Finalise().QuerySingleAsync<Kit>();
     }
 
     public async Task<bool> IsKitOnCooldown(UnturnedPlayer targetPlayer, string kitName)
@@ -99,8 +99,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return true;
         }
 
-        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        return await kitCooldownsStorage.StartQuery().Count().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<int>() > 0;
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingleAsync<Guid>();
+        return await kitCooldownsStorage.StartQuery().Count().Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingleAsync<int>() > 0;
     }
 
     public async Task<DateTime> GetLastSpawnDate(UnturnedPlayer targetPlayer, string kitName)
@@ -117,8 +117,8 @@ internal class KitsModule([NotNull] string directory) : Module(directory)
             return DateTime.Now;
         }
 
-        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingle<Guid>();
-        return await kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingle<DateTime>();
+        var kitID = await kitsStorage.StartQuery().Select("KitID").Where(("KitName", kitName)).Finalise().QuerySingleAsync<Guid>();
+        return await kitCooldownsStorage.StartQuery().Select("SpawnDateTime").Where(("KitID", kitID), ("User", targetPlayer.CSteamID.m_SteamID)).Finalise().QuerySingleAsync<DateTime>();
     }
 
     public void DeleteCooldown(UnturnedPlayer targetPlayer, string kitName) => 

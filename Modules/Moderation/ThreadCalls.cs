@@ -42,7 +42,7 @@ internal static class ThreadCalls
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
             .Where(("BanOver", false))
             .Finalise()
-            .Query<Ban>();
+            .QueryAsync<Ban>();
 
         foreach (var ban in bans)
         {
@@ -71,7 +71,7 @@ internal static class ThreadCalls
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
             .Where(("MuteOver", false))
             .Finalise()
-            .Query<Mute>();
+            .QueryAsync<Mute>();
 
 
         foreach (var mute in mutes)
@@ -100,7 +100,7 @@ internal static class ThreadCalls
                 .Count()
                 .Where(("TargetID", v.Item2.CSteamID.m_SteamID), ("BanOver", false))
                 .Finalise()
-                .QuerySingle<int>() <= 0)
+                .QuerySingleAsync<int>() <= 0)
         {
             if (v.Item1.GetConfiguration<NameBlackListConfiguration>(out var nameBlacklist))
             {
@@ -152,7 +152,7 @@ internal static class ThreadCalls
             .Select("Reason", "BanLength", "PunishmentGiven")
             .Where(("TargetID", v.Item2.CSteamID.m_SteamID))
             .Finalise()
-            .QuerySingle<Ban>();
+            .QuerySingleAsync<Ban>();
 
         Provider.kick(v.Item2.CSteamID, $"[BAN] Reason: {ban.Reason} Time Left: {ban.TimeLeftString}");
     }
@@ -324,7 +324,7 @@ internal static class ThreadCalls
                 .Count()
                 .Where(("PunishmentID", v.Item2), ("WarnRemoved", false))
                 .Finalise()
-                .QuerySingle<int>() > 0)
+                .QuerySingleAsync<int>() > 0)
         {
             if (!warnsStorage.StartQuery()
                     .Update(("WarnRemoved", true))
@@ -341,7 +341,7 @@ internal static class ThreadCalls
                 .Select("*")
                 .Where(("PunishmentID", v.Item2))
                 .Finalise()
-                .QuerySingle<Warn>();
+                .QuerySingleAsync<Warn>();
             var target = await v.Item1.GetPlayer(warn.TargetID);
             var punisher = v.Item3 is ConsolePlayer
                 ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
@@ -368,7 +368,7 @@ internal static class ThreadCalls
                 .Count()
                 .Where(("PunishmentID", v.Item2), ("MuteOver", false))
                 .Finalise()
-                .QuerySingle<int>() > 0)
+                .QuerySingleAsync<int>() > 0)
         {
             if (!mutesStorage.StartQuery()
                     .Update(("MuteOver", true))
@@ -383,7 +383,7 @@ internal static class ThreadCalls
                 .Select("*")
                 .Where(("PunishmentID", v.Item2))
                 .Finalise()
-                .QuerySingle<Mute>();
+                .QuerySingleAsync<Mute>();
 
             var target = await v.Item1.GetPlayer(mute.TargetID);
 
@@ -414,7 +414,7 @@ internal static class ThreadCalls
                 .Count()
                 .Where(("PunishmentID", v.Item2), ("BanOver", false))
                 .Finalise()
-                .QuerySingle<int>() > 0)
+                .QuerySingleAsync<int>() > 0)
         {
             if (!bansStorage.StartQuery()
                     .Update(("BanOver", true))
@@ -429,7 +429,7 @@ internal static class ThreadCalls
                 .Select("*")
                 .Where(("PunishmentID", v.Item2))
                 .Finalise()
-                .QuerySingle<Ban>();
+                .QuerySingleAsync<Ban>();
             var target = await v.Item1.GetPlayer(ban.TargetID);
             var punisher = v.Item3 is ConsolePlayer
                 ? new ModerationPlayer { DisplayName = "Console", FirstJoinDate = DateTime.Now, LastJoinDate = DateTime.Now, PlayerID = 0 }
@@ -460,7 +460,7 @@ internal static class ThreadCalls
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "BanLength", "BanOver")
             .Where(("BanOver", false), ("TargetID", v.Item2))
             .Finalise()
-            .Query<Ban>();
+            .QueryAsync<Ban>();
 
         UnturnedChat.Say(v.Item3, "Bans:");
         foreach (var ban in bans)
@@ -482,7 +482,7 @@ internal static class ThreadCalls
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "WarnRemoved")
             .Where(("WarnRemoved", false), ("TargetID", v.Item2))
             .Finalise()
-            .Query<Warn>();
+            .QueryAsync<Warn>();
 
         UnturnedChat.Say(v.Item3, "Warns:");
         foreach (var warn in warns)
@@ -504,7 +504,7 @@ internal static class ThreadCalls
             .Select("PunishmentID", "PunisherID", "TargetID", "PunishmentGiven", "Reason", "MuteLength", "MuteOver")
             .Where(("MuteOver", false), ("TargetID", v.Item2))
             .Finalise()
-            .Query<Mute>();
+            .QueryAsync<Mute>();
 
         UnturnedChat.Say(v.Item3, "Mutes:");
         foreach (var mute in mutes)

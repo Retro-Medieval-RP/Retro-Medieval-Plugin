@@ -47,12 +47,10 @@ public class MySqlExecutor(
         }
     }
 
-    public async Task<IEnumerable<T>> Query<T>() where T : new()
+    public IEnumerable<T> Query<T>() where T : new()
     {
-        return await QueryAsync<T>();
-        
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        
+
         try
         {
             return DataParams.Count < 1
@@ -69,11 +67,11 @@ public class MySqlExecutor(
 
         return new List<T>();
     }
-    
+
     public async Task<IEnumerable<T>> QueryAsync<T>() where T : new()
     {
         await using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        
+
         try
         {
             return DataParams.Count < 1
@@ -91,12 +89,10 @@ public class MySqlExecutor(
         return new List<T>();
     }
 
-    public async Task<T> QuerySingle<T>() where T : new()
+    public T QuerySingle<T>() where T : new()
     {
-        return await QuerySingleAsync<T>();
-        
         using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        
+
         try
         {
             return DataParams.Count < 1
@@ -117,7 +113,7 @@ public class MySqlExecutor(
     public async Task<T> QuerySingleAsync<T>() where T : new()
     {
         await using var conn = new MySqlConnection(DatabaseInfo.ConnectionString);
-        
+
         try
         {
             return DataParams.Count < 1
@@ -134,7 +130,7 @@ public class MySqlExecutor(
 
         return new T();
     }
-    
+
     private DynamicParameters ConvertParams()
     {
         var params_out = new DynamicParameters();

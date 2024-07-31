@@ -11,6 +11,8 @@ public interface IExecutor
     
     bool ExecuteSql();
 
-    Task<IEnumerable<T>> Query<T>() where T : new();
-    Task<T> QuerySingle<T>() where T : new();
+    IEnumerable<T> Query<T>() where T : new();
+    T QuerySingle<T>() where T : new();
+    Task<IEnumerable<T>> QueryAsync<T>() where T : new();
+    Task<T> QuerySingleAsync<T>() where T : new();
 }
