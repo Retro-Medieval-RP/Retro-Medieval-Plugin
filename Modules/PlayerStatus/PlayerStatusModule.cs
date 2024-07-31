@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using PlayerStatus.Models;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using Rocket.Unturned;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
+using Steamworks;
 
 namespace PlayerStatus
 {
@@ -12,6 +15,11 @@ namespace PlayerStatus
     [ModuleConfiguration<StatusConfiguration>("PlayerStatusConfiguration")]
     public class PlayerStatusModule(string directory) : Module(directory)
     {
+        private Dictionary<CSteamID, ImageChangeRange> LastHealthRange { get; } = [];
+        private Dictionary<CSteamID, ImageChangeRange> LastStaminaRange { get; } = [];
+        private Dictionary<CSteamID, ImageChangeRange> LastHungerRange { get; } = [];
+        private Dictionary<CSteamID, ImageChangeRange> LastWaterRange { get; } = [];
+        
         public override void Load()
         {
             U.Events.OnPlayerConnected += OnPlayerConnected;
@@ -69,6 +77,20 @@ namespace PlayerStatus
             var range = config.Health.Ranges
                 .Where(x => player.Player.life.health <= x.MaxValue)
                 .First(x => player.Player.life.health >= x.MinValue);
+
+            if (LastHealthRange.ContainsKey(player.CSteamID))
+            {
+                if (LastHealthRange[player.CSteamID] == range)
+                {
+                    return;
+                }
+                
+                LastHealthRange[player.CSteamID] = range;
+            }
+            else
+            {
+                LastHealthRange.Add(player.CSteamID, range);
+            }
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
         }
@@ -84,6 +106,20 @@ namespace PlayerStatus
                 .Where(x => player.Player.life.stamina <= x.MaxValue)
                 .First(x => player.Player.life.stamina >= x.MinValue);
             
+            if (LastStaminaRange.ContainsKey(player.CSteamID))
+            {
+                if (LastStaminaRange[player.CSteamID] == range)
+                {
+                    return;
+                }
+                
+                LastStaminaRange[player.CSteamID] = range;
+            }
+            else
+            {
+                LastStaminaRange.Add(player.CSteamID, range);
+            }
+            
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Stamina.ChildName, range.ImageURL, true, true);
         }
 
@@ -97,7 +133,21 @@ namespace PlayerStatus
             var range = config.Hunger.Ranges
                 .Where(x => player.Player.life.food <= x.MaxValue)
                 .First(x => player.Player.life.food >= x.MinValue);
-            
+
+            if (LastHungerRange.ContainsKey(player.CSteamID))
+            {
+                if (LastHungerRange[player.CSteamID] == range)
+                {
+                    return;
+                }
+                
+                LastHungerRange[player.CSteamID] = range;
+            }
+            else
+            {
+                LastHungerRange.Add(player.CSteamID, range);
+            }
+
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Hunger.ChildName, range.ImageURL, true, true);
         }
 
@@ -111,6 +161,20 @@ namespace PlayerStatus
             var range = config.Water.Ranges
                 .Where(x => player.Player.life.water <= x.MaxValue)
                 .First(x => player.Player.life.water >= x.MinValue);
+            
+            if (LastWaterRange.ContainsKey(player.CSteamID))
+            {
+                if (LastWaterRange[player.CSteamID] == range)
+                {
+                    return;
+                }
+                
+                LastWaterRange[player.CSteamID] = range;
+            }
+            else
+            {
+                LastWaterRange.Add(player.CSteamID, range);
+            }
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Water.ChildName, range.ImageURL, true, true);
         }
