@@ -13,7 +13,7 @@ internal class StatusConfiguration : IConfig
     
     public void LoadDefaults()
     {
-        UIID = 0;
+        UIID = 17102;
         Health = new UIPart
         {
             ChildName = "HealthIcon",

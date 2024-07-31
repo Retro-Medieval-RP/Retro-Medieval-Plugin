@@ -49,6 +49,9 @@ namespace PlayerStatus
                 return;
             }
             
+            player.Player.disablePluginWidgetFlag(EPluginWidgetFlags.ShowLifeMeters);
+            player.Player.disablePluginWidgetFlag(EPluginWidgetFlags.ShowStatusIcons);
+            
             EffectManager.sendUIEffect(config.UIID, 5567, player.Player.channel.GetOwnerTransportConnection(), false);
             UpdateHealth(player);
             UpdateStamina(player);
@@ -63,8 +66,9 @@ namespace PlayerStatus
                 return;
             }
             
-            var range = config.Health.Ranges.First(x =>
-                x.MaxValue <= player.Player.life.health && player.Player.life.health >= x.MinValue);
+            var range = config.Health.Ranges
+                .Where(x => player.Player.life.health <= x.MaxValue)
+                .First(x => player.Player.life.health >= x.MinValue);
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
         }
@@ -76,10 +80,11 @@ namespace PlayerStatus
                 return;
             }
             
-            var range = config.Stamina.Ranges.First(x =>
-                x.MaxValue <= player.Player.life.stamina && player.Player.life.stamina >= x.MinValue);
+            var range = config.Stamina.Ranges
+                .Where(x => player.Player.life.stamina <= x.MaxValue)
+                .First(x => player.Player.life.stamina >= x.MinValue);
             
-            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
+            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Stamina.ChildName, range.ImageURL, true, true);
         }
 
         private void UpdateHunger(UnturnedPlayer player)
@@ -89,10 +94,11 @@ namespace PlayerStatus
                 return;
             }
             
-            var range = config.Hunger.Ranges.First(x =>
-                x.MaxValue <= player.Player.life.food && player.Player.life.food >= x.MinValue);
+            var range = config.Hunger.Ranges
+                .Where(x => player.Player.life.food <= x.MaxValue)
+                .First(x => player.Player.life.food >= x.MinValue);
             
-            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
+            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Hunger.ChildName, range.ImageURL, true, true);
         }
 
         private void UpdateWater(UnturnedPlayer player)
@@ -102,10 +108,11 @@ namespace PlayerStatus
                 return;
             }
             
-            var range = config.Water.Ranges.First(x =>
-                x.MaxValue <= player.Player.life.water && player.Player.life.water >= x.MinValue);
+            var range = config.Water.Ranges
+                .Where(x => player.Player.life.water <= x.MaxValue)
+                .First(x => player.Player.life.water >= x.MinValue);
             
-            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
+            EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Water.ChildName, range.ImageURL, true, true);
         }
     }
 }
