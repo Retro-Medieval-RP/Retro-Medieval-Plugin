@@ -62,8 +62,7 @@ namespace PlayerStatus
             {
                 return;
             }
-
-
+            
             var range = config.Health.Ranges.First(x =>
                 x.MaxValue <= player.Player.life.health && player.Player.life.health >= x.MinValue);
             
@@ -76,8 +75,7 @@ namespace PlayerStatus
             {
                 return;
             }
-
-
+            
             var range = config.Stamina.Ranges.First(x =>
                 x.MaxValue <= player.Player.life.stamina && player.Player.life.stamina >= x.MinValue);
             
@@ -90,8 +88,7 @@ namespace PlayerStatus
             {
                 return;
             }
-
-
+            
             var range = config.Hunger.Ranges.First(x =>
                 x.MaxValue <= player.Player.life.food && player.Player.life.food >= x.MinValue);
             
@@ -104,8 +101,7 @@ namespace PlayerStatus
             {
                 return;
             }
-
-
+            
             var range = config.Water.Ranges.First(x =>
                 x.MaxValue <= player.Player.life.water && player.Player.life.water >= x.MinValue);
             
