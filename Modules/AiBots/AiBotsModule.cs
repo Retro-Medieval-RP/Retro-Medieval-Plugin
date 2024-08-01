@@ -14,6 +14,7 @@ using UnityEngine;
 namespace AiBots;
 
 [ModuleInformation("AiBots")]
+[ModuleStorage<BotsStorage>("Bots")]
 public class AiBotsModule(string directory) : Module(directory)
 {
     public List<BotAi> ActiveBots { get; set; } = [];
