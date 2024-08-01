@@ -93,9 +93,11 @@
         <Compile Include="Commands\CreateBotCommand.cs" />
         <Compile Include="Commands\RemoveBotCommand.cs" />
         <Compile Include="Commands\SpawnBotsCommand.cs" />
+        <Compile Include="Patches\ProviderPatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Threads\BotUserSim.cs" />
         <Compile Include="Threads\MouseState.cs" />
+        <Compile Include="UniTasksSetup.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\RetroMedieval.Modules\RetroMedieval.Modules.csproj">

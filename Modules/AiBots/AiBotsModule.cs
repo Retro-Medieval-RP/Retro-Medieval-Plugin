@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AiBots.Bot;
+using HarmonyLib;
 using RetroMedieval.Modules;
 using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events.Unturned;
@@ -18,40 +19,39 @@ namespace AiBots;
 public class AiBotsModule(string directory) : Module(directory)
 {
     public List<BotAi> ActiveBots { get; set; } = [];
-
+    private Harmony Harmony { get; set; }
+    
     public override void Load()
     {
+        UniTasksSetup.CheckInit();
+        
         UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
         UnturnedPlayerEvents.OnPlayerDead += OnPlayerDead;
         DamageEventPublisher.DamageEventEvent += OnPlayerDamaged;
+
+        Harmony = new Harmony("aiBots.retromedieval.com");
+        Harmony.PatchAll();
     }
 
     public override void Unload()
     {
+        UniTasksSetup.CheckInit();
+        
         UnturnedPlayerEvents.OnPlayerDeath -= OnPlayerDeath;
         UnturnedPlayerEvents.OnPlayerDead -= OnPlayerDead;
         DamageEventPublisher.DamageEventEvent -= OnPlayerDamaged;
+        
+        Harmony.UnpatchAll("aiBots.retromedieval.com");
     }
 
     private void OnPlayerDamaged(DamageEventArgs e, ref EPlayerKill kill, ref bool allow)
     {
-        var bot = ActiveBots.FirstOrDefault(b => e.Player.channel.owner.playerID.steamID == b.Id);
-        if (bot == null)
-            return;
-        Damage(bot, UnturnedPlayer.FromCSteamID(e.Killer));
     }
 
     private static async void Damage(BotAi bot, UnturnedPlayer damager) => await bot.Damage(damager, 1);
 
     private async void OnPlayerDead(UnturnedPlayer player, Vector3 position)
     {
-        if (ActiveBots.All(e => e.Id != player.CSteamID))
-        {
-            return;
-        }
-
-        var bot = ActiveBots.FirstOrDefault(e => e.Id == player.CSteamID);
-        await bot!.Respawn();
     }
 
     private void ClearInventory(Player player)
@@ -59,27 +59,31 @@ public class AiBotsModule(string directory) : Module(directory)
         var playerInv = player.inventory;
         for (byte index1 = 0; index1 < PlayerInventory.PAGES; ++index1)
         {
-            if (index1 != PlayerInventory.AREA)
+            if (index1 == PlayerInventory.AREA)
             {
-                var itemCount = playerInv.getItemCount(index1);
-                for (byte index2 = 0; index2 < itemCount; ++index2)
-                    playerInv.removeItem(index1, 0);
+                continue;
+            }
+            
+            var itemCount = playerInv.getItemCount(index1);
+            for (byte index2 = 0; index2 < itemCount; ++index2)
+            {
+                playerInv.removeItem(index1, 0);
             }
         }
 
-        player.clothing.askWearBackpack(0, 0, new byte[0], true);
+        player.clothing.askWearBackpack(0, 0, [], true);
         Action();
-        player.clothing.askWearGlasses(0, 0, new byte[0], true);
+        player.clothing.askWearGlasses(0, 0, [], true);
         Action();
-        player.clothing.askWearHat(0, 0, new byte[0], true);
+        player.clothing.askWearHat(0, 0, [], true);
         Action();
-        player.clothing.askWearPants(0, 0, new byte[0], true);
+        player.clothing.askWearPants(0, 0, [], true);
         Action();
-        player.clothing.askWearMask(0, 0, new byte[0], true);
+        player.clothing.askWearMask(0, 0, [], true);
         Action();
-        player.clothing.askWearShirt(0, 0, new byte[0], true);
+        player.clothing.askWearShirt(0, 0, [], true);
         Action();
-        player.clothing.askWearVest(0, 0, new byte[0], true);
+        player.clothing.askWearVest(0, 0, [], true);
         Action();
         return;
 
@@ -92,15 +96,5 @@ public class AiBotsModule(string directory) : Module(directory)
 
     private void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer)
     {
-        if (ActiveBots.All(e => e.Id != player.CSteamID))
-        {
-            return;
-        }
-
-        ClearInventory(player.Player);
-        foreach (var num in ActiveBots.FirstOrDefault(e => e.Id == player.CSteamID)?.Drop!)
-        {
-            player.GiveItem(num, 1);
-        }
     }
 }

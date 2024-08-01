@@ -12,12 +12,13 @@ using SDG.NetTransport;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace AiBots.Bot;
 
 public class BotAi : MonoBehaviour
 {
-    private static readonly FieldInfo SBattlEyeId = AccessTools.Field(typeof(SteamPlayer), "battlEyeId");
+    private static readonly FieldInfo s_BattlEyeId = AccessTools.Field(typeof(SteamPlayer), "battlEyeId");
     private Seeker _seeker = null;
     private Path _path = null;
     private Player _target = null;
@@ -54,19 +55,27 @@ public class BotAi : MonoBehaviour
 
     public void Prepare(CSteamID id, Vector3 spawnPoint)
     {
+        Logger.Log("Line 58");
         Id = id;
-        TransportConnection = new BotTransportConnection() as ITransportConnection;
+        Logger.Log("Line 60");
+        TransportConnection = (ITransportConnection)new BotTransportConnection();
+        Logger.Log("Line 62");
         _seeker = gameObject.AddComponent<Seeker>();
+        Logger.Log("Line 64");
         _spawnpoint = spawnPoint;
+        Logger.Log("Line 66");
         CreateBot();
+        Logger.Log("Line 68");
         PreventKick();
-        BattleyeId = (int)SBattlEyeId.GetValue(Player.channel.owner);
+        Logger.Log("Line 70");
+        BattleyeId = (int)s_BattlEyeId.GetValue(Player.channel.owner);
+        Logger.Log("Line 72");
     }
 
     private async void CreateBot()
     {
         var id1 = Id;
-        var num = (Provider.clients).Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
+        var num = Provider.clients.Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
         var str1 = "RETRO_BOT_" + num;
         num = Provider.clients.Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
         var str2 = "RETRO_BOT_" + num;
@@ -106,9 +115,6 @@ public class BotAi : MonoBehaviour
         Player = botPlayer;
         await DelayedRemoveRigidbody(botPlayer);
         Simulation = new BotUserSim(botPlayer);
-        steamPlayerId = null;
-        steamPending = null;
-        botPlayer = null;
     }
 
     private void PrepareInventoryDetails(SteamPending pending)
@@ -219,21 +225,28 @@ public class BotAi : MonoBehaviour
     private void ClearInventory(Player player)
     {
         PlayerInventory playerInv = player.inventory;
+        
         player.channel.send("tellSlot", (ESteamCall) 1, 0, [
             (byte) 0,
             (byte) 0, Array.Empty<byte>()
         ]);
+        
         player.channel.send("tellSlot", (ESteamCall) 1, 0, [
             (byte) 1,
             (byte) 0, Array.Empty<byte>()
         ]);
+        
         for (byte index1 = 0; index1 < PlayerInventory.PAGES; ++index1)
         {
-            if (index1 != PlayerInventory.AREA)
+            if (index1 == PlayerInventory.AREA)
             {
-                byte itemCount = playerInv.getItemCount(index1);
-                for (byte index2 = 0; index2 < itemCount; ++index2)
-                    playerInv.removeItem(index1, 0);
+                continue;
+            }
+            
+            var itemCount = playerInv.getItemCount(index1);
+            for (byte index2 = 0; index2 < itemCount; ++index2)
+            {
+                playerInv.removeItem(index1, 0);
             }
         }
 
