@@ -11,25 +11,25 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("ReceiveWearShirt")]
 internal class EquipShirtPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing ____instance)
+    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
-            if (____instance.player == null)
+            if (__instance.player == null)
             {
                 return;
             }
 
             if (id == Guid.Empty)
             {
-                ShirtDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), ____instance.player.clothing.shirt);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), ____instance.player.clothing.shirt);
+                ShirtDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
                 return;
             }
 
             var item = Assets.find(id);
-            ShirtEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), item.id);
+            ShirtEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
         }
         catch
         {
@@ -42,25 +42,25 @@ internal class EquipShirtPatch
 [HarmonyPatch("ReceiveWearPants")]
 internal class EquipPantsPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing ____instance)
+    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
-            if (____instance.player == null)
+            if (__instance.player == null)
             {
                 return;
             }
 
             if (id == Guid.Empty)
             {
-                PantsDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), ____instance.player.clothing.pants);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), ____instance.player.clothing.pants);
+                PantsDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
                 return;
             }
 
             var item = Assets.find(id);
-            PantsEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(____instance.player), item.id);
+            PantsEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
         }
         catch
         {
