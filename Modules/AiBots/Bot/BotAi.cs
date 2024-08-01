@@ -58,7 +58,7 @@ public class BotAi : MonoBehaviour
         Logger.Log("Line 58");
         Id = id;
         Logger.Log("Line 60");
-        TransportConnection = (ITransportConnection)new BotTransportConnection();
+        TransportConnection = new BotTransportConnection() as ITransportConnection;
         Logger.Log("Line 62");
         _seeker = gameObject.AddComponent<Seeker>();
         Logger.Log("Line 64");

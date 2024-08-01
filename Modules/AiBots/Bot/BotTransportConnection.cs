@@ -5,7 +5,7 @@ using SDG.Unturned;
 
 namespace AiBots.Bot;
 
-internal class BotTransportConnection
+internal class BotTransportConnection : ITransportConnection
 {
     private readonly string m_IP;
     private readonly ushort m_Port;

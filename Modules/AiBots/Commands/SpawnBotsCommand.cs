@@ -30,7 +30,9 @@ internal class SpawnBotsCommand : IRocketCommand
             UnturnedPlayer.FromPlayer(bot.Player);
             bot.Player.life.serverModifyHealth(100);
             foreach (var num in bot.Layout)
+            {
                 UnturnedPlayer.FromPlayer(bot.Player).GiveItem(num, 1);
+            }
             bot.Hunter = true;
         }
     }
