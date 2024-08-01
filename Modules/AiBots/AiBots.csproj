@@ -49,6 +49,9 @@
         <Reference Include="Dapper">
           <HintPath>..\Libs\Dapper.dll</HintPath>
         </Reference>
+        <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+          <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
         <Reference Include="Rocket.API">
           <HintPath>..\Libs\Rocket.API.dll</HintPath>
         </Reference>
@@ -111,6 +114,10 @@
         <Project>{9642ecb9-9358-489e-af91-35d6f517f354}</Project>
         <Name>RetroMedieval.Utils</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="App.config" />
+      <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
