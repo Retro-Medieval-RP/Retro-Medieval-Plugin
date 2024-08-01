@@ -52,7 +52,7 @@ public class AiBotsModule(string directory) : Module(directory)
         Damage(bot, UnturnedPlayer.FromCSteamID(e.Killer));
     }
 
-    private async void Damage(BotAi bot, UnturnedPlayer damager) => await bot.Damage(damager, 1);
+    private static async void Damage(BotAi bot, UnturnedPlayer damager) => await bot.Damage(damager, 1);
 
     private async void OnPlayerDead(UnturnedPlayer player, Vector3 position)
     {
