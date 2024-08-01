@@ -7,6 +7,7 @@ using AiBots.Threads;
 using Cysharp.Threading.Tasks;
 using HarmonyLib;
 using Pathfinding;
+using Rocket.Unturned.Player;
 using SDG.NetTransport;
 using SDG.Unturned;
 using Steamworks;
@@ -64,16 +65,16 @@ public class BotAi : MonoBehaviour
 
     private async void CreateBot()
     {
-        CSteamID id1 = Id;
-        int num = (Provider.clients).Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
-        string str1 = "RETRO_BOT_" + num;
+        var id1 = Id;
+        var num = (Provider.clients).Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
+        var str1 = "RETRO_BOT_" + num;
         num = Provider.clients.Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
-        string str2 = "RETRO_BOT_" + num;
+        var str2 = "RETRO_BOT_" + num;
         num = Provider.clients.Count(e => e.playerID.characterName.StartsWith("RETRO_BOT_"));
-        string str3 = "RETRO_BOT_" + num;
-        CSteamID id2 = Id;
-        SteamPlayerID steamPlayerId = new SteamPlayerID(id1, 0, str1, str2, str3, id2);
-        SteamPending steamPending = new SteamPending(
+        var str3 = "RETRO_BOT_" + num;
+        var id2 = Id;
+        var steamPlayerId = new SteamPlayerID(id1, 0, str1, str2, str3, id2);
+        var steamPending = new SteamPending(
             TransportConnection,
             steamPlayerId,
             true,
@@ -101,7 +102,7 @@ public class BotAi : MonoBehaviour
         PrepareInventoryDetails(steamPending);
         Provider.pending.Add(steamPending);
         Provider.accept(steamPending);
-        Player botPlayer = Provider.clients.LastOrDefault()?.player;
+        var botPlayer = Provider.clients.LastOrDefault()?.player;
         Player = botPlayer;
         await DelayedRemoveRigidbody(botPlayer);
         Simulation = new BotUserSim(botPlayer);
@@ -182,5 +183,79 @@ public class BotAi : MonoBehaviour
         Simulation.SetRotation(57.29578f * Mathf.Atan2((float) (2.0 * quaternion.y * quaternion.w - 2.0 * quaternion.x * quaternion.z), (float) (1.0 - 2.0 * quaternion.y * quaternion.y - 2.0 * quaternion.z * quaternion.z)), 90f, 0.0f);
         Simulation.Sprint = true;
         Player.movement.controller.SimpleMove(vector3_2);
+    }
+    
+    public async UniTask Damage(UnturnedPlayer damager, int second)
+    {
+        await UniTask.Delay(second * 1000);
+        await UniTask.SwitchToMainThread();
+        if (_target == null || Player.life.isDead || (long) _target.channel.owner.playerID.steamID.m_SteamID != (long) damager.CSteamID.m_SteamID || Time.time < (double) _nextFire || Player.equipment.state[10] <= 0)
+            return;
+        var direction = damager.Position - Player.transform.position;
+        var q = Quaternion.LookRotation(direction);
+        var yaw = 57.29578f * Mathf.Atan2((float) (2.0 * q.y * q.w - 2.0 * q.x * q.z), (float) (1.0 - 2.0 * q.y * q.y - 2.0 * q.z * q.z));
+        Simulation.SetRotation(yaw, 90f, 0.0f);
+        var gun = Player.equipment.useable as UseableGun;
+        _nextFire = Time.time + 1f / gun!.equippedGunAsset.firerate;
+        typeof (UseableGun).GetMethod("fire", BindingFlags.Instance | BindingFlags.NonPublic)?.Invoke(gun, []);
+        damager.Damage(_damage, damager.Position, (EDeathCause) 6, (ELimb) 13, Player.channel.owner.playerID.steamID);
+    }
+    
+    public async UniTask Respawn()
+    {
+        await UniTask.Delay(_respawn * 1000);
+        await UniTask.SwitchToMainThread();
+        Player.life.ServerRespawn(false);
+        Player.teleportToLocationUnsafe(_spawnpoint, 90f);
+        var unturnedPlayer = UnturnedPlayer.FromPlayer(Player);
+        ClearInventory(Player);
+        foreach (var item in Layout)
+        {
+            unturnedPlayer.GiveItem(item, 1);
+        }
+        Player.life.serverModifyHealth(100);
+    }
+    
+    private void ClearInventory(Player player)
+    {
+        PlayerInventory playerInv = player.inventory;
+        player.channel.send("tellSlot", (ESteamCall) 1, 0, [
+            (byte) 0,
+            (byte) 0, Array.Empty<byte>()
+        ]);
+        player.channel.send("tellSlot", (ESteamCall) 1, 0, [
+            (byte) 1,
+            (byte) 0, Array.Empty<byte>()
+        ]);
+        for (byte index1 = 0; index1 < PlayerInventory.PAGES; ++index1)
+        {
+            if (index1 != PlayerInventory.AREA)
+            {
+                byte itemCount = playerInv.getItemCount(index1);
+                for (byte index2 = 0; index2 < itemCount; ++index2)
+                    playerInv.removeItem(index1, 0);
+            }
+        }
+
+        player.clothing.askWearBackpack(0, 0, [], true);
+        Action();
+        player.clothing.askWearGlasses(0, 0, [], true);
+        Action();
+        player.clothing.askWearHat(0, 0, [], true);
+        Action();
+        player.clothing.askWearPants(0, 0, [], true);
+        Action();
+        player.clothing.askWearMask(0, 0, [], true);
+        Action();
+        player.clothing.askWearShirt(0, 0, [], true);
+        Action();
+        player.clothing.askWearVest(0, 0, [], true);
+        Action();
+        return;
+
+        void Action()
+        {
+            for (byte index = 0; index < playerInv.getItemCount(2); ++index) playerInv.removeItem(2, 0);
+        }
     }
 }
