@@ -10,9 +10,9 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("doDamage")]
 internal class DamagePatch
 {
-    public static bool Prefix(byte amount, Vector3 newRagdoll, EDeathCause newCause, ELimb newLimb, CSteamID newKiller, ref EPlayerKill kill, bool trackKill, ERagdollEffect newRagdollEffect, bool canCauseBleeding, PlayerLife instance)
+    public static bool Prefix(byte amount, Vector3 newRagdoll, EDeathCause newCause, ELimb newLimb, CSteamID newKiller, ref EPlayerKill kill, bool trackKill, ERagdollEffect newRagdollEffect, bool canCauseBleeding, PlayerLife __instance)
     {
-        var ply = instance.channel.owner.player;
+        var ply = __instance.channel.owner.player;
         if (ply is null) return false;
 
         var allow = true;

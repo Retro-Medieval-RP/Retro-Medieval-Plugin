@@ -10,9 +10,9 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("openStorage")]
 internal class StorageOpenPatch
 {
-    public static bool Prefix(InteractableStorage newStorage, PlayerInventory instance)
+    public static bool Prefix(InteractableStorage newStorage, PlayerInventory __instance)
     {
-        var player = UnturnedPlayer.FromPlayer(instance.player);
+        var player = UnturnedPlayer.FromPlayer(__instance.player);
         var allow = true;
         
         var result = Raycaster.RayCastPlayer(player, RayMasks.BARRICADE_INTERACT);
@@ -30,10 +30,10 @@ internal class StorageOpenPatch
 [HarmonyPatch("openStorage")]
 internal class StorageClosePatch
 {
-    public static bool Prefix(PlayerInventory instance)
+    public static bool Prefix(PlayerInventory __instance)
     {
-        var player = UnturnedPlayer.FromPlayer(instance.player);
-        var currentStorage = instance.storage;
+        var player = UnturnedPlayer.FromPlayer(__instance.player);
+        var currentStorage = __instance.storage;
         var allow = true;
         
         var result = Raycaster.RayCastPlayer(player, RayMasks.BARRICADE_INTERACT);
