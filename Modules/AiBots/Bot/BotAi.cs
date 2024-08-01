@@ -55,21 +55,13 @@ public class BotAi : MonoBehaviour
 
     public void Prepare(CSteamID id, Vector3 spawnPoint)
     {
-        Logger.Log("Line 58");
         Id = id;
-        Logger.Log("Line 60");
-        TransportConnection = new BotTransportConnection() as ITransportConnection;
-        Logger.Log("Line 62");
+        TransportConnection = new BotTransportConnection();
         _seeker = gameObject.AddComponent<Seeker>();
-        Logger.Log("Line 64");
         _spawnpoint = spawnPoint;
-        Logger.Log("Line 66");
         CreateBot();
-        Logger.Log("Line 68");
         PreventKick();
-        Logger.Log("Line 70");
         BattleyeId = (int)s_BattlEyeId.GetValue(Player.channel.owner);
-        Logger.Log("Line 72");
     }
 
     private async void CreateBot()
