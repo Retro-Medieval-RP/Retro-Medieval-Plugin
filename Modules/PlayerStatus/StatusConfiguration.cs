@@ -5,7 +5,7 @@ namespace PlayerStatus;
 
 internal class StatusConfiguration : IConfig
 {
-    public ushort UIID { get; set; }
+    public ushort Uiid { get; set; }
     public UIPart Health { get; set; }
     public UIPart Hunger { get; set; }
     public UIPart Water { get; set; }
@@ -13,7 +13,7 @@ internal class StatusConfiguration : IConfig
     
     public void LoadDefaults()
     {
-        UIID = 17102;
+        Uiid = 17102;
         Health = new UIPart
         {
             ChildName = "HealthIcon",

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Timers;
 using RetroMedieval.Utils;
-using Rocket.Core.Logging;
+using UnityEngine;
+using Logger = Rocket.Core.Logging.Logger;
 
 namespace RetroMedieval.Modules;
 
 public sealed class ModuleLoader : Padlock<ModuleLoader>
 {
+    public GameObject ServerGameObject { get; set; }
     public string ModuleDirectory { get; private set; } = "";
 
     private List<Module> Modules { get; } = [];

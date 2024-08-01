@@ -133,13 +133,13 @@ public class MySqlExecutor(
 
     private DynamicParameters ConvertParams()
     {
-        var params_out = new DynamicParameters();
+        var paramsOut = new DynamicParameters();
 
         foreach (var param in DataParams)
         {
-            params_out.Add(param.ParamName, param.ParamObject, param.ParamDbType);
+            paramsOut.Add(param.ParamName, param.ParamObject, param.ParamDbType);
         }
 
-        return params_out;
+        return paramsOut;
     }
 }

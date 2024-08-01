@@ -9,7 +9,7 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("handleRelayVoiceCulling_Proximity")]
 internal class PlayerVoicePatch
 {
-    public static bool Prefix(PlayerVoice speaker, PlayerVoice listener, PlayerVoice __instance)
+    public static bool Prefix(PlayerVoice speaker, PlayerVoice listener, PlayerVoice instance)
     {
         var allow = true;
         PlayerVoiceEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(speaker.player), UnturnedPlayer.FromPlayer(listener.player), ref allow);

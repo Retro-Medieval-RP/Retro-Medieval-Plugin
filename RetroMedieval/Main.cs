@@ -16,7 +16,8 @@ public class Main : RocketPlugin
     protected override void Load()
     {
         Instance = this;
-        
+
+        ModuleLoader.Instance.ServerGameObject = gameObject;
         ModuleLoader.Instance.SetDirectory(Directory);
 
         var files = System.IO.Directory.GetFiles("./Plugins/RetroMedieval/Modules", "*.dll", SearchOption.TopDirectoryOnly);

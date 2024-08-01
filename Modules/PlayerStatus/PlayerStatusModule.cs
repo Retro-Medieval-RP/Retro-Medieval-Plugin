@@ -60,7 +60,7 @@ namespace PlayerStatus
             player.Player.disablePluginWidgetFlag(EPluginWidgetFlags.ShowLifeMeters);
             player.Player.disablePluginWidgetFlag(EPluginWidgetFlags.ShowStatusIcons);
             
-            EffectManager.sendUIEffect(config.UIID, 5567, player.Player.channel.GetOwnerTransportConnection(), false);
+            EffectManager.sendUIEffect(config.Uiid, 5567, player.Player.channel.GetOwnerTransportConnection(), false);
             UpdateHealth(player);
             UpdateStamina(player);
             UpdateHunger(player);
