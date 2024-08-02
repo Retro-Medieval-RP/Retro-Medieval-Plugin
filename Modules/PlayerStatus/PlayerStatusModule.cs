@@ -23,6 +23,7 @@ namespace PlayerStatus
         public override void Load()
         {
             U.Events.OnPlayerConnected += OnPlayerConnected;
+            U.Events.OnPlayerDisconnected += OnPlayerDisconnected;
             UnturnedPlayerEvents.OnPlayerUpdateHealth += OnHealthChange;
             UnturnedPlayerEvents.OnPlayerUpdateStamina += OnStaminaChange;
             UnturnedPlayerEvents.OnPlayerUpdateFood += OnFoodChange;
@@ -32,6 +33,7 @@ namespace PlayerStatus
         public override void Unload()
         {
             U.Events.OnPlayerConnected -= OnPlayerConnected;
+            U.Events.OnPlayerDisconnected -= OnPlayerDisconnected;
             UnturnedPlayerEvents.OnPlayerUpdateHealth -= OnHealthChange;
             UnturnedPlayerEvents.OnPlayerUpdateStamina -= OnStaminaChange;
             UnturnedPlayerEvents.OnPlayerUpdateFood -= OnFoodChange;
@@ -49,6 +51,14 @@ namespace PlayerStatus
 
         private void OnWaterChange(UnturnedPlayer player, byte water) =>
             UpdateWater(player);
+
+        private void OnPlayerDisconnected(UnturnedPlayer player)
+        {
+            LastHealthRange.Remove(player.CSteamID);
+            LastStaminaRange.Remove(player.CSteamID);
+            LastHungerRange.Remove(player.CSteamID);
+            LastWaterRange.Remove(player.CSteamID);
+        }
 
         private void OnPlayerConnected(UnturnedPlayer player)
         {
@@ -78,7 +88,7 @@ namespace PlayerStatus
                 .Where(x => player.Player.life.health <= x.MaxValue)
                 .First(x => player.Player.life.health >= x.MinValue);
 
-            if (LastHealthRange.ContainsKey(player.CSteamID))
+            /*if (LastHealthRange.ContainsKey(player.CSteamID))
             {
                 if (LastHealthRange[player.CSteamID] == range)
                 {
@@ -90,7 +100,7 @@ namespace PlayerStatus
             else
             {
                 LastHealthRange.Add(player.CSteamID, range);
-            }
+            }*/
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Health.ChildName, range.ImageURL, true, true);
         }
@@ -106,7 +116,7 @@ namespace PlayerStatus
                 .Where(x => player.Player.life.stamina <= x.MaxValue)
                 .First(x => player.Player.life.stamina >= x.MinValue);
             
-            if (LastStaminaRange.ContainsKey(player.CSteamID))
+            /*if (LastStaminaRange.ContainsKey(player.CSteamID))
             {
                 if (LastStaminaRange[player.CSteamID] == range)
                 {
@@ -118,7 +128,7 @@ namespace PlayerStatus
             else
             {
                 LastStaminaRange.Add(player.CSteamID, range);
-            }
+            }*/
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Stamina.ChildName, range.ImageURL, true, true);
         }
@@ -134,7 +144,7 @@ namespace PlayerStatus
                 .Where(x => player.Player.life.food <= x.MaxValue)
                 .First(x => player.Player.life.food >= x.MinValue);
 
-            if (LastHungerRange.ContainsKey(player.CSteamID))
+            /*if (LastHungerRange.ContainsKey(player.CSteamID))
             {
                 if (LastHungerRange[player.CSteamID] == range)
                 {
@@ -146,7 +156,7 @@ namespace PlayerStatus
             else
             {
                 LastHungerRange.Add(player.CSteamID, range);
-            }
+            }*/
 
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Hunger.ChildName, range.ImageURL, true, true);
         }
@@ -162,7 +172,7 @@ namespace PlayerStatus
                 .Where(x => player.Player.life.water <= x.MaxValue)
                 .First(x => player.Player.life.water >= x.MinValue);
             
-            if (LastWaterRange.ContainsKey(player.CSteamID))
+            /*if (LastWaterRange.ContainsKey(player.CSteamID))
             {
                 if (LastWaterRange[player.CSteamID] == range)
                 {
@@ -174,7 +184,7 @@ namespace PlayerStatus
             else
             {
                 LastWaterRange.Add(player.CSteamID, range);
-            }
+            }*/
             
             EffectManager.sendUIEffectImageURL(5567, player.Player.channel.GetOwnerTransportConnection(), false, config.Water.ChildName, range.ImageURL, true, true);
         }

@@ -10,14 +10,14 @@ public class HatEquippedEventArgs
 
 public static class HatEquippedEventPublisher
 {
-    public delegate void HatEquippedEventHandler(HatEquippedEventArgs e);
+    public delegate void HatEquippedEventHandler(HatEquippedEventArgs e, ref bool allow);
 
     public static event HatEquippedEventHandler HatEquippedEvent;
 
-    public static void RaiseEvent(UnturnedPlayer player, ushort item) =>
+    public static void RaiseEvent(UnturnedPlayer player, ushort item, ref bool allow) =>
         HatEquippedEvent?.Invoke(new HatEquippedEventArgs
         {
             Player = player,
             ClothingItem = item
-        });
+        }, ref allow);
 }

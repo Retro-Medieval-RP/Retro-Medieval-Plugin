@@ -10,14 +10,14 @@ public class ClothingDequipEventArgs
 
 public static class ClothingDequipEventPublisher
 {
-    public delegate void ClothingDequipEventHandler(ClothingDequipEventArgs e);
+    public delegate void ClothingDequipEventHandler(ClothingDequipEventArgs e, ref bool allow);
 
     public static event ClothingDequipEventHandler ClothingDequipEvent;
 
-    public static void RaiseEvent(UnturnedPlayer player, ushort id) =>
+    public static void RaiseEvent(UnturnedPlayer player, ushort id, ref bool allow) =>
         ClothingDequipEvent?.Invoke(new ClothingDequipEventArgs
         {
             Player = player,
             DequippedClothingID = id
-        });
+        }, ref allow);
 }

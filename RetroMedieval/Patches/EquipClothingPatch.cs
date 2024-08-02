@@ -11,29 +11,31 @@ namespace RetroMedieval.Patches;
 [HarmonyPatch("ReceiveWearShirt")]
 internal class EquipShirtPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return allow;
             }
 
             if (id == Guid.Empty)
             {
-                ShirtDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt);
-                return;
+                ShirtDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.shirt, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            ShirtEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            ShirtEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -42,29 +44,31 @@ internal class EquipShirtPatch
 [HarmonyPatch("ReceiveWearPants")]
 internal class EquipPantsPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                PantsDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants);
-                return;
+                PantsDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.pants, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            PantsEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            PantsEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -73,29 +77,31 @@ internal class EquipPantsPatch
 [HarmonyPatch("ReceiveWearHat")]
 internal class EquipHatPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                HatDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat);
-                return;
+                HatDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.hat, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            HatEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            HatEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -104,29 +110,31 @@ internal class EquipHatPatch
 [HarmonyPatch("ReceiveWearBackpack")]
 internal class EquipBackpackPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                BackpackDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack);
-                return;
+                BackpackDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.backpack, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            BackpackEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            BackpackEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -135,29 +143,31 @@ internal class EquipBackpackPatch
 [HarmonyPatch("ReceiveWearVest")]
 internal class EquipVestPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                VestDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest);
-                return;
+                VestDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.vest, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            VestEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            VestEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -166,29 +176,31 @@ internal class EquipVestPatch
 [HarmonyPatch("ReceiveWearMask")]
 internal class EquipMaskPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                MaskDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask);
-                return;
+                MaskDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.mask, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            MaskEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            MaskEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }
@@ -197,29 +209,31 @@ internal class EquipMaskPatch
 [HarmonyPatch("ReceiveWearGlasses")]
 internal class EquipGlassesPatch
 {
-    public static void Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
+    public static bool Prefix(Guid id, byte quality, byte[] state, bool playEffect, PlayerClothing __instance)
     {
         try
         {
+            var allow = true;
             if (__instance.player == null)
             {
-                return;
+                return true;
             }
 
             if (id == Guid.Empty)
             {
-                GlassesDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses);
-                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses);
-                return;
+                GlassesDequippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses, ref allow);
+                ClothingDequipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), __instance.player.clothing.glasses, ref allow);
+                return allow;
             }
 
             var item = Assets.find(id);
-            GlassesEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
-            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id);
+            GlassesEquippedEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            ClothingEquipEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(__instance.player), item.id, ref allow);
+            return allow;
         }
         catch
         {
-            return;
+            return true;
         }
     }
 }

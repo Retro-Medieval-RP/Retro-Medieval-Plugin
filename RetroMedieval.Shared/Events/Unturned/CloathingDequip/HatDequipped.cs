@@ -10,14 +10,14 @@ public class HatDequippedEventArgs
 
 public static class HatDequippedEventPublisher
 {
-    public delegate void HatDequippedEventHandler(HatDequippedEventArgs e);
+    public delegate void HatDequippedEventHandler(HatDequippedEventArgs e, ref bool allow);
 
     public static event HatDequippedEventHandler HatDequippedEvent;
 
-    public static void RaiseEvent(UnturnedPlayer player, ushort id) =>
+    public static void RaiseEvent(UnturnedPlayer player, ushort id, ref bool allow) =>
         HatDequippedEvent?.Invoke(new HatDequippedEventArgs()
         {
             Player = player,
             DequippedClothingID = id
-        });
+        }, ref allow);
 }

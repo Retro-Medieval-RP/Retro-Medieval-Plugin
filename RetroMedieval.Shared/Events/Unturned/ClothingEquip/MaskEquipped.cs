@@ -10,14 +10,14 @@ public class MaskEquippedEventArgs
 
 public static class MaskEquippedEventPublisher
 {
-    public delegate void MaskEquippedEventHandler(MaskEquippedEventArgs e);
+    public delegate void MaskEquippedEventHandler(MaskEquippedEventArgs e, ref bool allow);
 
     public static event MaskEquippedEventHandler MaskEquippedEvent;
 
-    public static void RaiseEvent(UnturnedPlayer player, ushort item) =>
+    public static void RaiseEvent(UnturnedPlayer player, ushort item, ref bool allow) =>
         MaskEquippedEvent?.Invoke(new MaskEquippedEventArgs
         {
             Player = player,
             ClothingItem = item
-        });
+        }, ref allow);
 }

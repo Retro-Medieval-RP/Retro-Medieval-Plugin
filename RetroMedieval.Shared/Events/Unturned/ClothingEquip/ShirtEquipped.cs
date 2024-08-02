@@ -10,14 +10,14 @@ public class ShirtEquippedEventArgs
 
 public static class ShirtEquippedEventPublisher
 {
-    public delegate void ShirtEquippedEventHandler(ShirtEquippedEventArgs e);
+    public delegate void ShirtEquippedEventHandler(ShirtEquippedEventArgs e, ref bool allow);
 
     public static event ShirtEquippedEventHandler ShirtEquippedEvent;
 
-    public static void RaiseEvent(UnturnedPlayer player, ushort item) =>
+    public static void RaiseEvent(UnturnedPlayer player, ushort item, ref bool allow) =>
         ShirtEquippedEvent?.Invoke(new ShirtEquippedEventArgs
         {
             Player = player,
             ClothingItem = item
-        });
+        }, ref allow);
 }
