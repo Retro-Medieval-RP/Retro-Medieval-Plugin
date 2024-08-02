@@ -92,6 +92,8 @@
         <Compile Include="Events\Unturned\ClothingEquip\VestEquipped.cs" />
         <Compile Include="Events\Unturned\DamageEvent.cs" />
         <Compile Include="Events\Unturned\GestureEvent.cs" />
+        <Compile Include="Events\Unturned\Items\ItemDequip.cs" />
+        <Compile Include="Events\Unturned\Items\ItemEquip.cs" />
         <Compile Include="Events\Unturned\PlayerVoiceEvent.cs" />
         <Compile Include="Events\Unturned\Storage\CloseStorage.cs" />
         <Compile Include="Events\Unturned\Storage\OpenStorage.cs" />
