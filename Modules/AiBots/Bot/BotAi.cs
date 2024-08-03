@@ -216,7 +216,7 @@ public class BotAi : MonoBehaviour
     
     private void ClearInventory(Player player)
     {
-        PlayerInventory playerInv = player.inventory;
+        var playerInv = player.inventory;
         
         player.channel.send("tellSlot", (ESteamCall) 1, 0, [
             (byte) 0,
