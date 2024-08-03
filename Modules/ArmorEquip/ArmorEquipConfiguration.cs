@@ -15,10 +15,10 @@ internal class ArmorEquipConfiguration : IConfig
             new ArmorSet
             {
                 DropInventoryWhenEquip = true,
-                MainItem = 40517,
+                MainItem = 40515,
                 Items =
                 [
-                    40515,
+                    40517,
                     40516,
                     40518,
                     40519,
