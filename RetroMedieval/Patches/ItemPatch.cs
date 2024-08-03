@@ -1,5 +1,6 @@
 using System;
 using HarmonyLib;
+using RetroMedieval.Shared.Events.Unturned.Inventory;
 using RetroMedieval.Shared.Events.Unturned.Items;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -66,6 +67,10 @@ public class ReceiveDragItemPatch
     {
         var item = __instance.getItem(page_0, __instance.getIndex(page_0, x_0, y_0));
         var player = UnturnedPlayer.FromPlayer(__instance.player);
+
+        var allow = true;
+        ItemDragEventPublisher.RaiseEvent(page_0, x_0, y_0, page_1, x_1, y_1, rot_1, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -78,7 +83,9 @@ public class ReceiveSwapItemPatch
         var item = __instance.getItem(page_0, __instance.getIndex(page_0, x_0, y_0));
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemSwapEventPublisher.RaiseEvent(page_0, x_0, y_0, rot_0, page_1, x_1, y_1, rot_1, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -91,7 +98,9 @@ public class ReceiveDropItemPatch
         var item = __instance.getItem(page, __instance.getIndex(page, x, y));
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemDropEventPublisher.RaiseEvent(page, x, y, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -104,7 +113,9 @@ public class ReceiveUpdateAmountItemPatch
         var item = __instance.getItem(page, index);
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemUpdateAmountEventPublisher.RaiseEvent(page, index, amount, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -117,7 +128,9 @@ public class ReceiveUpdateQualityItemPatch
         var item = __instance.getItem(page, index);
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemUpdateQualityEventPublisher.RaiseEvent(page, index, quality, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -130,7 +143,9 @@ public class ReceiveUpdateInvStateItemPatch
         var item = __instance.getItem(page, index);
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemUpdateInvStateEventPublisher.RaiseEvent(page, index, state, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -143,7 +158,9 @@ public class ReceiveItemAddItemPatch
         var newItem = new ItemJar(x, y, rot, new Item(id, amount, quality, state));
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemAddEventPublisher.RaiseEvent(page, x, y, rot, player, newItem, ref allow);
+        return allow;
     }
 }
 
@@ -156,7 +173,9 @@ public class ReceiveItemRemoveItemPatch
         var item = __instance.getItem(page, __instance.getIndex(page, x, y));
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ItemRemoveEventPublisher.RaiseEvent(page, x, y, player, item, ref allow);
+        return allow;
     }
 }
 
@@ -168,6 +187,8 @@ public class ReceiveSizeItemPatch
     {
         var player = UnturnedPlayer.FromPlayer(__instance.player);
         
-        // TODO: SEND EVENT MESSAGE
+        var allow = true;
+        ClothingSizeEventPublisher.RaiseEvent(page, newWidth, newHeight, player, ref allow);
+        return allow;
     }
 }
