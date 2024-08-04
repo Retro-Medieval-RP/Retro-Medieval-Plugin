@@ -11,8 +11,16 @@ internal class PlayerVoicePatch
 {
     public static bool Prefix(PlayerVoice speaker, PlayerVoice listener, PlayerVoice __instance)
     {
-        var allow = true;
-        PlayerVoiceEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(speaker.player), UnturnedPlayer.FromPlayer(listener.player), ref allow);
-        return allow;
+        try
+        {
+            var allow = true;
+            PlayerVoiceEventPublisher.RaiseEvent(UnturnedPlayer.FromPlayer(speaker.player),
+                UnturnedPlayer.FromPlayer(listener.player), ref allow);
+            return allow;
+        }
+        catch
+        {
+            return true;
+        }
     }
 }

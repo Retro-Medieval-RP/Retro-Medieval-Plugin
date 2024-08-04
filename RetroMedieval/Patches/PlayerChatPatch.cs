@@ -12,18 +12,25 @@ internal class PlayerChatPatch
 {
     public static bool Prefix(CSteamID speakerSteamID, string iconURL, EChatMode mode, Color color, bool isRich, string text, ChatManager __instance)
     {
-        var allow = true;
-        var args = new ChatEventArgs()
+        try
         {
-            Sender = speakerSteamID,
-            IconURL = iconURL,
-            ChatMode = mode,
-            Color = color,
-            IsRich = isRich,
-            Text = text
-        };
+            var allow = true;
+            var args = new ChatEventArgs
+            {
+                Sender = speakerSteamID,
+                IconURL = iconURL,
+                ChatMode = mode,
+                Color = color,
+                IsRich = isRich,
+                Text = text
+            };
 
-        ChatEventPublisher.RaiseEvent(args, ref allow);
-        return allow;
+            ChatEventPublisher.RaiseEvent(args, ref allow);
+            return allow;
+        }
+        catch
+        {
+            return true;
+        }
     }
 }

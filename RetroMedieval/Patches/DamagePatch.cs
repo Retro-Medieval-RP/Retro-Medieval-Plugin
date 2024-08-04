@@ -12,11 +12,19 @@ internal class DamagePatch
 {
     public static bool Prefix(byte amount, Vector3 newRagdoll, EDeathCause newCause, ELimb newLimb, CSteamID newKiller, ref EPlayerKill kill, bool trackKill, ERagdollEffect newRagdollEffect, bool canCauseBleeding, PlayerLife __instance)
     {
-        var ply = __instance.channel.owner.player;
-        if (ply is null) return false;
+        try
+        {
+            var ply = __instance.channel.owner.player;
+            if (ply is null) return false;
 
-        var allow = true;
-        DamageEventPublisher.RaiseEvent(amount, newRagdoll, newCause, newLimb, newKiller, trackKill, newRagdollEffect, canCauseBleeding, ply, ref kill, ref allow);
-        return allow;
+            var allow = true;
+            DamageEventPublisher.RaiseEvent(amount, newRagdoll, newCause, newLimb, newKiller, trackKill,
+                newRagdollEffect, canCauseBleeding, ply, ref kill, ref allow);
+            return allow;
+        }
+        catch
+        {
+            return true;
+        }
     }
 }
