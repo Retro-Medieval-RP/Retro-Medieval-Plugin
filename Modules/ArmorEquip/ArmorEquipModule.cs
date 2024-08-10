@@ -7,7 +7,6 @@ using RetroMedieval.Modules.Attributes;
 using RetroMedieval.Shared.Events.Unturned.CloathingDequip;
 using RetroMedieval.Shared.Events.Unturned.ClothingEquip;
 using RetroMedieval.Shared.Events.Unturned.Inventory;
-using RetroMedieval.Shared.Events.Unturned.Items;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -21,7 +20,7 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
     private Dictionary<CSteamID, bool> IgnoreEquipOfClothing { get; } = [];
     private Dictionary<CSteamID, bool> IgnoreDequipOfClothing { get; } = [];
     private Dictionary<CSteamID, bool> RemoveItem { get; } = [];
-    
+
     public override void Load()
     {
         ClothingEquipEventPublisher.ClothingEquipEvent += OnClothingEquipped;
@@ -40,11 +39,13 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
 
     private void OnItemGive(ItemAddEventArgs e, ref bool allow)
     {
-        if (RemoveItem.ContainsKey(e.Player.CSteamID))
+        if (!RemoveItem.ContainsKey(e.Player.CSteamID))
         {
-            allow = false;
-            RemoveItem.Remove(e.Player.CSteamID);
+            return;
         }
+        
+        allow = false;
+        RemoveItem.Remove(e.Player.CSteamID);
     }
 
     private void OnClothingDequipped(ClothingDequipEventArgs e, ref bool allow)
@@ -87,6 +88,67 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
             ClearUserItems(e.Player);
 
             IgnoreDequipOfClothing.Add(e.Player.CSteamID, true);
+
+            foreach (var asset in set.Items.Select(item => Assets.find(EAssetType.ITEM, item) as ItemAsset))
+            {
+                switch (asset!.type)
+                {
+                    case EItemType.HAT:
+                    {
+                        e.Player.Player.clothing.askWearHat(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.SHIRT:
+                    {
+                        e.Player.Player.clothing.askWearShirt(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.PANTS:
+                    {
+                        e.Player.Player.clothing.askWearPants(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.BACKPACK:
+                    {
+                        e.Player.Player.clothing.askWearBackpack(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.VEST:
+                    {
+                        e.Player.Player.clothing.askWearVest(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.MASK:
+                    {
+                        e.Player.Player.clothing.askWearMask(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                    case EItemType.GLASSES:
+                    {
+                        e.Player.Player.clothing.askWearGlasses(0, 0, [], true);
+                        Action();
+                        break;
+                    }
+                }
+
+                IgnoreDequipOfClothing.Remove(e.Player.CSteamID);
+                
+                return;
+
+                void Action()
+                {
+                    for (byte index = 0; index < e.Player.Inventory.getItemCount(2); ++index)
+                    {
+                        e.Player.Inventory.removeItem(2, 0);
+                    }
+                }
+            }
         }
     }
 
@@ -206,7 +268,7 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
                         ItemManager.dropItem(
                             new Item(e.Player.Player.clothing.mask, 1, e.Player.Player.clothing.maskQuality,
                                 e.Player.Player.clothing.maskState), e.Player.Position, true, true, true);
-                        e.Player.Player.clothing.askWearVest(0, 0, [], true);
+                        e.Player.Player.clothing.askWearMask(0, 0, [], true);
                         Action();
                     }
 
@@ -220,7 +282,7 @@ internal class ArmorEquipModule([NotNull] string directory) : Module(directory)
                         ItemManager.dropItem(
                             new Item(e.Player.Player.clothing.glasses, 1, e.Player.Player.clothing.glassesQuality,
                                 e.Player.Player.clothing.glassesState), e.Player.Position, true, true, true);
-                        e.Player.Player.clothing.askWearVest(0, 0, [], true);
+                        e.Player.Player.clothing.askWearGlasses(0, 0, [], true);
                         Action();
                     }
 
